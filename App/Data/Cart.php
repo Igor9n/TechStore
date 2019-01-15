@@ -73,11 +73,14 @@ class Cart
         $this->personalArray['email'] = $email;
     }
 
-    public function fillAddressInfo($city, $address, $house, $apartment, $zip = '') {
+    public function fillAddressInfo($city, $address, $house, $apartment = '', $zip = '') {
         $this->addressArray['city'] = $city;
         $this->addressArray['address'] = $address;
-        $this->addressArray['house'] = $house;
-        $this->addressArray['apartment'] = $apartment;
+        if (!empty($apartment)) {
+            $this->addressArray['apartments'] = $house . '-' . $apartment;
+        } else {
+            $this->addressArray['apartments'] = $house;
+        }
         $this->addressArray['zip'] = $zip;
     }
 }

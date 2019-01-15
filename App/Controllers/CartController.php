@@ -46,7 +46,7 @@ class CartController extends Controller
             $uri = "/item/view/" . $item->serviceTitle;
             if (isset($_SESSION['cart'])) {
                 if (isset($_SESSION['cart']->itemsArray[$item->id])) {
-                    $this->mapper->changeItemCount('plus', $_SESSION['cart'],$item);
+                    $this->mapper->changeItemCount('plus',$_SESSION['cart'],$item);
                 } else {
                     $this->mapper->addItemToCart($_SESSION['cart'], $item);
                 }
@@ -54,6 +54,7 @@ class CartController extends Controller
                 $_SESSION['cart'] = $this->getCartInfo($item);
                 unset($_SESSION['item']);
             }
+            unset($_SESSION['item']);
             header("Location: $uri");
         } else {
             header("Location: /");
@@ -71,17 +72,16 @@ class CartController extends Controller
         $data['title'] = 'Cart';
         if (!empty($_SESSION['cart']->itemsArray)){
             $data['cart'] = $_SESSION['cart'];
-            if (isset($_POST['ordered'])) {
+            if (isset($_SESSION['ordered'])) {
                 $data['ordered'] = true;
-                $data['orderNumber'] = $_POST['orderNumber'];
-                foreach ($_POST as $key => $var){
-                    unset($_POST[$key]);
-                }
+                $data['orderNumber'] = $_SESSION['orderNumber'];
+                unset($_SESSION['ordered']);
+                unset($_SESSION['orderNumber']);
                 unset($_SESSION['cart']);
             } else {
-                if (isset($_POST['errors'])) {
-                    $data['errors'] = $_POST['errors'];
-                    unset($_POST['errors']);
+                if (isset($_SESSION['errors'])) {
+                    $data['errors'] = $_SESSION['errors'];
+                    unset($_SESSION['errors']);
                 }
                 $_SESSION['orderRang'] = 0;
             }
@@ -111,16 +111,17 @@ class CartController extends Controller
     }
     public function actionOrder() {
         if ($_SESSION['orderRang'] === 0) {
-            $info = $this->addInfoForOrder($_SESSION['cartObject']);
-            $errors = $this->model->checkForErrors($info);
+            $this->addInfoForOrder($_SESSION['cart']);
+            $info = $_SESSION['cart'];
+            $errors = $this->mapper->checkForErrors($info);
             if (!empty($errors)) {
-                $_POST['errors'] = $errors;
-                $this->actionCheckout();
+                $_SESSION['errors'] = $errors;
+                header("Location: /cart/checkout");
             } else {
                 $_SESSION['orderRang'] = 1;
-                $_POST['ordered'] = true;
-                $_POST['orderNumber'] = $this->model->submitOrder($info);
-                $this->actionCheckout();
+                $_SESSION['ordered'] = true;
+                $_SESSION['orderNumber'] = $this->mapper->submitOrder($info);
+                header("Location: /cart/checkout");
             }
         } else {
             header("Location: /category/view/all");
