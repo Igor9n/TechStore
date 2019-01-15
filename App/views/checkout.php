@@ -29,21 +29,21 @@
                         <div class="row">
                             <div class="col">
                                 <label>First name*</label>
-                                <input type="text" class="form-control" name="firstName">
+                                <input type="text" class="form-control" name="firstName" value="<?=$cart->personalArray['firstName']?>">
                             </div>
                             <div class="col">
                                 <label>Last name*</label>
-                                <input type="text" class="form-control" name="lastName">
+                                <input type="text" class="form-control" name="lastName" value="<?=$cart->personalArray['lastName']?>">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col">
                                 <label>Your phone number*</label>
-                                <input type="text" class="form-control" name="phone">
+                                <input type="text" class="form-control" name="phone" value="<?=$cart->personalArray['phone']?>">
                             </div>
                             <div class="col">
                                 <label>Your email</label>
-                                <input type="email" class="form-control" name="email">
+                                <input type="email" class="form-control" name="email" value="<?=$cart->personalArray['email']?>">
                             </div>
                         </div>
                         <div class="dropdown-divider">
@@ -57,15 +57,15 @@
                         <div class="row">
                             <div class="col">
                                 <label>Your city*</label>
-                                <input type="text" class="form-control" name="city">
+                                <input type="text" class="form-control" name="city" value="<?=$cart->addressArray['city']?>">
                             </div>
                             <div class="col">
                                 <label>Your address*</label>
-                                <input type="text" class="form-control" name="address">
+                                <input type="text" class="form-control" name="address" value="<?=$cart->addressArray['address']?>">
                             </div>
                             <div class="col">
                                 <label>Zip code</label>
-                                <input type="text" class="form-control" name="zip">
+                                <input type="text" class="form-control" name="zip" value="<?=$cart->addressArray['zip']?>">
                             </div>
                         </div>
                         <div class="row">

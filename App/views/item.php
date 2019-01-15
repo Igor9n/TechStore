@@ -33,7 +33,7 @@
     </div>
     <div class="row justify-content-center">
         <form method="GET" action="/item/add">
-            <button class="btn btn-primary" name="id" value="<?=$info->serviceTitle?>"> Add to cart</button>
+            <button class="btn btn-primary" name="id" value="<?=$info->id?>"> Add to cart</button>
         </form>
     </div>
     <div class="row justify-content-between">

@@ -24,7 +24,8 @@ class ItemModel extends Model
     }
 
     public function getItemId($id) {
-        return $this->selectTypeAndQuery($this->product,$id, 0);
+        $return = (int) $this->selectTypeAndQuery($this->product,$id, 0);
+        return $return;
     }
 
     public function getItemTitle($id) {
