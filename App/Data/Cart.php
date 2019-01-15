@@ -16,33 +16,39 @@ class Cart
     public $addressArray;
     public $totalPrice;
 
-    public function __construct(array $itemsArray) {
-        $this->itemsArray = $this->calculateItemsEndPrice($itemsArray);
+    public function __construct($item) {
+        $this->calculateItemEndPrice($item);
         $this->totalPrice = $this->getTotalPrice($this->itemsArray);
     }
 
-    public static function createObject(array $array): Cart {
+    public static function createObject($item): Cart {
         return new self(
-            $array
+            $item
         );
     }
 
     public function changeItemCount($flag, $item) {
         switch ($flag) {
             case "plus":
-                $this->itemsArray[$item->serviceTitle]['count']++;
+                $this->itemsArray[$item->id]['count']++;
                 break;
             case "minus":
-                $this->itemsArray[$item->serviceTitle]['count']--;
+                $this->itemsArray[$item->id]['count']--;
                 break;
         }
+        $this->calculateItemEndPrice($item, $this->itemsArray[$item->id]['count']);
+        $this->totalPrice = $this->getTotalPrice($this->itemsArray);
     }
 
-    public function calculateItemsEndPrice($array) {
-        foreach ($array as $item) {
-            $array[$item['info']->serviceTitle]['endPrice'] = $item['info']->price * $item['count'];
-        }
-        return $array;
+    public function calculateItemEndPrice($item, $count = 1) {
+        $this->itemsArray[$item->id]['info'] = $item;
+        $this->itemsArray[$item->id]['count'] = $count;
+        $this->itemsArray[$item->id]['endPrice'] = $this->itemsArray[$item->id]['count'] * $item->price;
+    }
+
+    public function addItem($item) {
+        $this->calculateItemEndPrice($item);
+        $this->totalPrice = $this->getTotalPrice($this->itemsArray);
     }
 
     public function endPrice($arr) {

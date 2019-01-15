@@ -29,26 +29,18 @@ class ItemController extends MainController
     public function actionView($id) {
         if(Route::checkExist($id,$this->model->getItemsSTList())){
             $data['info'] = $this->getItemInfo($id);
-            $data['title'] = $this->model->getItemTitle($id);
+            $data['title'] = $data['info']->title;
             $this->view->generate('template.php', 'item.php', $data);
         } else {
             Route::ErrorPage404();
         }
     }
     public function actionAdd(){
-        $id = $_GET['id'];
+        $id = (int) $_GET['id'];
         if (isset($id)){
-            $uri = '/item/view/' . $_GET['id'];
             Session::anotherSessionStart();
-            if (isset($_SESSION['cart'][$id])){
-                $_SESSION['cart'][$id]['count']++;
-
-            } else {
-                $_SESSION['cart'][$id]['info'] = $this->getItemInfo($id);
-                $_SESSION['cart'][$id]['count'] = 1;
-            }
-            header("Location: $uri");
-
+            $_SESSION['item'] = $this->getItemInfo($id);
+            header("Location: /cart/add");
         } else {
             header("Location: /");
         }

@@ -20,27 +20,48 @@ class CartController extends Controller
         $this->mapper = new CartMapper();
     }
 
-    public function getCartInfo() {
-        return $this->mapper->getObject();
+    public function getCartInfo($item) {
+        return $this->mapper->getObject($item);
     }
 
+
+
     public function addInfoForOrder($cart) {
-        var_dump($cart);
-        $cart->fillPersonalInfo(
-            $_POST['firstName'],
-            $_POST['lastName'],
-            $_POST['phone'],
-            $_POST['email']
-        );
-        $cart->fillAddressInfo(
+        $this->mapper->addAddressInfo($cart, [
             $_POST['city'],
             $_POST['address'],
             $_POST['house'],
             $_POST['apartment'],
             $_POST['zip']
-        );
-        return $cart;
+        ]);
+        $this->mapper->addPersonalInfo($cart, [
+            $_POST['firstName'],
+            $_POST['lastName'],
+            $_POST['phone'],
+            $_POST['email']
+        ]);
     }
+
+    public function actionAdd() {
+        if (isset($_SESSION['item'])) {
+            $item = $_SESSION['item'];
+            $uri = "/item/view/" . $item->serviceTitle;
+            if (isset($_SESSION['cart'])) {
+                if (isset($_SESSION['cart']->itemsArray[$item->id])) {
+                    $this->mapper->changeItemCount($_SESSION['cart'],$item);
+                } else {
+                    $this->mapper->addItemToCart($_SESSION['cart'], $item);
+                }
+            } else {
+                $_SESSION['cart'] = $this->getCartInfo($item);
+                unset($_SESSION['item']);
+            }
+            header("Location: $uri");
+        } else {
+            header("Location: /");
+        }
+    }
+
     public function actionView() {
         $data['title'] = 'Cart';
         if (!empty($_SESSION['cart'])){
@@ -108,5 +129,4 @@ class CartController extends Controller
             header("Location: /category/view/all");
         }
     }
-
 }

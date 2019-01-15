@@ -18,13 +18,35 @@ class CartMapper extends Mapper
         $this->model = new CartModel();
     }
 
-    public function getObject(): Cart {
-        return Cart::createObject(
-            $_SESSION['cart']
+    public function getObject($item): Cart {
+        return Cart::createObject($item);
+    }
+
+    public function changeItemCount($object, $item) {
+        $object->changeItemCount('plus',$item);
+    }
+
+    public function addItemToCart($object, $item) {
+        $object->calculateItemEndPrice($item);
+        $object->totalPrice = $object->getTotalPrice($object->itemsArray);
+    }
+
+    public function addPersonalInfo($object, $array) {
+        $object->fillPersonalInfo(
+            $array[0],
+            $array[1],
+            $array[2],
+            $array[3]
         );
     }
 
-    public function editObject() {
-
+    public function addAddressInfo($object, $array) {
+        $object->fillAddressInfo(
+            $array[0],
+            $array[1],
+            $array[2],
+            $array[3],
+            $array[4]
+        );
     }
 }
