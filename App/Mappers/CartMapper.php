@@ -22,8 +22,9 @@ class CartMapper extends Mapper
         return Cart::createObject($item);
     }
 
-    public function changeItemCount($object, $item) {
-        $object->changeItemCount('plus',$item);
+    public function changeItemCount($flag, $object, $item) {
+        var_dump($object);
+        $object->changeItemCount($flag ,$item);
     }
 
     public function addItemToCart($object, $item) {

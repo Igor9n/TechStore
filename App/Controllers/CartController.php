@@ -24,8 +24,6 @@ class CartController extends Controller
         return $this->mapper->getObject($item);
     }
 
-
-
     public function addInfoForOrder($cart) {
         $this->mapper->addAddressInfo($cart, [
             $_POST['city'],
@@ -48,7 +46,7 @@ class CartController extends Controller
             $uri = "/item/view/" . $item->serviceTitle;
             if (isset($_SESSION['cart'])) {
                 if (isset($_SESSION['cart']->itemsArray[$item->id])) {
-                    $this->mapper->changeItemCount($_SESSION['cart'],$item);
+                    $this->mapper->changeItemCount('plus', $_SESSION['cart'],$item);
                 } else {
                     $this->mapper->addItemToCart($_SESSION['cart'], $item);
                 }
@@ -64,16 +62,15 @@ class CartController extends Controller
 
     public function actionView() {
         $data['title'] = 'Cart';
-        if (!empty($_SESSION['cart'])){
-            $data['cart'] = $this->getCartInfo();
-            $_SESSION['cartObject'] = $data['cart'];
+        if (!empty($_SESSION['cart']->itemsArray)){
+            $data['cart'] = $_SESSION['cart'];
         }
         $this->view->generate('template.php', 'cart.php', $data);
     }
     public function actionCheckout() {
         $data['title'] = 'Cart';
-        if (!empty($_SESSION['cart'])){
-            $data['cart'] = $_SESSION['cartObject'];
+        if (!empty($_SESSION['cart']->itemsArray)){
+            $data['cart'] = $_SESSION['cart'];
             if (isset($_POST['ordered'])) {
                 $data['ordered'] = true;
                 $data['orderNumber'] = $_POST['orderNumber'];
@@ -93,23 +90,23 @@ class CartController extends Controller
     }
     public function actionClean() {
         unset($_SESSION['cart']);
-        unset($_SESSION['cartObject']);
         header("Location: /cart/view");
     }
     public function actionDelete() {
         $id = $_GET['id'];
-        unset($_SESSION['cart'][$id]);
+        unset($_SESSION['cart']->itemsArray[$id]);
+        $_SESSION['cart']->totalPrice = $_SESSION['cart']->getTotalPrice($_SESSION['cart']->itemsArray);
         header("Location: /cart/view");
 
     }
     public function actionPlus() {
         $id = $_GET['id'];
-        $_SESSION['cart'][$id]['count']++;
+        $this->mapper->changeItemCount('plus', $_SESSION['cart'],$_SESSION['cart']->itemsArray[$id]['info']);
         header("Location: /cart/view");
     }
     public function actionMinus() {
         $id = $_GET['id'];
-        $_SESSION['cart'][$id]['count']--;
+        $this->mapper->changeItemCount('minus', $_SESSION['cart'],$_SESSION['cart']->itemsArray[$id]['info']);
         header("Location: /cart/view");
     }
     public function actionOrder() {
