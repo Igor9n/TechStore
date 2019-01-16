@@ -11,6 +11,7 @@ namespace App\Controllers;
 
 use App\Classes\Session;
 use App\Core\Controller;
+use App\Mappers\UserMapper;
 use App\Models\{OrderModel,UserModel};
 
 class UserController extends Controller
@@ -19,8 +20,31 @@ class UserController extends Controller
     public function __construct()
     {
         parent::__construct();
-        $this->model = new UserModel();
+        $this->mapper = new UserMapper();
         $this->orderModel = new OrderModel();
+    }
+
+    public function actionTry() {
+        if (isset($_POST['try'])) {
+            switch ($_POST['try']) {
+                case 'log':
+                    $user = $this->mapper->getObject($_POST['try']);
+                    $errors = $this->mapper->checkForErrors($user['info'], $_POST['try']);
+                    var_dump($errors); die;
+                    if (empty($errors)) {
+                        Session::anotherSessionStart();
+                        $_SESSION['user']['info'] = $user;
+                        $_SESSION['user']['login'] = true;
+                        header("Location: user/orders");
+                    }
+                    break;
+                case 'reg':
+                    break;
+            }
+
+        } else {
+            header("Location: /user/login");
+        }
     }
     public function actionLogin()
     {
@@ -48,7 +72,7 @@ class UserController extends Controller
                     }
                 }
             } else {
-                header("Location: /user/logging");
+
             }
         }
     }
@@ -88,7 +112,7 @@ class UserController extends Controller
                 $data['errors'] = $_POST['errors'];
                 unset($_POST['errors']);
             }
-            $this->view->generate('template.php', 'logging.php', $data);
+            $this->view->generate('template.php', 'login.php', $data);
         }
     }
     public function actionRegistration(){

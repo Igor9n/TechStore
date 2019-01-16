@@ -17,7 +17,7 @@ class UserModel extends Model
     {
         parent::__construct();
     }
-    public function validateLogin($log){
+    public function validateLogin($log) {
         echo $log;
        $errors = [];
        if(!preg_match('/^[a-zA-Z0-9]+$/',$log)){
@@ -28,7 +28,7 @@ class UserModel extends Model
        }
        return $errors;
     }
-    public function validatePassword($flag,$pass,$confirm = ''){
+    public function validatePassword($flag,$pass,$confirm = '') {
         $errors = [];
         if(!preg_match('/^[a-zA-Z0-9$#%]+$/',$pass)){
             $errors['passwordError'] = 'Password must include only numbers, english characters, $, % or #';
@@ -48,14 +48,14 @@ class UserModel extends Model
                 return $errors;
         }
     }
-    public function validateEmail($email){
+    public function validateEmail($email) {
         $error = [];
         if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
             $error['emailError'] = 'Enter correct email';
         }
         return $error;
     }
-    public function checkLogin($flag, $login = '',$email = ''){
+    public function checkLoginInDB($flag, $login = '',$email = '') {
         switch ($flag) {
             case 'reg': // Is user already in db?
                 $check ="SELECT login FROM users WHERE login = :login OR email = :email";
@@ -81,16 +81,15 @@ class UserModel extends Model
                 return null;
         }
     }
-    public function checkLoginInfo($login,$password){
+    public function checkLoginPassword($login, $password) {
         $errors = [];
         $error = $this->checkLogin('log',$login);
-        if ($error){
+        if ($error) {
             $errors['loginError'] = $error;
             return $errors;
         } else {
-            $check = $this->pdo->prepare('SELECT password FROM users WHERE login = ?');
-            $check->execute([$login]);
-            $hash = $check->fetchColumn();
+            $check = "SELECT password FROM users WHERE login = :login";
+            $hash = $this->queryOne($check, ['login' => $login], 0 );
             if (password_verify($password,$hash)){
                 return null;
             } else {
@@ -99,57 +98,10 @@ class UserModel extends Model
             }
         }
     }
-    public function checkForErrors($array,$flag){
-        $errors = [];
-        switch ($flag){
-            case 'reg':
-                $check['loginErrors'] = $this->validateLogin($array['login']);
-                $check['passwordErrors'] = $this->validatePassword('reg',$array['password'],$array['confirm']);
-                $check['emailErrors'] = $this->validateEmail($array['email']);
-                foreach ($check as $value){
-                    if (isset($value)){
-                        foreach ($value as $var){
-                            $errors[] = $var;
-                        }
-                    }
-                }
-                return $errors;
-            case 'log':
-                $check['loginErrors'] = $this->validateLogin($array['login']);
-                $check['passwordErrors'] = $this->validatePassword($flag, $array['password']);
-                foreach ($check as $value){
-                    if (isset($value)){
-                        foreach ($value as $var){
-                            $errors[] = $var;
-                        }
-                    }
-                }
-                return $errors;
-            default:
-                return null;
-        }
-    }
+
     public function registerUser($log,$pass,$email){
         $pass = password_hash($pass, PASSWORD_DEFAULT);
         $register = $this->pdo->prepare('INSERT INTO users (`login`, `password`, `email`) VALUES (?, ?, ?)');
         $register->execute([$log,$pass,$email]);
-    }
-    public function getInfoFromPost($flag){
-        switch ($flag) {
-            case 'reg':
-                return [
-                    'login' => $_POST['login'],
-                    'email' => $_POST['email'],
-                    'password' => $_POST['password'],
-                    'confirm' => $_POST['confirm'],
-                ];
-            case 'log':
-                return[
-                    'login' => $_POST['login'],
-                    'password' => $_POST['password']
-                ];
-            default:
-                return null;
-        }
     }
 }

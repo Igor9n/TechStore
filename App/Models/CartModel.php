@@ -111,7 +111,6 @@ class CartModel extends Model
         $personalId = "SELECT last_insert_id()";
         return $this->queryOne($personalId, [], 0);
     }
-
     public function submitAddress($person, $array) {
         $address = "
             INSERT INTO users_addresses (city,address,apartments_numbers,zip,personal_id)
@@ -124,7 +123,6 @@ class CartModel extends Model
             'personalId' => $person
         ]);
     }
-
     public function submitOrder($person, $price){
         $order = "
             INSERT INTO orders (personal_id,total_price)
@@ -141,7 +139,6 @@ class CartModel extends Model
             VALUES (:order)";
         $this->queryOne($delivery, ['order' => $order]);
     }
-
     public function submitOrderProducts($order, $array) {
         $orderProducts = "
             INSERT INTO orders_products (order_id,product_id, count, endprice)

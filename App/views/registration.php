@@ -24,7 +24,7 @@
                     <h4 class="alert-heading">Don't have an account yet?</h4>
                     <p class="mb-0">Fix it right now</p>
                 </div>
-                <form method="post" action="/user/register">
+                <form method="post" action="/user/try">
                     <div class="row">
                         <div class="col">
                             <label>Your login</label>
@@ -52,7 +52,7 @@
                     </div>
                     <div class="row">
                         <div class="col">
-                            <button class="btn btn-primary" name="reg" value="submit">Submit</button>
+                            <button class="btn btn-primary" name="try" value="log">Submit</button>
                         </div>
                     </div>
                 </form>
