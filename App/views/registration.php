@@ -1,7 +1,7 @@
 <div class="col-sm-10">
     <div class="row">
         <div class="col-sm-9">
-            <?php if(isset($data['registered'])):?>
+            <?php if(isset($registered)):?>
                 <div class="alert alert-success">
                     <h4 class="alert-heading"><strong>Well done!</strong></h4>
                     <p class="mb-0">You successfully registered!</p>
@@ -24,7 +24,7 @@
                     <h4 class="alert-heading">Don't have an account yet?</h4>
                     <p class="mb-0">Fix it right now</p>
                 </div>
-                <form method="post" action="/user/register">
+                <form method="post" action="/user/try">
                     <div class="row">
                         <div class="col">
                             <label>Your login</label>
@@ -52,7 +52,7 @@
                     </div>
                     <div class="row">
                         <div class="col">
-                            <button class="btn btn-primary" name="reg" value="submit">Submit</button>
+                            <button class="btn btn-primary" name="try" value="reg">Submit</button>
                         </div>
                     </div>
                 </form>

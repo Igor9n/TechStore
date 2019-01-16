@@ -23,7 +23,7 @@
                     <h4 class="alert-heading">Hi, guest!</h4>
                     <p class="mb-0">Sign in for tracking your orders</p>
                 </div>
-                <form method="post" action="/user/login">
+                <form method="post" action="/user/try">
                     <div class="row">
                         <div class="col">
                             <label>Your login</label>
@@ -41,7 +41,7 @@
                     </div>
                     <div class="row">
                         <div class="col">
-                            <button class="btn btn-primary" name="log" value="submit">Submit</button>
+                            <button class="btn btn-primary" name="try" value="log">Submit</button>
                         </div>
                     </div>
                 </form>

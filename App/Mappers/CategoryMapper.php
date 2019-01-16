@@ -39,7 +39,7 @@ class CategoryMapper extends Mapper
                 $var,
                 $this->model->getCategoryServiceTitle($var),
                 $this->model->getCategoryTitle($var)
-                ]);
+            ]);
         }
         return $categoriesArray;
     }

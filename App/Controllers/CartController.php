@@ -20,10 +20,6 @@ class CartController extends Controller
         $this->mapper = new CartMapper();
     }
 
-    public function getCartInfo($item) {
-        return $this->mapper->getObject($item);
-    }
-
     public function addInfoForOrder($cart) {
         $this->mapper->addAddressInfo($cart, [
             $_POST['city'],
@@ -51,7 +47,7 @@ class CartController extends Controller
                     $this->mapper->addItemToCart($_SESSION['cart'], $item);
                 }
             } else {
-                $_SESSION['cart'] = $this->getCartInfo($item);
+                $_SESSION['cart'] = $this->mapper->getObject($item);
                 unset($_SESSION['item']);
             }
             unset($_SESSION['item']);
