@@ -70,4 +70,8 @@ class UserMapper extends Mapper
                 return null;
         }
     }
+
+    public function addId(User $object) {
+        $object->fillId($this->model->getUserId($object->login));
+    }
 }

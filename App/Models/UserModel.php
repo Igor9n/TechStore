@@ -13,9 +13,12 @@ use App\Core\Model;
 
 class UserModel extends Model
 {
+    public $userIdQuery;
+
     public function __construct()
     {
         parent::__construct();
+        $this->userIdQuery = "SELECT id FROM users WHERE login = :login";
     }
     public function validateLogin($log) {
         echo $log;
@@ -64,8 +67,7 @@ class UserModel extends Model
                 }
                 return false;
             case 'log': // Is user registered?
-                $check = "SELECT id FROM users WHERE login = :login";
-                if ($this->queryOne($check,['login' => $login],0)) {
+                if ($this->queryOne($this->userIdQuery,['login' => $login],0)) {
                     return null;
                 } else {
                     return 'This user is not registered';
@@ -83,7 +85,7 @@ class UserModel extends Model
     }
     public function checkLoginPassword($login, $password) {
         $errors = [];
-        $error = $this->checkLogin('log',$login);
+        $error = $this->checkLoginInDB('log',$login);
         if ($error) {
             $errors['loginError'] = $error;
             return $errors;
@@ -99,6 +101,9 @@ class UserModel extends Model
         }
     }
 
+    public function getUserId($login) {
+        return $this->queryOne($this->userIdQuery, ['login' => $login], 0);
+    }
     public function registerUser($log,$pass,$email){
         $pass = password_hash($pass, PASSWORD_DEFAULT);
         $register = $this->pdo->prepare('INSERT INTO users (`login`, `password`, `email`) VALUES (?, ?, ?)');

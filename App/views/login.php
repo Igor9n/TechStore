@@ -41,7 +41,7 @@
                     </div>
                     <div class="row">
                         <div class="col">
-                            <button class="btn btn-primary" name="try" value="reg">Submit</button>
+                            <button class="btn btn-primary" name="try" value="log">Submit</button>
                         </div>
                     </div>
                 </form>

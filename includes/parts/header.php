@@ -22,13 +22,13 @@
             </form>
         <?php if (!isset($_SESSION['user'])): ?>
             <div class="col-3 row justify-content-end form-around">
-                <a class="btn btn-primary" href="/user/logging">Login</a>
+                <a class="btn btn-primary" href="/user/login">Login</a>
                 <a class="btn btn-primary" href="/user/registration">Register</a>
                 <a class="btn btn-primary" href="/cart/view">Cart</a>
             </div>
         <?php else: ?>
             <div class="col-3 row justify-content-end form-around">
-                <a class="btn btn-primary" href="/user/orders"><?=$_SESSION['user']['name']?></a>
+                <a class="btn btn-primary" href="/user/orders"><?=$_SESSION['user']->login?></a>
                 <a class="btn btn-primary" href="/user/logout">Logout</a>
                 <a class="btn btn-primary" href="/cart/view">Cart</a>
             </div>
