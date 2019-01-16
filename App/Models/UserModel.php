@@ -58,47 +58,38 @@ class UserModel extends Model
         }
         return $error;
     }
+
     public function checkLoginInDB($flag, $login = '',$email = '') {
+        $errors = [];
         switch ($flag) {
             case 'reg': // Is user already in db?
                 $check ="SELECT login FROM users WHERE login = :login OR email = :email";
                 if ($this->queryOne($check,['login' => $login,'email' => $email], 0)) {
-                    return 'User is already registered';
+                    $errors['inBase'] = 'User is already registered';
+                    return $errors;
                 }
                 return false;
             case 'log': // Is user registered?
                 if ($this->queryOne($this->userIdQuery,['login' => $login],0)) {
-                    return null;
+                    return false;
                 } else {
-                    return 'This user is not registered';
+                    $errors['notInBase'] = 'This user is not registered';
+                    return $errors;
                 }
-            case 'id': // Get user's id, login and email
-                $check = "SELECT id, login, email FROM users WHERE login = :login";
-                return [
-                    $this->queryOne($check,['login' => $login],0),
-                    $this->queryOne($check,['login' => $login],1),
-                    $this->queryOne($check,['login' => $login],2)
-                ];
             default:
-                return null;
+                return $errors;
         }
     }
     public function checkLoginPassword($login, $password) {
         $errors = [];
-        $error = $this->checkLoginInDB('log',$login);
-        if ($error) {
-            $errors['loginError'] = $error;
-            return $errors;
-        } else {
-            $check = "SELECT password FROM users WHERE login = :login";
-            $hash = $this->queryOne($check, ['login' => $login], 0 );
-            if (password_verify($password,$hash)){
-                return null;
+        $check = "SELECT password FROM users WHERE login = :login";
+        $hash = $this->queryOne($check, ['login' => $login], 0 );
+        if (password_verify($password,$hash)) {
+                return $errors;
             } else {
                 $errors['dbPassError'] = 'Wrong password';
                 return $errors;
             }
-        }
     }
 
     public function getUserId($login) {
@@ -106,7 +97,12 @@ class UserModel extends Model
     }
     public function registerUser($log,$pass,$email){
         $pass = password_hash($pass, PASSWORD_DEFAULT);
-        $register = $this->pdo->prepare('INSERT INTO users (`login`, `password`, `email`) VALUES (?, ?, ?)');
-        $register->execute([$log,$pass,$email]);
+        $register = "INSERT INTO users (login, password, email) VALUES (:login, :password, :email)";
+        $this->queryOne($register, [
+            'login' => $log,
+            'password' => $pass,
+            'email' => $email
+        ]);
+        return true;
     }
 }

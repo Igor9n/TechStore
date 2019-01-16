@@ -28,7 +28,7 @@ class UserMapper extends Mapper
                 return User::createObject(
                     $_POST['login'],
                     $_POST['password'],
-                    $_POST['confirmPassword'],
+                    $_POST['confirm'],
                     $_POST['email']
                 );
         }
@@ -51,27 +51,36 @@ class UserMapper extends Mapper
 
     }
 
-    public function checkForErrors(User $object, $flag){
+    public function checkForErrors(User $object, $flag) {
+        $errors = $this->validateInfo($object, $flag);
         switch ($flag){
             case 'log':
-                $errors = $this->validateInfo($object, $flag);
                 if (empty($errors)) {
-                    return $this->model->checkLoginPassword($object->login, $object->password);
-                } else {
-                    return $errors;
+                    $errors = $this->model->checkLoginInDB($flag, $object->login);
+                    if (empty($errors)){
+                        $errors = $this->model->checkLoginPassword($object->login, $object->password);
+                    }
                 }
+                return $errors;
             case 'reg':
-                $errors = $this->validateInfo($object, $flag);
                 if (empty($errors)) {
-
+                    return $this->model->checkLoginInDB($flag, $object->login);
                 }
                 return $errors;
             default:
-                return null;
+                return $errors;
         }
     }
 
     public function addId(User $object) {
         $object->fillId($this->model->getUserId($object->login));
+    }
+
+    public function registerUser(User $object) {
+        return $this->model->registerUser(
+            $object->login,
+            $object->password,
+            $object->email
+        );
     }
 }
