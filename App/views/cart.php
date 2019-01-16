@@ -27,16 +27,16 @@
                                             <a class="page-link">-</a>
                                         </div>
                                     <?php else: ?>
-                                        <a class="page-link d-inline-block" href="/cart/minus?id=<?=$var['info']->serviceTitle?>">-</a>
+                                        <a class="page-link d-inline-block" href="/cart/minus?id=<?=$var['info']->id?>">-</a>
                                     <?php endif; ?>
                                     <input href="/cart/quantity?id=<?=$var['info']->id?>" size="1" class="input-text qty text" title="Change quantity" value="<?=$var['count']?>" min="0" step="1" disabled>
-                                    <a class="page-link d-inline-block" href="/cart/plus?id=<?=$var['info']->serviceTitle?>">+</a>
+                                    <a class="page-link d-inline-block" href="/cart/plus?id=<?=$var['info']->id?>">+</a>
                                 </div>
                             </td>
                             <th scope="row"><?=$var['endPrice']?></th>
                             <td>
                                 <form method="GET" action="/cart/delete">
-                                    <button class="btn btn-secondary" name="id" value="<?=$var['info']->serviceTitle?>">Delete</button>
+                                    <button class="btn btn-secondary" name="id" value="<?=$var['info']->id?>">Delete</button>
                                 </form>
                             </td>
                         </tr>

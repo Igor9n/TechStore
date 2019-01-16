@@ -16,40 +16,6 @@ class CartModel extends Model
     public function __construct(){
         parent::__construct();
     }
-    public function getPersonalForOrder(){
-        $array = [];
-        if (!empty($_POST['email'])){
-            $array['email'] = $_POST ['email'];
-        }
-        $array['firstName'] = $_POST['firstName'];
-        $array['lastName'] = $_POST['lastName'];
-        $array['phone'] = $_POST['phone'];
-        return $array;
-
-    }
-    public function getAddressForOrder(){
-        $array = [];
-        if (!empty($_POST['zip'])){
-            $array['zip'] = $_POST['zip'];
-        }
-        $array['city'] = $_POST['city'];
-        $array['address'] = $_POST['address'];
-        if (!empty($_POST['apartment'])) {
-            $array['apartmentsNumbers'] = $_POST['house'] . '-' . $_POST['apartment'];
-        } else {
-            $array['apartmentsNumbers'] = $_POST['house'];
-        }
-        return $array;
-    }
-    public function getProductsInfo(){
-        $array = [];
-        foreach ($_SESSION['cart'] as $value){
-            $array[$value['serviceTitle']]['id'] = $value['id'];
-            $array[$value['serviceTitle']]['serviceTitle'] = $value['serviceTitle'];
-            $array[$value['serviceTitle']]['count'] = $value['count'];
-        }
-        return $array;
-    }
 
     public function validateName($flag, $value){
         $errors = [];
@@ -76,10 +42,20 @@ class CartModel extends Model
     public function validatePhone($value){
         $errors = [];
         if(!preg_match('/^[0-9]+$/',$value)){
-            $errors['phoneError'] = 'Phone may contains only letters';
+            $errors['phoneError'] = 'Phone may contains only numbers';
         }
         if(strlen($value) < 7 || strlen($value) > 12){
-            $errors['firstCount'] = 'Phone may have min 7 and max 12 numbers';
+            $errors['phoneCount'] = 'Phone may have min 7 and max 12 numbers';
+        };
+        return $errors;
+    }
+    public function validateZip($value){
+        $errors = [];
+        if(!preg_match('/^[0-9]+$/',$value)){
+            $errors['zipError'] = 'ZIP may contains only numbers';
+        }
+        if(strlen($value) < 1 || strlen($value) > 12){
+            $errors['zipCount'] = 'ZIP may have min 1 and max 10 numbers';
         };
         return $errors;
     }
@@ -121,95 +97,59 @@ class CartModel extends Model
         }
         return $errors;
     }
-    public function checkForErrors($array){
-        $errors = [];
-        $check['firstNameErrors'] = $this->validateName('first',$array['personal']['firstName']);
-        $check['lastNameErrors'] = $this->validateName('last',$array['personal']['lastName']);
-        $check['phoneErrors'] = $this->validatePhone($array['personal']['phone']);
-        if(isset($array['personal']['email'])){
-            $check['emailErrors'] = $this->validateEmail($array['personal']['email']);
-        }
-        $check['cityErrors'] = $this->validateCity($array['address']['city']);
-        $check['addressErrors'] = $this->validateAddress($array['address']['address']);
-        foreach ($check as $value){
-            if (isset($value)){
-                foreach ($value as $var){
-                    $errors[] = $var;
-                }
-            }
-        }
-        return $errors;
+
+    public function submitPersonal($array) {
+        $personal = "
+            INSERT INTO users_personal (first_name,last_name,phone_number,email)
+            VALUES (:first, :last, :phone, :email)";
+        $this->queryOne($personal, [
+            'first' => $array['firstName'],
+            'last' => $array['lastName'],
+            'phone' => $array['phone'],
+            'email' => $array['email'],
+        ]);
+        $personalId = "SELECT last_insert_id()";
+        return $this->queryOne($personalId, [], 0);
     }
-    public function getTotalPrice($array){
-        $totalPrice = 0;
-        $price = $this->pdo->prepare(
-            'SELECT price FROM products_availability 
-            JOIN products
-            ON products.id = products_availability.product_id
-            WHERE products.service_title = ?');
-        foreach ($array['products'] as $var){
-            $price->execute([$var['serviceTitle']]);
-            $priceForAdd = $price->fetchColumn();
-            $totalPrice = $totalPrice + $priceForAdd * $var['count'];
-        }
-        echo $totalPrice;
-        die();
-        return $totalPrice;
+    public function submitAddress($person, $array) {
+        $address = "
+            INSERT INTO users_addresses (city,address,apartments_numbers,zip,personal_id)
+            VALUES (:city, :address, :apartments, :zip, :personalId)";
+        $this->queryOne($address, [
+            'city' => $array['city'],
+            'address' => $array['address'],
+            'apartments' => $array['apartments'],
+            'zip' => $array['zip'],
+            'personalId' => $person
+        ]);
     }
-    public function submitOrder($array){
-        if(!isset($array['personal']['email'])) {
-            $array['personal']['email'] = '';
-        }
-        $personal = $this->pdo->prepare(
-            'INSERT INTO users_personal (first_name,last_name,phone_number,email)
-            VALUES (?, ?, ?, ?)');
-        $personal->execute([
-            $array['personal']['firstName'],
-            $array['personal']['lastName'],
-            $array['personal']['phone'],
-            $array['personal']['email']
+    public function submitOrder($person, $price){
+        $order = "
+            INSERT INTO orders (personal_id,total_price)
+            VALUES (:person, :price)";
+        $this->queryOne($order, [
+            'person' => $person,
+            'price' => $price
         ]);
-        $personalId = $this->pdo->query('SELECT last_insert_id()');
-        $personalId = $personalId->fetchColumn();
-        if(!isset($array['address']['zip'])) {
-            $array['address']['zip'] = '';
-        }
-        $address = $this->pdo->prepare(
-            'INSERT INTO users_addresses (city,address,apartments_numbers,zip,personal_id)
-            VALUES (?, ?, ?, ?, ?)');
-        $address->execute([
-            $array['address']['city'],
-            $array['address']['address'],
-            $array['address']['apartmentsNumbers'],
-            $array['address']['zip'],
-            $personalId
-        ]);
-        $totalPrice = $this->getTotalPrice($array);
-        $order = $this->pdo->prepare(
-            'INSERT INTO orders (personal_id,total_price)
-            VALUES (?, ?)');
-        $order->execute([
-            $personalId,
-            $totalPrice
-        ]);
-        $orderId = $this->pdo->query('SELECT last_insert_id()');
-        $orderId = $orderId->fetchColumn();
-        $address = $this->pdo->prepare(
-            'INSERT INTO orders_delivery (order_id)
-            VALUES (?)');
-        $address->execute([
-            $orderId
-        ]);
-        $orderProducts = $this->pdo->prepare(
-            'INSERT INTO orders_products (order_id,product_id, count)
-            VALUES (?, ?, ?)');
-        foreach ($array['products'] as $var){
-            $orderProducts->execute([
-                $orderId,
-                $var['id'],
-                $var['count']
+        $orderId = "SELECT last_insert_id()";
+        return $this->queryOne($orderId, [], 0);
+    }
+    public function submitOrderDelivery($order) {
+        $delivery = "INSERT INTO orders_delivery (order_id)
+            VALUES (:order)";
+        $this->queryOne($delivery, ['order' => $order]);
+    }
+    public function submitOrderProducts($order, $array) {
+        $orderProducts = "
+            INSERT INTO orders_products (order_id,product_id, count, endprice)
+            VALUES (:order, :product, :count, :price)";
+        foreach ($array as $var){
+            $this->queryOne($orderProducts, [
+                'order' => $order,
+                'product' => $var['info']->id,
+                'count' => $var['count'],
+                'price' => $var['endPrice']
             ]);
         }
-        return $orderId;
     }
 }

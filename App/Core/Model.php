@@ -19,10 +19,14 @@ class Model
         $this->pdo = DBConnection::getInstance();
     }
 
-    protected function queryOne($query, $value, $column) {
+    protected function queryOne($query, array $value, $column = null) {
         $query = $this->pdo->prepare($query);
-        $query->execute(['value' => $value]);
-        return $query->fetchColumn($column);
+        $query->execute($value);
+        if ($column === null) {
+            return true;
+        } else {
+            return $query->fetchColumn($column);
+        }
     }
 
     protected function selectCondition($query, $value) {
@@ -37,7 +41,7 @@ class Model
 
     protected function selectTypeAndQuery($query, $value, $column) {
         $query = $this->selectCondition($query, $value);
-        return $this->queryOne($query, $value, $column);
+        return $this->queryOne($query, ['value' => $value], $column);
     }
 
     protected function queryList($query, $column, array $variables = []) {
