@@ -57,26 +57,26 @@ class UserModel extends Model
     }
     public function checkLogin($flag, $login = '',$email = ''){
         switch ($flag) {
-            case 'reg':
-                $check = $this->pdo->prepare('SELECT login FROM users WHERE login = ? OR email = ?');
-                $check->execute([$login,$email]);
-                if ($check->fetchAll()) {
+            case 'reg': // Is user already in db?
+                $check ="SELECT login FROM users WHERE login = :login OR email = :email";
+                if ($this->queryOne($check,['login' => $login,'email' => $email], 0)) {
                     return 'User is already registered';
                 }
                 return false;
-            case 'log':
-                $check = $this->pdo->prepare('SELECT id FROM users WHERE login = ?');
-                $check->execute([$login]);
-
-                if ($stmn = $check->fetchColumn()) {
+            case 'log': // Is user registered?
+                $check = "SELECT id FROM users WHERE login = :login";
+                if ($this->queryOne($check,['login' => $login],0)) {
                     return null;
                 } else {
                     return 'This user is not registered';
                 }
-            case 'id':
-                $check = $this->pdo->prepare('SELECT id, login FROM users WHERE login = ?');
-                $check->execute([$login]);
-                return $check->fetchAll();
+            case 'id': // Get user's id, login and email
+                $check = "SELECT id, login, email FROM users WHERE login = :login";
+                return [
+                    $this->queryOne($check,['login' => $login],0),
+                    $this->queryOne($check,['login' => $login],1),
+                    $this->queryOne($check,['login' => $login],2)
+                ];
             default:
                 return null;
         }

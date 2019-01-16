@@ -54,7 +54,7 @@ class CartModel extends Model
         if(!preg_match('/^[0-9]+$/',$value)){
             $errors['zipError'] = 'ZIP may contains only numbers';
         }
-        if(strlen($value) < 7 || strlen($value) > 12){
+        if(strlen($value) < 1 || strlen($value) > 12){
             $errors['zipCount'] = 'ZIP may have min 1 and max 10 numbers';
         };
         return $errors;

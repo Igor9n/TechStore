@@ -13,7 +13,7 @@ class DBConnection
 {
     private static $instance;
 
-    public static function getInstance(){
+    public static function getInstance(): \PDO {
         if(null === static::$instance){
             $config = require 'App/Config/db.php';
             $dsn = sprintf('mysql:host=%s;dbname=%s;charset=%s',$config['host'],$config['db'],$config['charset']);

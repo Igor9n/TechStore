@@ -9,7 +9,7 @@
 namespace App\Core;
 
 
-class Mapper
+abstract class Mapper
 {
     protected $model;
 
