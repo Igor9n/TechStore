@@ -7,17 +7,20 @@
  */
 namespace App\Mappers;
 
+use App\Classes\Session;
 use App\Core\Mapper;
 use App\Data\User;
 use App\Models\UserModel;
 
 class UserMapper extends Mapper
 {
-    public function __construct() {
+    public function __construct()
+    {
         $this->model = new UserModel();
     }
 
-    public function getObject($flag): User {
+    public function getObject($flag): User
+    {
         switch ($flag) {
             case 'log':
                 return User::createObject(
@@ -34,7 +37,8 @@ class UserMapper extends Mapper
         }
     }
 
-    public function validateInfo(User $object, $flag) {
+    public function validateInfo(User $object, $flag)
+    {
         switch ($flag){
             case 'log':
                 $check['loginErrors'] = $this->model->validateLogin($object->login);
@@ -42,24 +46,26 @@ class UserMapper extends Mapper
                 return $this->makeSimpleArray($check);
             case 'reg':
                 $check['loginErrors'] = $this->model->validateLogin($object->login);
-                $check['passwordErrors'] = $this->model->validatePassword($flag,$object->password,$object->confirmPassword);
+                $check['passwordErrors'] = $this->model->validatePassword($object->password);
+                $check['confirmError'] = $this->model->validateConfirm($object->password,$object->confirmPassword);
                 $check['emailErrors'] = $this->model->validateEmail($object->email);
                 return $this->makeSimpleArray($check);
             default:
-                return null;
+                return ['Invalid input data'];
         }
 
     }
 
-    public function checkForErrors(User $object, $flag) {
+    public function checkForErrors(User $object, $flag)
+    {
         $errors = $this->validateInfo($object, $flag);
         switch ($flag){
             case 'log':
                 if (empty($errors)) {
                     $errors = $this->model->checkLoginInDB($flag, $object->login);
-                    if (empty($errors)){
-                        $errors = $this->model->checkLoginPassword($object->login, $object->password);
-                    }
+                }
+                if (empty($errors)){
+                    $errors = $this->model->checkLoginPassword($object->login, $object->password);
                 }
                 return $errors;
             case 'reg':
@@ -72,15 +78,39 @@ class UserMapper extends Mapper
         }
     }
 
-    public function addId(User $object) {
+    public function addId(User $object)
+    {
         $object->fillId($this->model->getUserId($object->login));
     }
 
-    public function registerUser(User $object) {
+    public function submitUserInfo(User $object)
+    {
         return $this->model->registerUser(
             $object->login,
             $object->password,
             $object->email
         );
     }
+
+    public function loginUser($errors,$user)
+    {
+        if (empty($errors)) {
+            Session::anotherSessionStart();
+            $this->addId($user);
+            $_SESSION['user'] = $user;
+        } else {
+            $_SESSION['errors'] = $errors;
+        }
+        header("Location: /user/login");
+    }
+    public function registerUser($errors,$user)
+    {
+        if (empty($errors)) {
+            $_SESSION['registered'] = $this->submitUserInfo($user);
+        } else {
+            $_SESSION['errors'] = $errors;
+        }
+        header("Location: /user/registration");
+    }
+
 }
