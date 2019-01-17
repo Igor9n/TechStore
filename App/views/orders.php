@@ -1,7 +1,7 @@
 <div class="col-sm-10">
     <div class="row">
         <div class="col-sm-9">
-            <?php if(isset($data['info'])): ?>
+            <?php if(isset($info)): ?>
                 <div class="tab-content">
                     <table class="table">
                         <thead>
@@ -14,7 +14,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($data['info'] as $var):?>
+                            <?php foreach ($info as $var):?>
                                 <tr>
                                     <th scope="row"><?=$var['orderNumber']?></th>
                                     <td>

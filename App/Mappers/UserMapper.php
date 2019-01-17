@@ -42,7 +42,7 @@ class UserMapper extends Mapper
         switch ($flag){
             case 'log':
                 $check['loginErrors'] = $this->model->validateLogin($object->login);
-                $check['passwordErrors'] = $this->model->validatePassword($flag, $object->password);
+                $check['passwordErrors'] = $this->model->validatePassword($object->password);
                 return $this->makeSimpleArray($check);
             case 'reg':
                 $check['loginErrors'] = $this->model->validateLogin($object->login);
