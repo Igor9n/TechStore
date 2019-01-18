@@ -14,10 +14,12 @@ use App\Core\Model;
 class OrderModel extends Model
 {
     public $product;
+    public $order;
     public function __construct()
     {
         parent::__construct();
         $this->product = "SELECT count, endprice FROM orders_products WHERE product_id = :product";
+        $this->order = "SELECT id,status,total_price FROM orders WHERE user_id = :user";
     }
 
     public function checkOrderById($id)
@@ -29,19 +31,17 @@ class OrderModel extends Model
         return false;
     }
 
-    public function getOrdersByUserId($id)
+    public function getOrdersIdByUserId($id)
     {
-        $array = [];
-        $i = 0;
-        $orders = $this->pdo->prepare('SELECT id,status,total_price FROM orders WHERE user_id = ?');
-        $orders->execute([$id]);
-        while ($value = $orders->fetch()){
-            $array[$i]['orderNumber'] = $value['id'];
-            $array[$i]['orderStatus'] = $value['status'];
-            $array[$i]['totalPrice'] = $value['total_price'];
-            $i++;
-        }
-        return $array;
+        return $this->queryList($this->order,0,['user' => $id]);
+    }
+    public function getOrdersStatusByUserId($id)
+    {
+        return $this->queryList($this->order,1,['user' => $id]);
+    }
+    public function getOrdersPriceByUserId($id)
+    {
+        return $this->queryList($this->order,2,['user' => $id]);
     }
     public function getPersonalInfoByOrderId($id)
     {

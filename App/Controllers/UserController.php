@@ -49,7 +49,7 @@ class UserController extends Controller
     public function actionLogin()
     {
         if (isset($_SESSION['user'])) {
-            header("Location: /user/orders");
+            header("Location: /order/all");
         }
 
         $data['title'] = 'Login';
@@ -64,7 +64,7 @@ class UserController extends Controller
     public function actionRegistration()
     {
         if (isset($_SESSION['user'])) {
-            header("Location: /user/orders");
+            header("Location: /order/all");
         }
 
         $data['title'] = 'Registration';

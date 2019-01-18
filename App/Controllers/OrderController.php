@@ -22,14 +22,14 @@ class OrderController extends Controller
 
     public function actionAll()
     {
-        if (isset($_SESSION['user'])) {
-            $id = $_SESSION['user']->id;
-            $data['title'] = 'Orders';
-            $data['info'] = $this->orderModel->getOrdersByUserId($id);
-            $this->view->generate('template.php','orders.php',$data);
-        } else {
+        if (!isset($_SESSION['user'])){
             header("Location: /user/login");
         }
+
+        $id = $_SESSION['user']->id;
+        $data['info'] = $this->mapper->getOrdersListForUser($id);
+        $data['title'] = 'Orders';
+        $this->view->generate('template.php','orders.php',$data);
     }
     public function actionView()
     {

@@ -21,6 +21,21 @@ class OrderMapper extends Mapper
         $this->mapper = new ItemMapper();
     }
 
+    public function getOrdersListForUser($id)
+    {
+        $array = [];
+        $list = $this->model->getOrdersIdByUserId($id);
+        $status = $this->model->getOrdersStatusByUserId($id);
+        $price = $this->model->getOrdersPriceByUserId($id);
+
+        for ($i=0;$i<count($list);$i++) {
+            $array[$i]['id'] = $list[$i];
+            $array[$i]['status'] = $status[$i];
+            $array[$i]['totalPrice'] = $price[$i];
+        }
+
+        return $array;
+    }
     public function getProductsPriceInfo(array $array)
     {
         foreach ($array as $var){
