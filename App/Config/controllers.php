@@ -3,6 +3,8 @@
 return [
     'main',
     'category',
-    'item','cart',
-    'user'
+    'item',
+    'cart',
+    'user',
+    'order'
 ];

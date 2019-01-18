@@ -12,6 +12,7 @@ namespace App\Core;
 class Mapper
 {
     protected $model;
+    protected $mapper;
 
     protected function makeSimpleArray($array) {
         $result = [];

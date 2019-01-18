@@ -8,7 +8,7 @@
                 </div>
                 <div class="alert alert-secondary">
                     <a class="btn btn-secondary" href="/">Return</a>
-                    <a class="btn btn-secondary" href="/main/login">Login</a>
+                    <a class="btn btn-secondary" href="/user/login">Login</a>
                 </div>
             <?php else: ?>
                 <?php if(isset($errors)):?>

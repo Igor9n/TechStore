@@ -49,7 +49,7 @@ class UserController extends Controller
     public function actionLogin()
     {
         if (isset($_SESSION['user'])) {
-            header("Location: /user/orders");
+            header("Location: /order/all");
         }
 
         $data['title'] = 'Login';
@@ -64,7 +64,7 @@ class UserController extends Controller
     public function actionRegistration()
     {
         if (isset($_SESSION['user'])) {
-            header("Location: /user/orders");
+            header("Location: /order/all");
         }
 
         $data['title'] = 'Registration';
@@ -86,28 +86,5 @@ class UserController extends Controller
             unset($_SESSION['user']);
         }
         header("Location: /user/login");
-    }
-
-    public function actionOrders()
-    {
-        if (isset($_SESSION['user'])) {
-            $id = $_SESSION['user']->id;
-            $data['title'] = 'Orders';
-            $data['info'] = $this->orderModel->getOrdersByUserId($id);
-            $this->view->generate('template.php','orders.php',$data);
-        } else {
-            header("Location: /user/login");
-        }
-    }
-    public function actionOrder($id)
-    {
-        if(isset($_SESSION['user'])){
-            $data['title'] = 'Order info';
-            $data['orderNumber'] = $id;
-            $data['info'] = $this->orderModel->getOrderInfoById($id);
-            $this->view->generate('template.php','order.php',$data);
-        } else {
-            header("Location: /user/login");
-        }
     }
 }
