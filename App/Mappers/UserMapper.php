@@ -98,6 +98,7 @@ class UserMapper extends Mapper
             Session::anotherSessionStart();
             $this->addId($user);
             $_SESSION['user'] = $user;
+            unset($_SESSION['user']->password);
         } else {
             $_SESSION['errors'] = $errors;
         }
@@ -113,4 +114,7 @@ class UserMapper extends Mapper
         header("Location: /user/registration");
     }
 
+    public function addOrdersInfo(User $user, $list) {
+        $user->fillOrders($list);
+    }
 }

@@ -29,9 +29,9 @@ class OrderMapper extends Mapper
         $price = $this->model->getOrdersPriceByUserId($id);
 
         for ($i=0;$i<count($list);$i++) {
-            $array[$i]['id'] = $list[$i];
-            $array[$i]['status'] = $status[$i];
-            $array[$i]['totalPrice'] = $price[$i];
+            $array[$list[$i]]['id'] = $list[$i];
+            $array[$list[$i]]['status'] = $status[$i];
+            $array[$list[$i]]['totalPrice'] = $price[$i];
         }
 
         return $array;

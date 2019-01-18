@@ -1,7 +1,7 @@
 <div class="col-sm-10">
     <div class="row">
         <div class="col-sm-9">
-            <?php if(!empty($info)): ?>
+            <?php if(!empty($info->orders)): ?>
                 <div class="alert alert-warning">
                     <h4 class="alert-heading">All orders</h4>
                 </div>
@@ -17,7 +17,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($info as $var):?>
+                            <?php foreach ($info->orders as $var):?>
                                 <tr>
                                     <th scope="row"><?=$var['id']?></th>
                                     <td>
