@@ -121,13 +121,13 @@
                         <?php foreach ($info->productsInfo as $var):?>
                             <tr>
                                 <th scope="row"><?= $i++;?></th>
-                                <th scope="row"><a href="/item/view/<?=$var->serviceTitle?>"><?=$var->title?></a></th>
+                                <th scope="row"><a href="/item/view/<?=$var['info']->serviceTitle?>"><?=$var['info']->title?></a></th>
                                 <td>
                                     <div>
-                                        <input size="1" value="<?=$var->count?>" disabled>
+                                        <input size="1" value="<?=$var['count']?>" disabled>
                                     </div>
                                 </td>
-                                <th scope="row"><?=$var->endprice?></th>
+                                <th scope="row"><?=$var['endprice']?></th>
                             </tr>
                         <?php endforeach; ?>
                         </tbody>

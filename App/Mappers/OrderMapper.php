@@ -21,10 +21,22 @@ class OrderMapper extends Mapper
         $this->mapper = new ItemMapper();
     }
 
+    public function getProductsPriceInfo(array $array)
+    {
+        foreach ($array as $var){
+            $array[$var['info']->id]['count'] = $this->model->getOrderProductCount($var['info']->id);
+            $array[$var['info']->id]['endprice'] = $this->model->getOrderProductEndprice($var['info']->id);
+        }
+        return $array;
+    }
+
     public function getProductsForOrder($id)
     {
         $list = $this->model->getProductsListByOrderId($id);
-        return $this->mapper->getArray($list);
+        foreach ($list as $var){
+            $products[$var]['info'] = $this->mapper->getObject($var);
+        }
+        return $this->getProductsPriceInfo($products);
     }
 
     public function getOrderInfo($id)

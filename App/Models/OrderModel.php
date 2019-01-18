@@ -13,9 +13,11 @@ use App\Core\Model;
 
 class OrderModel extends Model
 {
+    public $product;
     public function __construct()
     {
         parent::__construct();
+        $this->product = "SELECT count, endprice FROM orders_products WHERE product_id = :product";
     }
 
     public function checkOrderById($id)
@@ -27,7 +29,8 @@ class OrderModel extends Model
         return false;
     }
 
-    public function getOrdersByUserId($id){
+    public function getOrdersByUserId($id)
+    {
         $array = [];
         $i = 0;
         $orders = $this->pdo->prepare('SELECT id,status,total_price FROM orders WHERE user_id = ?');
@@ -40,7 +43,8 @@ class OrderModel extends Model
         }
         return $array;
     }
-    public function getPersonalInfoByOrderId($id){
+    public function getPersonalInfoByOrderId($id)
+    {
         $array = [];
         $info = "
             SELECT first_name,last_name,phone_number,email 
@@ -56,7 +60,8 @@ class OrderModel extends Model
 
         return $array;
     }
-    public function getAddressInfoByOrderId($id){
+    public function getAddressInfoByOrderId($id)
+    {
         $array = [];
         $info = "
             SELECT city,address,apartments_numbers 
@@ -71,7 +76,8 @@ class OrderModel extends Model
 
         return $array;
     }
-    public function getDeliveryInfoByOrderId($id){
+    public function getDeliveryInfoByOrderId($id)
+    {
         $array = [];
         $info = "
             SELECT type,date,time
@@ -86,12 +92,21 @@ class OrderModel extends Model
 
         return $array;
     }
-    public function getProductsListByOrderId($id){
+    public function getProductsListByOrderId($id)
+    {
         $query = "
             SELECT product_id 
             FROM orders_products
             WHERE order_id = :order
         ";
         return $this->queryList($query,0,['order' => $id]);
+    }
+    public function getOrderProductCount($id)
+    {
+        return $this->queryOne($this->product,['product' => $id], 0);
+    }
+    public function getOrderProductEndprice($id)
+    {
+        return $this->queryOne($this->product,['product' => $id], 1);
     }
 }
