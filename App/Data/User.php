@@ -14,6 +14,7 @@ class User
     public $password;
     public $confirmPassword;
     public $email;
+    public $orders;
 
     public function __construct($login, $password, $confirmPassword, $email) {
         $this->login = $login;
@@ -33,6 +34,10 @@ class User
 
     public function fillId ($id) {
         $this->id = $id;
+    }
+
+    public function fillOrders ($list) {
+        $this->orders = $list;
     }
 
 }
