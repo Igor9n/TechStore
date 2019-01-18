@@ -109,4 +109,9 @@ class OrderModel extends Model
     {
         return $this->queryOne($this->product,['product' => $id], 1);
     }
+    public function getOrderStatus($id)
+    {
+        $query = "SELECT status FROM orders WHERE id = :order";
+        return $this->queryOne($query,['order' => $id], 0);
+    }
 }

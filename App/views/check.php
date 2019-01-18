@@ -7,25 +7,29 @@
                 </div>
                 <table class="table">
                     <thead>
-                    <tr>
-                        <th scope="col" style="width: 50%;">Delivery</th>
-                        <th scope="col" style="width: 50%;">Value</th>
-                    </tr>
+                        <tr>
+                            <th scope="col" style="width: 50%;">Delivery</th>
+                            <th scope="col" style="width: 50%;">Value</th>
+                        </tr>
                     </thead>
-                    <tbody>
-                    <tr>
-                        <th scope="row">Type</th>
-                        <td><?=$info['type']?></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Date</th>
-                        <td><?=$info['date']?></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Time</th>
-                        <td><?=$info['time']?></td>
-                    </tr>
-                    </tbody>
+                        <tbody>
+                            <tr>
+                                <th scope="row">Status</th>
+                                <td><?=$info[1]?></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Type</th>
+                                <td><?=$info[0]['type']?></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Date</th>
+                                <td><?=$info[0]['date']?></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Time</th>
+                                <td><?=$info[0]['time']?></td>
+                            </tr>
+                        </tbody>
                 </table>
             <?php else: ?>
                 <div class="alert alert-warning">

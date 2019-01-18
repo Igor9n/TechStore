@@ -62,7 +62,6 @@ class OrderController extends Controller
             $data['info'] = $this->mapper->getShortenOrder($_GET['id']);
             $data['orderId'] = $_GET['id'];
         }
-
         $data['title'] = 'Order status';
         $this->view->generate('template.php','check.php', $data);
     }
