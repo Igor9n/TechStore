@@ -33,9 +33,9 @@ class OrderController extends Controller
     }
     public function actionView()
     {
-        if (!isset($_SESSION['user'])){
-            header("Location: /user/login");
-        }
+//        if (!isset($_SESSION['user'])){
+//            header("Location: /user/login");
+//        }
         $order = false;
         $data['title'] = 'Order info';
         if(isset($_GET['id'])){
