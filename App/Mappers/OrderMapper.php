@@ -72,6 +72,14 @@ class OrderMapper extends Mapper
         return false;
     }
 
+    public function getShortenOrder($id)
+    {
+        if ($this->model->checkOrderById($id)){
+            return $this->model->getDeliveryInfoByOrderId($id);
+        }
+        return false;
+    }
+
     public function getObject($id, array $array): Order
     {
         return Order::getObject(

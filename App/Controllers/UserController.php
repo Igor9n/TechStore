@@ -26,7 +26,6 @@ class UserController extends Controller
 
     public function actionTry(): void
     {
-        $user = null;
         $errors = [];
 
         if (isset($_POST['try'])) {
@@ -44,6 +43,13 @@ class UserController extends Controller
             default:
                 header("Location: /user/login");
         }
+    }
+    public function actionLogout()
+    {
+        if (isset($_SESSION['user'])) {
+            unset($_SESSION['user']);
+        }
+        header("Location: /user/login");
     }
 
     public function actionLogin()
@@ -79,12 +85,5 @@ class UserController extends Controller
         }
 
         $this->view->generate('template.php', 'registration.php', $data);
-    }
-    public function actionLogout()
-    {
-        if (isset($_SESSION['user'])) {
-            unset($_SESSION['user']);
-        }
-        header("Location: /user/login");
     }
 }

@@ -42,8 +42,10 @@ class OrderController extends Controller
         if (!isset($_SESSION['user'])){
             header("Location: /user/login");
         }
+
         $order = false;
         $data['title'] = 'Order info';
+
         if(isset($_GET['id']) && isset($_SESSION['user']->orders[$_GET['id']])){
             $order = $this->mapper->getOrder($_GET['id']);
         }
@@ -53,5 +55,15 @@ class OrderController extends Controller
         }
 
         $this->view->generate('template.php','order.php',$data);
+    }
+    public function actionCheck()
+    {
+        if(isset($_GET['id'])){
+            $data['info'] = $this->mapper->getShortenOrder($_GET['id']);
+            $data['orderId'] = $_GET['id'];
+        }
+
+        $data['title'] = 'Order status';
+        $this->view->generate('template.php','check.php', $data);
     }
 }

@@ -16,7 +16,7 @@
                 <a class="nav-link" href="/main/about">About</a>
             </li>
         </ul>
-            <form class="form-inline my-2 my-lg-0" method="GET" action="/order/view">
+            <form class="form-inline my-2 my-lg-0" method="GET" action="/order/check">
                 <input class="form-control mr-sm-1" type="text" placeholder="Enter order number" name="id">
 <!--                <button class="btn btn-secondary" type="submit">Search</button>-->
             </form>
