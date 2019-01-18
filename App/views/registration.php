@@ -8,18 +8,18 @@
                 </div>
                 <div class="alert alert-secondary">
                     <a class="btn btn-secondary" href="/">Return</a>
-                    <a class="btn btn-secondary" href="/main/login">Login</a>
+                    <a class="btn btn-secondary" href="/user/login">Login</a>
                 </div>
             <?php else: ?>
-            <?php if(isset($errors)):?>
-                <div class="alert alert-danger">
-                    <ul>
-                        <?php foreach ($errors as $var): ?>
-                            <li><?=$var?></li>
-                        <?php endforeach; ?>
-                    </ul>
-                </div>
-            <?php endif; ?>
+                <?php if(isset($errors)):?>
+                    <div class="alert alert-danger">
+                        <ul>
+                            <?php foreach ($errors as $var): ?>
+                                <li><?=$var?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                <?php endif; ?>
                 <div class="alert alert-secondary">
                     <h4 class="alert-heading">Don't have an account yet?</h4>
                     <p class="mb-0">Fix it right now</p>

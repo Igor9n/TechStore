@@ -1,7 +1,10 @@
 <div class="col-sm-10">
     <div class="row">
         <div class="col-sm-9">
-            <?php if(isset($data['info'])): ?>
+            <?php if(!empty($info)): ?>
+                <div class="alert alert-warning">
+                    <h4 class="alert-heading">All orders</h4>
+                </div>
                 <div class="tab-content">
                     <table class="table">
                         <thead>
@@ -14,16 +17,16 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($data['info'] as $var):?>
+                            <?php foreach ($info as $var):?>
                                 <tr>
-                                    <th scope="row"><?=$var['orderNumber']?></th>
+                                    <th scope="row"><?=$var['id']?></th>
                                     <td>
                                         <div>
-                                            <input size=5" value="<?=$var['orderStatus']?>" disabled>
+                                            <input size=5" value="<?=$var['status']?>" disabled>
                                         </div>
                                     </td>
                                     <th scope="row"><?=$var['totalPrice']?></th>
-                                    <th scope="row"><a class="btn btn-primary" href="/user/order/<?=$var['orderNumber']?>">More</a></th>
+                                    <th scope="row"><a class="btn btn-primary" href="/order/view?id=<?=$var['id']?>">More</a></th>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
