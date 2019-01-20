@@ -66,11 +66,12 @@ class Cart
         return $total;
     }
 
-    public function fillPersonalInfo($firstName, $lastName, $phone, $email = '') {
+    public function fillPersonalInfo($firstName, $lastName, $phone, $email = '',$id = '') {
         $this->personalArray['firstName'] = $firstName;
         $this->personalArray['lastName'] = $lastName;
         $this->personalArray['phone'] = $phone;
         $this->personalArray['email'] = $email;
+        $this->personalArray['user'] = $id;
     }
 
     public function fillAddressInfo($city, $address, $house, $apartment = '', $zip = '') {

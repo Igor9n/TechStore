@@ -28,33 +28,38 @@ class CartController extends Controller
             $_POST['apartment'],
             $_POST['zip']
         ]);
+        $id = '';
+        if(isset($_SESSION['user'])){
+            $id = (int)$_SESSION['user']->id;
+        }
         $this->mapper->addPersonalInfo($cart, [
             $_POST['firstName'],
             $_POST['lastName'],
             $_POST['phone'],
-            $_POST['email']
+            $_POST['email'],
+            $id
         ]);
     }
 
     public function actionAdd() {
-        if (isset($_SESSION['item'])) {
-            $item = $_SESSION['item'];
-            $uri = "/item/view/" . $item->serviceTitle;
-            if (isset($_SESSION['cart'])) {
-                if (isset($_SESSION['cart']->itemsArray[$item->id])) {
-                    $this->mapper->changeItemCount('plus',$_SESSION['cart'],$item);
-                } else {
-                    $this->mapper->addItemToCart($_SESSION['cart'], $item);
-                }
-            } else {
-                $_SESSION['cart'] = $this->mapper->getObject($item);
-                unset($_SESSION['item']);
-            }
-            unset($_SESSION['item']);
-            header("Location: $uri");
-        } else {
+        if (!isset($_SESSION['item'])) {
             header("Location: /");
         }
+
+        $item = $_SESSION['item'];
+        $uri = "/item/view/" . $item->serviceTitle;
+        if (isset($_SESSION['cart'])) {
+            if (isset($_SESSION['cart']->itemsArray[$item->id])) {
+                $this->mapper->changeItemCount('plus',$_SESSION['cart'],$item);
+            } else {
+                $this->mapper->addItemToCart($_SESSION['cart'], $item);
+            }
+        } else {
+            $_SESSION['cart'] = $this->mapper->getObject($item);
+            unset($_SESSION['item']);
+        }
+        unset($_SESSION['item']);
+        header("Location: $uri");
     }
 
     public function actionView() {

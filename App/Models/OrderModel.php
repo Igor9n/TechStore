@@ -19,7 +19,11 @@ class OrderModel extends Model
     {
         parent::__construct();
         $this->product = "SELECT count, endprice FROM orders_products WHERE product_id = :product";
-        $this->order = "SELECT id,status,total_price FROM orders WHERE user_id = :user";
+        $this->order = "
+            SELECT orders.id,status,total_price FROM orders
+            JOIN users_personal
+            ON orders.personal_id = users_personal.id
+            WHERE users_personal.user_id = :user";
     }
 
     public function checkOrderById($id)
@@ -47,7 +51,7 @@ class OrderModel extends Model
     {
         $array = [];
         $info = "
-            SELECT first_name,last_name,phone_number,email 
+            SELECT first_name,last_name,phone_number,email,user_id 
             FROM users_personal
             JOIN orders
             ON users_personal.id = orders.personal_id
@@ -57,17 +61,19 @@ class OrderModel extends Model
         $array['lastName'] = $this->queryOne($info,['order' => $id],1);
         $array['phoneNumber'] = $this->queryOne($info,['order' => $id],2);
         $array['email'] = $this->queryOne($info,['order' => $id],3);
+        $array['user'] = $this->queryOne($info,['order' => $id],4);
 
         return $array;
     }
     public function getAddressInfoByOrderId($id)
     {
+        var_dump($id);
         $array = [];
         $info = "
             SELECT city,address,apartments_numbers 
             FROM users_addresses
             JOIN orders
-            ON users_addresses.id = orders.personal_id
+            ON users_addresses.personal_id = orders.personal_id
             WHERE orders.id = :order
         ";
         $array['city'] = $this->queryOne($info,['order' => $id],0);

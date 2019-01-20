@@ -36,7 +36,8 @@ class CartMapper extends Mapper
             $array[0],
             $array[1],
             $array[2],
-            $array[3]
+            $array[3],
+            $array[4]
         );
     }
 

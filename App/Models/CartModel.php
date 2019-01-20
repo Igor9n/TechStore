@@ -100,13 +100,14 @@ class CartModel extends Model
 
     public function submitPersonal($array) {
         $personal = "
-            INSERT INTO users_personal (first_name,last_name,phone_number,email)
-            VALUES (:first, :last, :phone, :email)";
+            INSERT INTO users_personal (first_name,last_name,phone_number,email,user_id)
+            VALUES (:first, :last, :phone, :email, :user)";
         $this->queryOne($personal, [
             'first' => $array['firstName'],
             'last' => $array['lastName'],
             'phone' => $array['phone'],
             'email' => $array['email'],
+            'user' => $array['user']
         ]);
         $personalId = "SELECT last_insert_id()";
         return $this->queryOne($personalId, [], 0);
