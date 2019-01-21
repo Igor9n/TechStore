@@ -1,7 +1,7 @@
 <?php
 namespace App\Controllers;
 
-use App\Core\{Controller,Route};
+use Core\{Controller,Route};
 use App\Mappers\CategoryMapper;
 use App\Models\CategoryModel;
 

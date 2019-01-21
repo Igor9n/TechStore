@@ -8,7 +8,7 @@
 namespace App\Mappers;
 
 use App\Classes\Session;
-use App\Core\Mapper;
+use Core\Mapper;
 use App\Data\User;
 use App\Models\UserModel;
 

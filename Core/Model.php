@@ -6,7 +6,7 @@
  * Time: 19:46
  */
 
-namespace App\Core;
+namespace Core;
 
 
 use App\Classes\DBConnection;
@@ -19,6 +19,7 @@ class Model
     {
         $this->pdo = DBConnection::getInstance();
     }
+
 
     protected function queryOne($query, array $value, $column = null)
     {

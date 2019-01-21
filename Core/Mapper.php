@@ -6,7 +6,7 @@
  * Time: 17:13
  */
 
-namespace App\Core;
+namespace Core;
 
 
 class Mapper

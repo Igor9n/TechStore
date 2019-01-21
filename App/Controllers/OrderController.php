@@ -9,7 +9,7 @@
 namespace App\Controllers;
 
 
-use App\Core\Controller;
+use Core\Controller;
 use App\Mappers\OrderMapper;
 use App\Mappers\UserMapper;
 

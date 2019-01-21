@@ -3,14 +3,14 @@ namespace App\Classes;
 
 class Session
 {
-    public static function sessionStart()
+    public static function sessionStart(): void
     {
         if ( self::sessionExists() )
         {
             session_start();
         }
     }
-    public static function anotherSessionStart()
+    public static function anotherSessionStart(): bool
     {
         if ( session_id() )
         {

@@ -8,19 +8,21 @@
 
 namespace App\Controllers;
 
-use App\Core\Controller;
+use Core\Controller;
 use App\Mappers\CartMapper;
 use App\Models\CartModel;
 
 class CartController extends Controller
 {
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->model = new CartModel();
         $this->mapper = new CartMapper();
     }
 
-    public function addInfoForOrder($cart) {
+    public function addInfoForOrder($cart)
+    {
         $this->mapper->addAddressInfo($cart, [
             $_POST['city'],
             $_POST['address'],
@@ -41,7 +43,8 @@ class CartController extends Controller
         ]);
     }
 
-    public function actionAdd() {
+    public function actionAdd()
+    {
         if (!isset($_SESSION['item'])) {
             header("Location: /");
         }
@@ -62,14 +65,16 @@ class CartController extends Controller
         header("Location: $uri");
     }
 
-    public function actionView() {
+    public function actionView()
+    {
         $data['title'] = 'Cart';
         if (!empty($_SESSION['cart']->itemsArray)){
             $data['cart'] = $_SESSION['cart'];
         }
         $this->view->generate('template.php', 'cart.php', $data);
     }
-    public function actionCheckout() {
+    public function actionCheckout()
+    {
         $data['title'] = 'Cart';
         if (!empty($_SESSION['cart']->itemsArray)){
             $data['cart'] = $_SESSION['cart'];
@@ -89,43 +94,49 @@ class CartController extends Controller
         }
         $this->view->generate('template.php', 'checkout.php', $data);
     }
-    public function actionClean() {
+    public function actionClean()
+    {
         unset($_SESSION['cart']);
         header("Location: /cart/view");
     }
-    public function actionDelete() {
+    public function actionDelete()
+    {
         $id = $_GET['id'];
         unset($_SESSION['cart']->itemsArray[$id]);
         $_SESSION['cart']->totalPrice = $_SESSION['cart']->getTotalPrice($_SESSION['cart']->itemsArray);
         header("Location: /cart/view");
 
     }
-    public function actionPlus() {
+    public function actionPlus()
+    {
         $id = $_GET['id'];
         $this->mapper->changeItemCount('plus', $_SESSION['cart'],$_SESSION['cart']->itemsArray[$id]['info']);
         header("Location: /cart/view");
     }
-    public function actionMinus() {
+    public function actionMinus()
+    {
         $id = $_GET['id'];
         $this->mapper->changeItemCount('minus', $_SESSION['cart'],$_SESSION['cart']->itemsArray[$id]['info']);
         header("Location: /cart/view");
     }
-    public function actionOrder() {
-        if ($_SESSION['orderRang'] === 0) {
-            $this->addInfoForOrder($_SESSION['cart']);
-            $info = $_SESSION['cart'];
-            $errors = $this->mapper->checkForErrors($info);
-            if (!empty($errors)) {
-                $_SESSION['errors'] = $errors;
-                header("Location: /cart/checkout");
-            } else {
-                $_SESSION['orderRang'] = 1;
-                $_SESSION['ordered'] = true;
-                $_SESSION['orderNumber'] = $this->mapper->submitOrder($info);
-                header("Location: /cart/checkout");
-            }
-        } else {
+    public function actionOrder()
+    {
+        if ($_SESSION['orderRang'] === 1) {
             header("Location: /category/view/all");
         }
+
+        $this->addInfoForOrder($_SESSION['cart']);
+        $info = $_SESSION['cart'];
+        $errors = $this->mapper->checkForErrors($info);
+
+        if (!empty($errors)) {
+            $_SESSION['errors'] = $errors;
+            header("Location: /cart/checkout");
+        }
+
+        $_SESSION['orderRang'] = 1;
+        $_SESSION['ordered'] = true;
+        $_SESSION['orderNumber'] = $this->mapper->submitOrder($info);
+        header("Location: /cart/checkout");
     }
 }

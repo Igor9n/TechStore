@@ -8,11 +8,9 @@
 
 namespace App\Controllers;
 
-
-use App\Classes\Session;
-use App\Core\Controller;
+use Core\Controller;
 use App\Mappers\UserMapper;
-use App\Models\{OrderModel,UserModel};
+use App\Models\{OrderModel};
 
 class UserController extends Controller
 {

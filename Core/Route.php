@@ -1,7 +1,6 @@
 <?php
-namespace App\Core;
 
-use App\Config\controllers;
+namespace Core;
 
 class Route
 {

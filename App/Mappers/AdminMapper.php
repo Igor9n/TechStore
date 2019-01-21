@@ -9,7 +9,9 @@
 namespace App\Mappers;
 
 
-class AdminMapper
+use Core\Mapper;
+
+class AdminMapper extends Mapper
 {
 
 }

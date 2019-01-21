@@ -1,24 +1,29 @@
 <?php
 namespace App\Controllers;
 
-use App\Core\Controller;
+use Core\{View,Controller};
+
 
 class MainController extends Controller
 {
 
-    public function __construct(){
+    public function __construct()
+    {
         parent::__construct();
-        $this->view = new \App\Core\View();
+        $this->view = new View();
     }
-    public function actionIndex(){
+    public function actionIndex()
+    {
         $data['title'] = 'Main page';
         $this->view->generate('template.php','index.php', $data);
     }
-    public function actionAbout(){
+    public function actionAbout()
+    {
         $data['title'] = 'Our company';
         $this->view->generate('template.php', 'about.php', $data);
     }
-    public function actionVacancies(){
+    public function actionVacancies()
+    {
         $data['title'] = 'Vacancies';
         $this->view->generate('template.php', 'vacancies.php', $data);
     }

@@ -9,7 +9,7 @@
 namespace App\Models;
 
 
-use App\Core\Model;
+use Core\Model;
 
 class CartModel extends Model
 {

@@ -9,7 +9,7 @@
 namespace App\Models;
 
 
-use App\Core\Model;
+use Core\Model;
 
 class OrderModel extends Model
 {
@@ -67,7 +67,6 @@ class OrderModel extends Model
     }
     public function getAddressInfoByOrderId($id)
     {
-        var_dump($id);
         $array = [];
         $info = "
             SELECT city,address,apartments_numbers 

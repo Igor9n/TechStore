@@ -9,5 +9,6 @@ return array(
     'Stereolog\\' => array($vendorDir . '/stereolog/stereolog/src/Stereolog'),
     'Psr\\Log\\' => array($vendorDir . '/psr/log/Psr/Log'),
     'Monolog\\' => array($vendorDir . '/monolog/monolog/src/Monolog'),
+    'Core\\' => array($baseDir . '/Core'),
     'App\\' => array($baseDir . '/App'),
 );

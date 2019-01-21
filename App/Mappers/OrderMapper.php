@@ -9,7 +9,7 @@
 namespace App\Mappers;
 
 
-use App\Core\Mapper;
+use Core\Mapper;
 use App\Data\Order;
 use App\Models\OrderModel;
 

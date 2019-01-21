@@ -9,7 +9,9 @@
 namespace App\Models;
 
 
-class AdminModel
+use Core\Model;
+
+class AdminModel extends Model
 {
 
 }
