@@ -15,22 +15,22 @@ class CategoryModel extends Model
     }
 
     public function getCategoriesList() {
-        return $this->queryList($this->categories,0);
+        return $this->queryList($this->categories,'id');
     }
 
     public function getCategoriesSTList() {
-        return $this->queryList($this->categories,1);
+        return $this->queryList($this->categories,'service_title');
     }
 
     public function getCategoryId($id) {
-        return $this->selectTypeAndQuery($this->category,$id, 0);
+        return $this->selectTypeAndQuery($this->category,$id, 'id');
     }
 
     public function getCategoryTitle($id) {
-        return $this->selectTypeAndQuery($this->category,$id, 1);
+        return $this->selectTypeAndQuery($this->category,$id, 'title');
     }
 
     public function getCategoryServiceTitle($id) {
-        return $this->selectTypeAndQuery($this->category,$id, 2);
+        return $this->selectTypeAndQuery($this->category,$id, 'service_title');
     }
 }

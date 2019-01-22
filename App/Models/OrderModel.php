@@ -37,15 +37,15 @@ class OrderModel extends Model
 
     public function getOrdersIdByUserId($id)
     {
-        return $this->queryList($this->order,0,['user' => $id]);
+        return $this->queryList($this->order,'id',['user' => $id]);
     }
     public function getOrdersStatusByUserId($id)
     {
-        return $this->queryList($this->order,1,['user' => $id]);
+        return $this->queryList($this->order,'status',['user' => $id]);
     }
     public function getOrdersPriceByUserId($id)
     {
-        return $this->queryList($this->order,2,['user' => $id]);
+        return $this->queryList($this->order,'total_price',['user' => $id]);
     }
     public function getPersonalInfoByOrderId($id)
     {
@@ -104,19 +104,19 @@ class OrderModel extends Model
             FROM orders_products
             WHERE order_id = :order
         ";
-        return $this->queryList($query,0,['order' => $id]);
+        return $this->queryList($query,'product_id',['order' => $id]);
     }
     public function getOrderProductCount($id)
     {
-        return $this->queryOne($this->product,['product' => $id], 0);
+        return $this->queryOne($this->product,['product' => $id], 'count');
     }
     public function getOrderProductEndprice($id)
     {
-        return $this->queryOne($this->product,['product' => $id], 1);
+        return $this->queryOne($this->product,['product' => $id], 'endprice');
     }
     public function getOrderStatus($id)
     {
         $query = "SELECT status FROM orders WHERE id = :order";
-        return $this->queryOne($query,['order' => $id], 0);
+        return $this->queryOne($query,['order' => $id], 'status');
     }
 }

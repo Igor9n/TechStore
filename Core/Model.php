@@ -28,7 +28,7 @@ class Model
         if ($column === null) {
             return true;
         } else {
-            return $query->fetchColumn($column);
+            return $query->fetch()[$column];
         }
     }
 
@@ -54,7 +54,7 @@ class Model
         $array = [];
         $query = $this->pdo->prepare($query);
         $query->execute($variables);
-        if ($column === 0) {
+        if ($column === 'id' || preg_match('/[a-z]_id$/',$column)) {
             while ($value = $query->fetch()) {
                 $array[] = (int) $value[$column];
             }
