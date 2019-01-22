@@ -4,7 +4,7 @@
     </div>
     <div class="row">
         <div class="col-sm-3">
-            <img class="card-img-top" src="../../includes/media/products/<?=$info->serviceTitle?>.jpg" alt="Card image cap">
+            <img class="card-img-top" src="/media/products/<?=$info->serviceTitle?>.jpg" alt="Card image cap">
         </div>
         <div class="col-sm-9">
             <div class="row justify-content-between">

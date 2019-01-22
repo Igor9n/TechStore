@@ -21,7 +21,7 @@
     <div class="row justify-content-between">
         <?php foreach (array_reverse($items) as $value): ?>
             <div class="card col-sm-2" style="width: 15rem;" style="height: 15rem;">
-                <img width="140" height="250" class="card-img-top" src="/includes/media/products/<?= $value->serviceTitle ?>.jpg" alt="Card image cap">
+                <img width="140" height="250" class="card-img-top" src="/media/products/<?= $value->serviceTitle ?>.jpg" alt="Card image cap">
                 <div class="card-footer">
                     <h5 class="card-title"><b><?= $value->title;?></b></h5>
                     <p class="card-text"><?= $value->shortDescription;?></p>
