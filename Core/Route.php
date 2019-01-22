@@ -11,7 +11,7 @@ class Route
     public static function start()
     {
         Route::parseUrl();
-        $controllers = require 'App/Config/controllers.php';
+        $controllers = require '../App/Config/controllers.php';
         if (Route::checkExist(Route::$controllerName, $controllers)){
 
             $controllerName = '\\App\\Controllers\\'.ucfirst(Route::$controllerName).'Controller';
