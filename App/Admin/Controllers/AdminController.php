@@ -30,6 +30,7 @@ class AdminController extends Controller
         if(!isset($_SESSION['admin'])){
             header("Location: /admin/login");
         }
+
         $data['title'] = 'Admin page';
         $this->view->generate('admin_template.php','admin_main.php', $data);
     }

@@ -76,16 +76,19 @@ class CartController extends Controller
     public function actionCheckout()
     {
         $data['title'] = 'Cart';
-        if (!empty($_SESSION['cart']->itemsArray)){
+        if (!empty($_SESSION['cart'])) {
             $data['cart'] = $_SESSION['cart'];
+
             if (isset($_SESSION['ordered'])) {
                 $data['ordered'] = true;
                 $data['orderNumber'] = $_SESSION['orderNumber'];
                 unset($_SESSION['ordered']);
                 unset($_SESSION['orderNumber']);
                 unset($_SESSION['cart']);
+
             } else {
                 if (isset($_SESSION['errors'])) {
+
                     $data['errors'] = $_SESSION['errors'];
                     unset($_SESSION['errors']);
                 }
@@ -128,15 +131,13 @@ class CartController extends Controller
         $this->addInfoForOrder($_SESSION['cart']);
         $info = $_SESSION['cart'];
         $errors = $this->mapper->checkForErrors($info);
-
         if (!empty($errors)) {
             $_SESSION['errors'] = $errors;
-            header("Location: /cart/checkout");
+        } else {
+            $_SESSION['orderRang'] = 1;
+            $_SESSION['ordered'] = true;
+            $_SESSION['orderNumber'] = $this->mapper->submitOrder($info);
         }
-
-        $_SESSION['orderRang'] = 1;
-        $_SESSION['ordered'] = true;
-        $_SESSION['orderNumber'] = $this->mapper->submitOrder($info);
         header("Location: /cart/checkout");
     }
 }
