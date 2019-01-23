@@ -25,6 +25,7 @@ class ComposerStaticInit66ea791a170e7e5701e89e83130e42b7
         ),
         'A' => 
         array (
+            'App\\Admin\\' => 10,
             'App\\' => 4,
         ),
     );
@@ -45,6 +46,10 @@ class ComposerStaticInit66ea791a170e7e5701e89e83130e42b7
         'Core\\' => 
         array (
             0 => __DIR__ . '/../..' . '/Core',
+        ),
+        'App\\Admin\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/App/Admin',
         ),
         'App\\' => 
         array (

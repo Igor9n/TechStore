@@ -3,11 +3,11 @@ namespace Core;
 
 class View
 {
-    function generate($template, $content, $data = [])
+    function generate($template, $content, $data = [], $path = "../App/views/")
     {
         ob_start();
         extract($data);
-        include '../App/views/'.$template;
+        include $path.$template;
         ob_end_flush();
     }
 }

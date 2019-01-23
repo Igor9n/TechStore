@@ -6,12 +6,10 @@
  * Time: 10:02
  */
 
-namespace App\Mappers;
+namespace App\Admin\Data;
 
 
-use Core\Mapper;
-
-class AdminMapper extends Mapper
+class Admin
 {
 
 }

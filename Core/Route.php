@@ -14,7 +14,12 @@ class Route
         $controllers = require '../App/Config/controllers.php';
         if (Route::checkExist(Route::$controllerName, $controllers)){
 
-            $controllerName = '\\App\\Controllers\\'.ucfirst(Route::$controllerName).'Controller';
+            if (preg_match('/^admin/', Route::$controllerName)){
+                $controllerName = '\\App\\Admin\\Controllers\\'.ucfirst(Route::$controllerName).'Controller';
+            } else {
+                $controllerName = '\\App\\Controllers\\'.ucfirst(Route::$controllerName).'Controller';
+            }
+
             $actionName = 'action'.ucfirst(Route::$actionName);
 
             // создаем объект контроллера
@@ -22,16 +27,15 @@ class Route
             if(method_exists($controller, $actionName))
             {
                 $controller->$actionName(Route::$actionId);
-            }else{
+            } else {
             // здесь также разумнее было бы кинуть исключение
             Route::ErrorPage404();
             }
 
-        }else{
+        } else {
             // здесь также разумнее было бы кинуть исключение
             Route::ErrorPage404();
         }
-
     }
 
     public static function ErrorPage404()

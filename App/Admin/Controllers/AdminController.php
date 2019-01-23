@@ -6,16 +6,17 @@
  * Time: 9:50
  */
 
-namespace App\Controllers;
+namespace App\Admin\Controllers;
 
 
 use Core\Controller;
+use App\Admin\Main\AdminView;
 
 class AdminController extends Controller
 {
     public function __construct()
     {
-        parent::__construct();
+        $this->view= new AdminView();
     }
 
     public function actionLogin()
