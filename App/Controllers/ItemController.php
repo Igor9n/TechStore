@@ -28,9 +28,12 @@ class ItemController extends MainController
         $this->view->generate('template.php', 'item.php', $data);
     }
 
+    /**
+     * Adding item to cart
+     */
     public function actionAdd()
     {
-        $id = (int) $_GET['id'];
+        $id = (int)$_GET['id'];
 
         if (!isset($id)) {
             header("Location: /");
