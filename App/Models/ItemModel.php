@@ -8,6 +8,7 @@ class ItemModel extends Model
 {
     private $products;
     private $product;
+    private $queryType;
 
     public function __construct()
     {
@@ -15,6 +16,8 @@ class ItemModel extends Model
         $this->products = "SELECT id, service_title FROM products";
         $this->product = "SELECT id, title, service_title, short_description, description, category_id, price
                           FROM products WHERE %s = :value";
+        $this->queryType = 'col';
+
     }
 
     /**
@@ -39,51 +42,44 @@ class ItemModel extends Model
 
     public function getFullItemInfo($id)
     {
-        $flag = 'row';
-        return $this->selectTypeAndQuery($this->product, $id, $flag);
+        $this->queryType = 'row';
+        return $this->selectTypeAndQuery($this->product, $id, $this->queryType);
     }
 
     public function getItemId($id)
     {
-        $flag = 'col';
-        $return = (int)$this->selectTypeAndQuery($this->product, $id, $flag, 'id');
+        $return = (int)$this->selectTypeAndQuery($this->product, $id, $this->queryType, 'id');
         return $return;
     }
 
     public function getItemTitle($id)
     {
-        $flag = 'col';
-        return $this->selectTypeAndQuery($this->product, $id, $flag, 'title');
+        return $this->selectTypeAndQuery($this->product, $id, $this->queryType, 'title');
     }
 
     public function getItemServiceTitle($id)
     {
-        $flag = 'col';
-        return $this->selectTypeAndQuery($this->product, $id, $flag, 'service_title');
+        return $this->selectTypeAndQuery($this->product, $id, $this->queryType, 'service_title');
     }
 
     public function getItemShortDescription($id)
     {
-        $flag = 'col';
-        return $this->selectTypeAndQuery($this->product, $id, $flag, 'short_description');
+        return $this->selectTypeAndQuery($this->product, $id, $this->queryType, 'short_description');
     }
 
     public function getItemDescription($id)
     {
-        $flag = 'col';
-        return $this->selectTypeAndQuery($this->product, $id, $flag, 'description');
+        return $this->selectTypeAndQuery($this->product, $id, $this->queryType, 'description');
     }
 
     public function getItemCategoryId($id)
     {
-        $flag = 'col';
-        return $this->selectTypeAndQuery($this->product, $id, $flag, 'category_id');
+        return $this->selectTypeAndQuery($this->product, $id, $this->queryType, 'category_id');
     }
 
     public function getItemPrice($id)
     {
-        $flag = 'col';
-        return $this->selectTypeAndQuery($this->product, $id, $flag, 'price');
+        return $this->selectTypeAndQuery($this->product, $id, $this->queryType, 'price');
     }
 
     public function getCharacteristicsTitles($id)

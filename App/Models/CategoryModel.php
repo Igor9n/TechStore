@@ -6,14 +6,16 @@ use Core\Model;
 
 class CategoryModel extends Model
 {
-    public $categories;
-    public $category;
+    private $categories;
+    private $category;
+    private $queryType;
 
     public function __construct()
     {
         parent::__construct();
         $this->categories = "SELECT id, service_title FROM categories";
         $this->category = "SELECT id, title, service_title FROM categories WHERE %s = :value";
+        $this->queryType = 'col';
     }
 
     public function getCategoriesList()
@@ -28,25 +30,22 @@ class CategoryModel extends Model
 
     public function getFullCategoryInfo($id): array
     {
-        $flag = 'row';
-        return $this->selectTypeAndQuery($this->category, $id, $flag);
+        $this->queryType = 'row';
+        return $this->selectTypeAndQuery($this->category, $id, $this->queryType);
     }
 
     public function getCategoryId($id)
     {
-        $flag = 'col';
-        return $this->selectTypeAndQuery($this->category, $id, $flag, 'id');
+        return $this->selectTypeAndQuery($this->category, $id, $this->queryType, 'id');
     }
 
     public function getCategoryTitle($id)
     {
-        $flag = 'col';
-        return $this->selectTypeAndQuery($this->category, $id, $flag, 'title');
+        return $this->selectTypeAndQuery($this->category, $id, $this->queryType, 'title');
     }
 
     public function getCategoryServiceTitle($id)
     {
-        $flag = 'col';
-        return $this->selectTypeAndQuery($this->category, $id, $flag, 'service_title');
+        return $this->selectTypeAndQuery($this->category, $id, $this->queryType, 'service_title');
     }
 }
