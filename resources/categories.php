@@ -1,7 +1,7 @@
-<?php $categoryController = new App\Controllers\CategoryController();?>
+<?php $categoryMapper = new App\Mappers\CategoryMapper();?>
 <div class="col-sm-2">
     <div class="list-group row justify-content-start">
-        <?php foreach ($categoryController->getAllCategories() as $key => $value):?>
+        <?php foreach ($categoryMapper->getAllCategories() as $key => $value):?>
             <?php if ($key === 0):?>
                 <a href="/category/view/<?=$value->serviceTitle?>" class="list-group-item list-group-item-action"><strong><?=$value->title?></strong></a>
             <?php else: ?>

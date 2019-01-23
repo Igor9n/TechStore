@@ -30,9 +30,10 @@ class CartController extends Controller
             $_POST['apartment'],
             $_POST['zip']
         ]);
-        $id = '';
-        if(isset($_SESSION['user'])){
+        if (isset($_SESSION['user'])) {
             $id = (int)$_SESSION['user']->id;
+        } else {
+            $id = 0;
         }
         $this->mapper->addPersonalInfo($cart, [
             $_POST['firstName'],

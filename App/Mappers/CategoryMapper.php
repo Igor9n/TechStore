@@ -15,32 +15,76 @@ use App\Models\CategoryModel;
 
 class CategoryMapper extends Mapper
 {
-    public function __construct() {
+    public $item;
+
+    public function __construct()
+    {
         $this->model = new CategoryModel();
+        $this->item = new ItemMapper();
+
     }
 
-    public function getArray(): array {
+    /**
+     * Returns category object
+     *
+     * @param $id
+     * @return Category
+     */
+    public function getCategoryObject($id): Category
+    {
+        $categoryInfo = $this->model->getFullCategoryInfo($id);
+        return Category::createObject([
+            'id' => $categoryInfo['id'],
+            'serviceTitle' => $categoryInfo['service_title'],
+            'title' => $categoryInfo['title']
+        ]);
+    }
+
+    /**
+     * Returns categories array using categories list
+     *
+     * @param array $categoriesList
+     * @return array
+     */
+    private function getCategoriesArray(array $categoriesList): array
+    {
+        $categoriesArray = [];
+        foreach ($categoriesList as $category) {
+            $categoriesArray[] = $this->getCategoryObject($category);
+        }
+        return $categoriesArray;
+    }
+
+    /**
+     * Returns array of items objects using category id
+     *
+     * @param $id
+     * @return array
+     */
+    public function getItemsByCategory($id): array
+    {
+        return $this->item->getItemsByCategoryId($id);
+    }
+
+    /**
+     * Returns array of categories objects
+     *
+     * @return array
+     */
+    public function getAllCategories(): array
+    {
         $list = $this->model->getCategoriesList();
         return $this->getCategoriesArray($list);
     }
 
-    public function getObject($id): Category {
-        return Category::createObject([
-            $this->model->getCategoryId($id),
-            $this->model->getCategoryServiceTitle($id),
-            $this->model->getCategoryTitle($id)
-        ]);
-    }
-
-    private function getCategoriesArray(array $array): array {
-        $categoriesArray = [];
-        foreach ($array as $var){
-            $categoriesArray[] = Category::createObject([
-                $var,
-                $this->model->getCategoryServiceTitle($var),
-                $this->model->getCategoryTitle($var)
-            ]);
-        }
-        return $categoriesArray;
+    /**
+     * Returns category object by category id
+     *
+     * @param $id
+     * @return Category
+     */
+    public function getCategoryInfo($id): Category
+    {
+        return $this->getCategoryObject($id);
     }
 }

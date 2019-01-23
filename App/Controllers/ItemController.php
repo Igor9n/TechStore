@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controllers;
 
 use App\Classes\Session;
@@ -15,37 +16,23 @@ class ItemController extends MainController
         $this->mapper = new ItemMapper();
     }
 
-    public function getItemInfo($id)
-    {
-        return $this->mapper->getObject($id);
-    }
-
-    public function getFiveItems()
-    {
-        return $this->mapper->getArray($this->model->getLastFiveItemsIds());
-    }
-
-    public function getAllItems()
-    {
-        return $this->mapper->getArray($this->model->getItemsIdList());
-    }
-
     public function actionView($id)
     {
-        if(Route::checkExist($id,$this->model->getItemsSTList())){
-            $data['info'] = $this->getItemInfo($id);
+        if (Route::checkExist($id, $this->model->getItemsSTList())) {
+            $data['info'] = $this->mapper->getItemObject($id);
             $data['title'] = $data['info']->title;
             $this->view->generate('template.php', 'item.php', $data);
         } else {
             Route::ErrorPage404();
         }
     }
+
     public function actionAdd()
     {
-        $id = (int) $_GET['id'];
-        if (isset($id)){
+        $id = (int)$_GET['id'];
+        if (isset($id)) {
             Session::anotherSessionStart();
-            $_SESSION['item'] = $this->getItemInfo($id);
+            $_SESSION['item'] = $this->mapper->getItemObject($id);
             header("Location: /cart/add");
         } else {
             header("Location: /");

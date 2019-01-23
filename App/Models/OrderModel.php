@@ -29,7 +29,7 @@ class OrderModel extends Model
     public function checkOrderById($id)
     {
         $info = "SELECT COUNT(id) FROM orders WHERE orders.id = :order";
-        if ($this->queryOne($info, ['order' => $id], 0)){
+        if ($this->queryColumn($info, ['order' => $id], 0)){
             return true;
         };
         return false;
@@ -57,11 +57,11 @@ class OrderModel extends Model
             ON users_personal.id = orders.personal_id
             WHERE orders.id = :order
         ";
-        $array['firstName'] = $this->queryOne($info,['order' => $id],0);
-        $array['lastName'] = $this->queryOne($info,['order' => $id],1);
-        $array['phoneNumber'] = $this->queryOne($info,['order' => $id],2);
-        $array['email'] = $this->queryOne($info,['order' => $id],3);
-        $array['user'] = $this->queryOne($info,['order' => $id],4);
+        $array['firstName'] = $this->queryColumn($info,['order' => $id],0);
+        $array['lastName'] = $this->queryColumn($info,['order' => $id],1);
+        $array['phoneNumber'] = $this->queryColumn($info,['order' => $id],2);
+        $array['email'] = $this->queryColumn($info,['order' => $id],3);
+        $array['user'] = $this->queryColumn($info,['order' => $id],4);
 
         return $array;
     }
@@ -75,9 +75,9 @@ class OrderModel extends Model
             ON users_addresses.personal_id = orders.personal_id
             WHERE orders.id = :order
         ";
-        $array['city'] = $this->queryOne($info,['order' => $id],0);
-        $array['address'] = $this->queryOne($info,['order' => $id],1);
-        $array['apartmentsNumbers'] = $this->queryOne($info,['order' => $id],2);
+        $array['city'] = $this->queryColumn($info,['order' => $id],0);
+        $array['address'] = $this->queryColumn($info,['order' => $id],1);
+        $array['apartmentsNumbers'] = $this->queryColumn($info,['order' => $id],2);
 
         return $array;
     }
@@ -91,9 +91,9 @@ class OrderModel extends Model
             ON orders_delivery.order_id = orders.id
             WHERE orders.id = :order
         ";
-        $array['type'] = $this->queryOne($info,['order' => $id],0);
-        $array['date'] = $this->queryOne($info,['order' => $id],1);
-        $array['time'] = $this->queryOne($info,['order' => $id],2);
+        $array['type'] = $this->queryColumn($info,['order' => $id],0);
+        $array['date'] = $this->queryColumn($info,['order' => $id],1);
+        $array['time'] = $this->queryColumn($info,['order' => $id],2);
 
         return $array;
     }
@@ -108,15 +108,15 @@ class OrderModel extends Model
     }
     public function getOrderProductCount($id)
     {
-        return $this->queryOne($this->product,['product' => $id], 'count');
+        return $this->queryColumn($this->product,['product' => $id], 'count');
     }
     public function getOrderProductEndprice($id)
     {
-        return $this->queryOne($this->product,['product' => $id], 'endprice');
+        return $this->queryColumn($this->product,['product' => $id], 'endprice');
     }
     public function getOrderStatus($id)
     {
         $query = "SELECT status FROM orders WHERE id = :order";
-        return $this->queryOne($query,['order' => $id], 'status');
+        return $this->queryColumn($query,['order' => $id], 'status');
     }
 }

@@ -64,13 +64,13 @@ class UserModel extends Model
         switch ($flag) {
             case 'reg': // Is user already in db?
                 $check ="SELECT login FROM users WHERE login = :login OR email = :email";
-                if ($this->queryOne($check,['login' => $login,'email' => $email], 0)) {
+                if ($this->queryColumn($check,['login' => $login,'email' => $email], 0)) {
                     $errors['inBase'] = 'User is already registered';
                     return $errors;
                 }
                 return false;
             case 'log': // Is user registered?
-                if ($this->queryOne($this->userIdQuery,['login' => $login],0)) {
+                if ($this->queryColumn($this->userIdQuery,['login' => $login],0)) {
                     return false;
                 } else {
                     $errors['notInBase'] = 'This user is not registered';
@@ -84,7 +84,7 @@ class UserModel extends Model
     {
         $errors = [];
         $check = "SELECT password FROM users WHERE login = :login";
-        $hash = $this->queryOne($check, ['login' => $login], 0 );
+        $hash = $this->queryColumn($check, ['login' => $login], 0 );
         if (password_verify($password,$hash)) {
                 return $errors;
         }
@@ -94,13 +94,13 @@ class UserModel extends Model
 
     public function getUserId($login)
     {
-        return $this->queryOne($this->userIdQuery, ['login' => $login], 0);
+        return $this->queryColumn($this->userIdQuery, ['login' => $login], 0);
     }
     public function registerUser($log,$pass,$email)
     {
         $pass = password_hash($pass, PASSWORD_DEFAULT);
         $register = "INSERT INTO users (login, password, email) VALUES (:login, :password, :email)";
-        $this->queryOne($register, [
+        $this->queryColumn($register, [
             'login' => $log,
             'password' => $pass,
             'email' => $email
