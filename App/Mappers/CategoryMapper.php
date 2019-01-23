@@ -56,18 +56,7 @@ class CategoryMapper extends Mapper
     }
 
     /**
-     * Returns array of items objects using category id
-     *
-     * @param $id
-     * @return array
-     */
-    public function getItemsByCategory($id): array
-    {
-        return $this->item->getItemsByCategoryId($id);
-    }
-
-    /**
-     * Returns array of categories objects
+     * Returns array with all categories objects
      *
      * @return array
      */

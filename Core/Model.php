@@ -71,7 +71,7 @@ class Model
 
         if ($column === 'id' || preg_match('/[a-z]_id$/', $column)) {
             while ($value = $query->fetch()) {
-                $array[] = (int) $value[$column];
+                $array[] = (int)$value[$column];
             }
         } else {
             while ($value = $query->fetch()) {

@@ -21,17 +21,18 @@ class CategoryController extends Controller
 
     function actionView($id)
     {
-        if ($id === 'all') {
-            $data['products'] = $this->item->getAllItems();
-        } else {
-            if (Route::checkExist($id, $this->model->getCategoriesSTList())) {
-                $data['products'] = $this->mapper->getItemsByCategory($this->model->getCategoryId($id));
-            } else {
-                Route::ErrorPage404();
-            }
+        if (!Route::checkExist($id, $this->model->getCategoriesSTList())) {
+            Route::ErrorPage404();
         }
 
         $data['category'] = $this->mapper->getCategoryObject($id);
+
+        if ($id === 'all') {
+            $data['products'] = $this->item->getAllItems();
+        } else {
+            $data['products'] = $this->item->getItemsByCategoryId($data['category']->id);
+        }
+
         $data['title'] = $data['category']->title;
         $this->view->generate('template.php', 'category.php', $data);
     }

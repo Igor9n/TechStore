@@ -18,24 +18,26 @@ class ItemController extends MainController
 
     public function actionView($id)
     {
-        if (Route::checkExist($id, $this->model->getItemsSTList())) {
-            $data['info'] = $this->mapper->getItemObject($id);
-            $data['title'] = $data['info']->title;
-            $this->view->generate('template.php', 'item.php', $data);
-        } else {
+        if (!Route::checkExist($id, $this->model->getItemsSTList())) {
             Route::ErrorPage404();
         }
+
+        $data['info'] = $this->mapper->getItemObject($id);
+        $data['title'] = $data['info']->title;
+
+        $this->view->generate('template.php', 'item.php', $data);
     }
 
     public function actionAdd()
     {
-        $id = (int)$_GET['id'];
-        if (isset($id)) {
-            Session::anotherSessionStart();
-            $_SESSION['item'] = $this->mapper->getItemObject($id);
-            header("Location: /cart/add");
-        } else {
+        $id = (int) $_GET['id'];
+
+        if (!isset($id)) {
             header("Location: /");
         }
+
+        Session::anotherSessionStart();
+        $_SESSION['item'] = $this->mapper->getItemObject($id);
+        header("Location: /cart/add");
     }
 }
