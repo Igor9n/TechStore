@@ -13,12 +13,14 @@ class Mapper
 {
     protected $model;
     protected $mapper;
+    protected $validator;
 
-    protected function makeSimpleArray($array) {
+    protected function makeSimpleArray($array)
+    {
         $result = [];
-        foreach ($array as $value){
-            if (isset($value)){
-                foreach ($value as $var){
+        foreach ($array as $value) {
+            if (isset($value)) {
+                foreach ($value as $var) {
                     $result[] = $var;
                 }
             }

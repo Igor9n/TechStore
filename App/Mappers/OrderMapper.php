@@ -28,7 +28,7 @@ class OrderMapper extends Mapper
         $status = $this->model->getOrdersStatusByUserId($id);
         $price = $this->model->getOrdersPriceByUserId($id);
 
-        for ($i=0;$i<count($list);$i++) {
+        for ($i = 0; $i < count($list); $i++) {
             $array[$list[$i]]['id'] = $list[$i];
             $array[$list[$i]]['status'] = $status[$i];
             $array[$list[$i]]['totalPrice'] = $price[$i];
@@ -36,9 +36,10 @@ class OrderMapper extends Mapper
 
         return $array;
     }
+
     public function getProductsPriceInfo(array $array)
     {
-        foreach ($array as $var){
+        foreach ($array as $var) {
             $array[$var['info']->id]['count'] = $this->model->getOrderProductCount($var['info']->id);
             $array[$var['info']->id]['endprice'] = $this->model->getOrderProductEndprice($var['info']->id);
         }
@@ -48,8 +49,8 @@ class OrderMapper extends Mapper
     public function getProductsForOrder($id)
     {
         $list = $this->model->getProductsListByOrderId($id);
-        foreach ($list as $var){
-            $products[$var]['info'] = $this->mapper->getObject($var);
+        foreach ($list as $var) {
+            $products[$var]['info'] = $this->mapper->getItemObject($var);
         }
         return $this->getProductsPriceInfo($products);
     }
@@ -74,7 +75,7 @@ class OrderMapper extends Mapper
 
     public function getShortenOrder($id)
     {
-        if ($this->model->checkOrderById($id)){
+        if ($this->model->checkOrderById($id)) {
             $array[0] = $this->model->getDeliveryInfoByOrderId($id);
             $array[1] = $this->model->getOrderStatus($id);
             return $array;

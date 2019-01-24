@@ -1,11 +1,11 @@
 <div class="col-sm-10">
     <div class="row">
         <div class="col-sm-9">
-            <?php if(isset($errors)):?>
+            <?php if ($errors) : ?>
                 <div class="alert alert-danger">
                     <ul>
-                        <?php foreach ($errors as $var): ?>
-                            <li><?=$var?></li>
+                        <?php foreach ($errors as $var) : ?>
+                            <li><?= $var ?></li>
                         <?php endforeach; ?>
                     </ul>
                 </div>
@@ -26,13 +26,13 @@
                     </div>
                 </div>
                 <div class="dropdown-divider">
-                    ------------------------------------------------------------------------------------------------------
-                    ------------------------------------------------------------------------------------------------------
-                    ---------------------------
+                    ---------------------------------------------------------------------------------
+                    ---------------------------------------------------------------------------------
+                    ---------------------------------------------------------------------
                 </div>
                 <div class="row">
                     <div class="col">
-                        <button class="btn btn-primary" name="try" value="log">Submit</button>
+                        <button class="btn btn-primary" name="try" value="login">Submit</button>
                     </div>
                 </div>
             </form>

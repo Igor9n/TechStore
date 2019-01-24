@@ -8,6 +8,7 @@
 
 namespace App\Controllers;
 
+use App\Classes\Session;
 use Core\Controller;
 use App\Mappers\UserMapper;
 use App\Models\{OrderModel};
@@ -15,6 +16,7 @@ use App\Models\{OrderModel};
 class UserController extends Controller
 {
     public $orderModel;
+
     public function __construct()
     {
         parent::__construct();
@@ -22,64 +24,66 @@ class UserController extends Controller
         $this->orderModel = new OrderModel();
     }
 
+    /**
+     * Trying to login/register
+     */
     public function actionTry(): void
     {
-        $errors = [];
-
-        if (isset($_POST['try'])) {
-            $user = $this->mapper->getObject($_POST['try']);
-            $errors = $this->mapper->checkForErrors($user, $_POST['try']);
+        if (!isset($_POST['try'])) {
+            header("Location: /user/login");
         }
 
-        switch ($_POST['try']) {
-            case 'log':
-                $this->mapper->loginUser($errors, $user);
-                break;
-            case 'reg':
-                $this->mapper->registerUser($errors,$user);
-                break;
-            default:
-                header("Location: /user/login");
-        }
+        Session::additionalSessionStart();
+
+        $action = $_POST['try'];
+        $method = $action . 'User';
+        $errors = $action . 'Errors';
+
+        $user = $this->mapper->getObject($action);
+        $errors = $this->mapper->$errors($user, $action);
+
+        $this->mapper->$method($user, $errors);
     }
+
     public function actionLogout()
     {
-        if (isset($_SESSION['user'])) {
-            unset($_SESSION['user']);
-        }
+        Session::unset('user');
         header("Location: /user/login");
     }
 
+    /**
+     * Login page
+     */
     public function actionLogin()
     {
-        if (isset($_SESSION['user'])) {
+        if (Session::check('user')) {
             header("Location: /order/all");
         }
 
         $data['title'] = 'Login';
-
-        if (isset($_SESSION['errors'])) {
-            $data['errors'] = $_SESSION['errors'];
-            unset($_SESSION['errors']);
-        }
+        $data['errors'] = Session::get('errors');
+        Session::unset('errors');
 
         $this->view->generate('template.php', 'login.php', $data);
     }
+
+    /**
+     * Registration page
+     */
     public function actionRegistration()
     {
-        if (isset($_SESSION['user'])) {
+        if (Session::check('user')) {
             header("Location: /order/all");
         }
 
         $data['title'] = 'Registration';
 
-        if (isset($_SESSION['errors'])) {
-            $data['errors'] = $_SESSION['errors'];
-            unset($_SESSION['errors']);
-        }
-        if (isset($_SESSION['registered'])) {
-            $data['registered'] = true;
-            unset($_SESSION['registered']);
+        $data['errors'] = Session::get('errors');
+        Session::unset('errors');
+
+        if (Session::check('registered')) {
+            $data['registered'] = Session::get('registered');
+            Session::unset('registered');
         }
 
         $this->view->generate('template.php', 'registration.php', $data);

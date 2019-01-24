@@ -21,7 +21,6 @@ class CategoryMapper extends Mapper
     {
         $this->model = new CategoryModel();
         $this->item = new ItemMapper();
-
     }
 
     /**

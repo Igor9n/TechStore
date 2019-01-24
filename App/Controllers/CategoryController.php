@@ -19,7 +19,7 @@ class CategoryController extends Controller
         $this->item = new ItemMapper();
     }
 
-    function actionView($id)
+    public function actionView($id)
     {
         if (!Route::checkExist($id, $this->model->getCategoriesSTList())) {
             Route::ErrorPage404();

@@ -17,7 +17,6 @@ class ItemModel extends Model
         $this->product = "SELECT id, title, service_title, short_description, description, category_id, price
                           FROM products WHERE %s = :value";
         $this->queryType = 'col';
-
     }
 
     /**
@@ -48,8 +47,7 @@ class ItemModel extends Model
 
     public function getItemId($id)
     {
-        $return = (int)$this->selectTypeAndQuery($this->product, $id, $this->queryType, 'id');
-        return $return;
+        return (int)$this->selectTypeAndQuery($this->product, $id, $this->queryType, 'id');
     }
 
     public function getItemTitle($id)
