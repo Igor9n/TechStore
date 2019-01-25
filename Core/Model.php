@@ -79,4 +79,13 @@ class Model
         }
         return $array;
     }
+
+    protected function matchData($arrayOne, $arrayTwo)
+    {
+        $result = [];
+        for ($i = 0; $i < count($arrayOne); $i++) {
+            $result[$arrayOne[$i]] = $arrayTwo[$i];
+        }
+        return $result;
+    }
 }

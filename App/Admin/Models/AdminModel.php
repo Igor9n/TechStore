@@ -13,5 +13,5 @@ use Core\Model;
 
 class AdminModel extends Model
 {
-
 }
+

@@ -1,4 +1,5 @@
 <?php
+
 namespace Core;
 
 class View
@@ -7,7 +8,7 @@ class View
     {
         ob_start();
         extract($data);
-        include $path.$template;
+        include $path . $template;
         ob_end_flush();
     }
 }

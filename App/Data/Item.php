@@ -15,8 +15,6 @@ class Item
     public $categoryId;
     public $title;
     public $characteristics;
-    public $characteristicsTitles;
-    public $characteristicsValues;
     public $shortDescription;
     public $description;
     public $price;
@@ -31,7 +29,8 @@ class Item
         string $shortDescription,
         string $description,
         string $price
-    ) {
+    )
+    {
         $this->id = $id;
         $this->serviceTitle = $serviceTitle;
         $this->categoryId = $categoryId;
@@ -39,16 +38,16 @@ class Item
         $this->shortDescription = $shortDescription;
         $this->description = $description;
         $this->price = $price;
-        $this->characteristicsTitles = $characteristicsTitles;
-        $this->characteristicsValues = $characteristicsValues;
-        $this->listCharacteristics($this->characteristicsTitles, $this->characteristicsValues);
+        $this->listCharacteristics($characteristicsTitles, $characteristicsValues);
     }
 
     private function listCharacteristics($titles, $values)
     {
-        for ($i = 0; $i < count($titles); $i++) {
-            $this->characteristics[$titles[$i]] = $values[$i];
+        $array = [];
+        foreach ($titles as $key => $value) {
+            $array[$value] = $values[$key];
         }
+        $this->characteristics = $array;
     }
 
     public static function createObject(array $array): Item

@@ -33,7 +33,7 @@ class ItemMapper extends Mapper
             'serviceTitle' => $itemInfo['service_title'],
             'categoryId' => $itemInfo['category_id'],
             'title' => $itemInfo['title'],
-            'characteristicsTitles' => $this->model->getCharacteristicsValues($id),
+            'characteristicsTitles' => $this->model->getCharacteristicsTitles($id),
             'characteristicsValues' => $this->model->getCharacteristicsValues($id),
             'shortDescription' => $itemInfo['short_description'],
             'description' => $itemInfo['description'],

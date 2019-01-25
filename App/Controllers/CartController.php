@@ -15,14 +15,11 @@ use App\Models\CartModel;
 
 class CartController extends Controller
 {
-    public $cart;
-
     public function __construct()
     {
         parent::__construct();
         $this->model = new CartModel();
         $this->mapper = new CartMapper();
-        $this->cart = Session::get('cart');
     }
 
 
@@ -34,16 +31,15 @@ class CartController extends Controller
 
         $newAdded = 0;
         $item = Session::get('item');
-
         if (!Session::check('cart')) {
             Session::set('cart', $this->mapper->getObject($item));
             $newAdded = 1;
         }
 
-        if (isset($this->cart->itemsArray[$item->id]) && $newAdded === 0) {
-            $this->mapper->changeItemCount('plus', $this->cart, $item);
+        if (isset(Session::get('cart')->itemsArray[$item->id]) && $newAdded === 0) {
+            $this->mapper->changeItemCount('plus', Session::get('cart'), $item);
         } else {
-            $this->mapper->addItemToCart($this->cart, $item);
+            $this->mapper->addItemToCart(Session::get('cart'), $item);
         }
 
         Session::unset('item');
@@ -55,9 +51,7 @@ class CartController extends Controller
     {
         $data['title'] = 'Cart';
 
-        if (!empty($this->cart->itemsArray)) {
-            $data['cart'] = $this->cart;
-        }
+        $data['cart'] = Session::get('cart');
 
         $this->view->generate('template.php', 'cart.php', $data);
     }
@@ -66,23 +60,21 @@ class CartController extends Controller
     {
         $data['title'] = 'Cart';
 
-        if (!empty($this->cart)) {
-            $data['cart'] = $this->cart;
+        $data['cart'] = Session::get('cart');
 
-            if (Session::check('ordered')) {
-                $data['ordered'] = true;
-                $data['orderNumber'] = Session::get('orderNumber');
+        if (Session::check('ordered')) {
+            $data['ordered'] = true;
+            $data['orderNumber'] = Session::get('orderNumber');
 
-                Session::unset('ordered');
-                Session::unset('orderNumber');
-                Session::unset('cart');
-            } else {
-                if (Session::check('errors')) {
-                    $data['errors'] = Session::get('errors');
-                    Session::unset('errors');
-                }
-                Session::set('orderRang', 0);
+            Session::unset('ordered');
+            Session::unset('orderNumber');
+            Session::unset('cart');
+        } else {
+            if (Session::check('errors')) {
+                $data['errors'] = Session::get('errors');
+                Session::unset('errors');
             }
+            Session::set('orderRang', 0);
         }
         $this->view->generate('template.php', 'checkout.php', $data);
     }
@@ -98,7 +90,7 @@ class CartController extends Controller
         $id = $_GET['id'];
 
         unset($_SESSION['cart']->itemsArray[$id]);
-        $this->cart->totalPrice = $this->cart->getTotalPrice($this->cart->itemsArray);
+        Session::get('cart')->totalPrice = Session::get('cart')->getTotalPrice(Session::get('cart')->itemsArray);
         header("Location: /cart/view");
     }
 
@@ -106,7 +98,7 @@ class CartController extends Controller
     {
         $id = $_GET['id'];
 
-        $this->mapper->changeItemCount('plus', $this->cart, $this->cart->itemsArray[$id]['info']);
+        $this->mapper->changeItemCount('plus', Session::get('cart'), Session::get('cart')->itemsArray[$id]['info']);
         header("Location: /cart/view");
     }
 
@@ -114,7 +106,7 @@ class CartController extends Controller
     {
         $id = $_GET['id'];
 
-        $this->mapper->changeItemCount('minus', $this->cart, $this->cart->itemsArray[$id]['info']);
+        $this->mapper->changeItemCount('minus', Session::get('cart'), Session::get('cart')->itemsArray[$id]['info']);
         header("Location: /cart/view");
     }
 
@@ -124,8 +116,8 @@ class CartController extends Controller
             header("Location: /category/view/all");
         }
 
-        $this->mapper->addInfoForOrder($this->cart);
-        $info = $this->cart;
+        $this->mapper->addInfoForOrder(Session::get('cart'));
+        $info = Session::get('cart');
         $errors = $this->mapper->checkForErrors($info);
 
         if (!empty($errors)) {

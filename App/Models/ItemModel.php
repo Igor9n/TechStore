@@ -82,29 +82,37 @@ class ItemModel extends Model
 
     public function getCharacteristicsTitles($id)
     {
-        $titles = "SELECT categories_characteristics.title
+        $titles = "SELECT categories_characteristics.id, categories_characteristics.title
             FROM categories_characteristics
             JOIN products
             ON products.category_id = categories_characteristics.category_id
             WHERE products.%s = ?";
         $query = $this->selectCondition($titles, $id);
-        return $this->queryList($query, 'title', [$id]);
+
+        $ids = $this->queryList($query, 'id', [$id]);
+        $values = $this->queryList($query, 'title', [$id]);
+
+        return $this->matchData($ids, $values);
     }
 
     public function getCharacteristicsValues($id)
     {
-        $values = "SELECT products_characteristics.id,products_characteristics.value 
+        $values = "SELECT products_characteristics.characteristic_id,products_characteristics.value 
             FROM products_characteristics 
             JOIN products 
             ON products.id = products_characteristics.product_id 
             WHERE products.%s = ?";
         $query = $this->selectCondition($values, $id);
-        return $this->queryList($query, 'value', [$id]);
+
+        $ids = $this->queryList($query, 'characteristic_id', [$id]);
+        $values = $this->queryList($query, 'value', [$id]);
+
+        return $this->matchData($ids, $values);
     }
 
     public function getLastFiveItemsIds()
     {
-        $list = "SELECT id FROM products ORDER BY created_at DESC LIMIT 5";
+        $list = "SELECT id FROM products WHERE visible = 'true' ORDER BY created_at  DESC LIMIT 5 ";
         return $this->queryList($list, 'id');
     }
 

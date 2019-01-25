@@ -48,7 +48,7 @@ class OrderMapper extends Mapper
         return $array;
     }
 
-    public function getProductsPriceInfo(array $array)
+    public function getProductsPriceInfo(array $array): array
     {
         foreach ($array as $product) {
             $array[$product['info']->id]['count'] = $this->model->getOrderProductCount($product['info']->id);
@@ -79,7 +79,7 @@ class OrderMapper extends Mapper
         return $array;
     }
 
-    public function getProductsForOrder($id)
+    public function getProductsForOrder($id): array
     {
         $list = $this->model->getProductsListByOrderId($id);
         foreach ($list as $product) {
