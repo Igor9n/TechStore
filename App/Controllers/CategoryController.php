@@ -1,7 +1,9 @@
 <?php
+
 namespace App\Controllers;
 
-use App\Core\{Controller,Route};
+use App\Mappers\ItemMapper;
+use Core\{Controller, Route};
 use App\Mappers\CategoryMapper;
 use App\Models\CategoryModel;
 
@@ -9,44 +11,29 @@ class CategoryController extends Controller
 {
     public $item;
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->model = new CategoryModel();
-        $this->item = new ItemController();
         $this->mapper = new CategoryMapper();
+        $this->item = new ItemMapper();
     }
 
-    public function getItemsByCategory($id) {
-        $array = $this->item->getAllItems();
-        $resultItems = [];
-        foreach ($array as $value) {
-            if ( $value->categoryId === $id ) {
-                $resultItems[] = $value;
-            }
+    public function actionView($id)
+    {
+        if (!Route::checkExist($id, $this->model->getCategoriesSTList())) {
+            Route::ErrorPage404();
         }
-        return $resultItems;
-    }
 
-    public function getAllCategories(): array {
-        return $cats = $this->mapper->getArray();
-    }
+        $data['category'] = $this->mapper->getCategoryObject($id);
 
-    public function getCategoryInfo($id): object {
-        return $this->mapper->getObject($id);
-    }
-
-    function actionView($id) {
         if ($id === 'all') {
             $data['products'] = $this->item->getAllItems();
         } else {
-            if (Route::checkExist($id, $this->model->getCategoriesSTList())) {
-                $data['products'] = $this->getItemsByCategory($this->model->getCategoryId($id));
-            } else {
-                Route::ErrorPage404();
-            }
+            $data['products'] = $this->item->getItemsByCategoryId($data['category']->id);
         }
-        $data['category'] = $this->mapper->getObject($id);
+
         $data['title'] = $data['category']->title;
-        $this->view->generate('template.php','category.php', $data);
+        $this->view->generate('template.php', 'category.php', $data);
     }
 }

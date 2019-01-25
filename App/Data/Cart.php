@@ -16,57 +16,61 @@ class Cart
     public $addressArray;
     public $totalPrice;
 
-    public function __construct($item) {
-        $this->calculateItemEndPrice($item);
-        $this->totalPrice = $this->getTotalPrice($this->itemsArray);
+    public function __construct($item)
+    {
+        $this->addItem($item);
     }
 
-    public static function createObject($item): Cart {
+    public static function createObject($item): Cart
+    {
         return new self(
             $item
         );
     }
 
-    public function changeItemCount($flag, $item) {
-        switch ($flag) {
-            case "plus":
-                $this->itemsArray[$item->id]['count']++;
-                break;
-            case "minus":
-                $this->itemsArray[$item->id]['count']--;
-                break;
+    public function changeItemCount($flag, $item)
+    {
+        if ($flag === 'plus') {
+            $this->itemsArray[$item->id]['count']++;
+        } else {
+            $this->itemsArray[$item->id]['count']--;
         }
         $this->calculateItemEndPrice($item, $this->itemsArray[$item->id]['count']);
         $this->totalPrice = $this->getTotalPrice($this->itemsArray);
     }
 
-    public function calculateItemEndPrice($item, $count = 1) {
+    public function calculateItemEndPrice($item, $count = 1)
+    {
         $this->itemsArray[$item->id]['info'] = $item;
         $this->itemsArray[$item->id]['count'] = $count;
         $this->itemsArray[$item->id]['endPrice'] = $this->itemsArray[$item->id]['count'] * $item->price;
     }
 
-    public function addItem($item) {
+    public function addItem($item)
+    {
         $this->calculateItemEndPrice($item);
         $this->totalPrice = $this->getTotalPrice($this->itemsArray);
     }
 
-    public function endPrice($arr) {
-        foreach ($arr as $item) {
-            $arr[$item['info']->serviceTitle]['endPrice'] = $item['info']->price * $item['count'];
+    public function endPrice($productsList)
+    {
+        foreach ($productsList as $item) {
+            $productsList[$item['info']->serviceTitle]['endPrice'] = $item['info']->price * $item['count'];
         }
-        return $arr;
+        return $productsList;
     }
 
-    public function getTotalPrice($array) {
+    public function getTotalPrice($productsList)
+    {
         $total = 0;
-        foreach ($array as $item) {
+        foreach ($productsList as $item) {
             $total += $item['endPrice'];
         }
         return $total;
     }
 
-    public function fillPersonalInfo($firstName, $lastName, $phone, $email = '',$id = '') {
+    public function fillPersonalInfo($firstName, $lastName, $phone, $email = '', $id = '')
+    {
         $this->personalArray['firstName'] = $firstName;
         $this->personalArray['lastName'] = $lastName;
         $this->personalArray['phone'] = $phone;
@@ -74,14 +78,15 @@ class Cart
         $this->personalArray['user'] = $id;
     }
 
-    public function fillAddressInfo($city, $address, $house, $apartment = '', $zip = '') {
+    public function fillAddressInfo($city, $address, $house, $apartment = '', $zip = '')
+    {
         $this->addressArray['city'] = $city;
         $this->addressArray['address'] = $address;
-        if (!empty($apartment)) {
-            $this->addressArray['apartments'] = $house . '-' . $apartment;
-        } else {
-            $this->addressArray['apartments'] = $house;
-        }
+        $this->addressArray['apartments'] = $house;
         $this->addressArray['zip'] = $zip;
+
+        if (!empty($apartment)) {
+            $this->addressArray['apartments'] .= '-' . $apartment;
+        }
     }
 }
