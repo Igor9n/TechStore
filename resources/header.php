@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <img src="/includes/media/tech.png" width="30" height="30" alt="">
+    <img src="/media/tech.png" width="30" height="30" alt="">
     <a class="navbar-brand" href="/">TechStore</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -16,9 +16,9 @@
                 <a class="nav-link" href="/main/about">About</a>
             </li>
         </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="text" placeholder="What do you need?">
-    <!--            <button class="btn btn-secondary" type="submit">Search</button>-->
+            <form class="form-inline my-2 my-lg-0" method="GET" action="/order/check">
+                <input class="form-control mr-sm-1" type="text" placeholder="Enter order number" name="id">
+<!--                <button class="btn btn-secondary" type="submit">Search</button>-->
             </form>
         <?php if (!isset($_SESSION['user'])): ?>
             <div class="col-3 row justify-content-end form-around">

@@ -5,6 +5,7 @@
  * Date: 11.01.19
  * Time: 16:02
  */
+
 namespace App\Data;
 
 class User
@@ -14,15 +15,18 @@ class User
     public $password;
     public $confirmPassword;
     public $email;
+    public $orders;
 
-    public function __construct($login, $password, $confirmPassword, $email) {
+    public function __construct($login, $password, $confirmPassword, $email)
+    {
         $this->login = $login;
         $this->password = $password;
         $this->confirmPassword = $confirmPassword;
         $this->email = $email;
     }
 
-    public static function createObject($login, $password, $confirmPassword = '', $email = ''): User {
+    public static function createObject($login, $password, $confirmPassword = '', $email = ''): User
+    {
         return new self(
             $login,
             $password,
@@ -31,8 +35,18 @@ class User
         );
     }
 
-    public function fillId ($id) {
+    public function fillId($id)
+    {
         $this->id = $id;
     }
 
+    public function fillOrders($list)
+    {
+        $this->orders = $list;
+    }
+
+    public function clearPassword()
+    {
+        unset($this->password);
+    }
 }

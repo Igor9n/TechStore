@@ -6,5 +6,6 @@ return [
     'item',
     'cart',
     'user',
-    'order'
+    'order',
+    'admin'
 ];

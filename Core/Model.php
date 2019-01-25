@@ -6,10 +6,11 @@
  * Time: 19:46
  */
 
-namespace App\Core;
+namespace Core;
 
 
 use App\Classes\DBConnection;
+use PDO;
 
 class Model
 {
@@ -20,15 +21,23 @@ class Model
         $this->pdo = DBConnection::getInstance();
     }
 
-    protected function queryOne($query, array $value, $column = null)
+
+    protected function queryColumn($query, array $value = [], $column = null)
     {
         $query = $this->pdo->prepare($query);
         $query->execute($value);
         if ($column === null) {
             return true;
         } else {
-            return $query->fetchColumn($column);
+            return $query->fetch()[$column];
         }
+    }
+
+    protected function queryRow($query, array $values = [])
+    {
+        $query = $this->pdo->prepare($query);
+        $query->execute($values);
+        return $query->fetch(PDO::FETCH_ASSOC);
     }
 
     protected function selectCondition($query, $value)
@@ -38,14 +47,19 @@ class Model
         } else {
             $condition = 'service_title';
         }
-        $query = sprintf($query,$condition);
-        return $query;
+        return sprintf($query, $condition);
     }
 
-    protected function selectTypeAndQuery($query, $value, $column)
+    protected function selectTypeAndQuery($query, $value, $flag, $column = 0)
     {
         $query = $this->selectCondition($query, $value);
-        return $this->queryOne($query, ['value' => $value], $column);
+
+        switch ($flag) {
+            case 'col':
+                return $this->queryColumn($query, ['value' => $value], $column);
+            case 'row':
+                return $this->queryRow($query, ['value' => $value]);
+        }
     }
 
     protected function queryList($query, $column, array $variables = [])
@@ -53,9 +67,10 @@ class Model
         $array = [];
         $query = $this->pdo->prepare($query);
         $query->execute($variables);
-        if ($column === 0) {
+
+        if ($column === 'id' || preg_match('/[a-z]_id$/', $column)) {
             while ($value = $query->fetch()) {
-                $array[] = (int) $value[$column];
+                $array[] = (int)$value[$column];
             }
         } else {
             while ($value = $query->fetch()) {

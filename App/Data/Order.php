@@ -17,7 +17,7 @@ class Order
     public $deliveryInfo;
     public $productsInfo;
 
-    public function __construct($id, array $personal,array $address,array $delivery,array $products)
+    public function __construct($id, array $personal, array $address, array $delivery, array $products)
     {
         $this->id = $id;
         $this->personalInfo = $personal;
@@ -26,8 +26,8 @@ class Order
         $this->productsInfo = $products;
     }
 
-    public static function getObject($id,$personal,$address,$delivery,$products): Order
+    public static function getObject($id, $personal, $address, $delivery, $products): Order
     {
-        return new self ($id,$personal,$address,$delivery,$products);
+        return new self($id, $personal, $address, $delivery, $products);
     }
 }

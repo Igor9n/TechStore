@@ -5,10 +5,12 @@
  * Date: 11.01.19
  * Time: 16:03
  */
+
 namespace App\Mappers;
 
 use App\Classes\Session;
-use App\Core\Mapper;
+use App\Validators\UserValidator;
+use Core\Mapper;
 use App\Data\User;
 use App\Models\UserModel;
 
@@ -17,70 +19,75 @@ class UserMapper extends Mapper
     public function __construct()
     {
         $this->model = new UserModel();
+        $this->validator = new UserValidator();
     }
 
     public function getObject($flag): User
     {
-        switch ($flag) {
-            case 'log':
-                return User::createObject(
-                    $_POST['login'],
-                    $_POST['password']
-                );
-            case 'reg':
-                return User::createObject(
-                    $_POST['login'],
-                    $_POST['password'],
-                    $_POST['confirm'],
-                    $_POST['email']
-                );
+        if ($flag === 'login') {
+            return User::createObject(
+                $_POST['login'],
+                $_POST['password']
+            );
+        } else {
+            return User::createObject(
+                $_POST['login'],
+                $_POST['password'],
+                $_POST['confirm'],
+                $_POST['email']
+            );
         }
     }
 
-    public function validateInfo(User $object, $flag)
+    public function validateLoginInfo(User $object)
     {
-        switch ($flag){
-            case 'log':
-                $check['loginErrors'] = $this->model->validateLogin($object->login);
-                $check['passwordErrors'] = $this->model->validatePassword($object->password);
-                return $this->makeSimpleArray($check);
-            case 'reg':
-                $check['loginErrors'] = $this->model->validateLogin($object->login);
-                $check['passwordErrors'] = $this->model->validatePassword($object->password);
-                $check['confirmError'] = $this->model->validateConfirm($object->password,$object->confirmPassword);
-                $check['emailErrors'] = $this->model->validateEmail($object->email);
-                return $this->makeSimpleArray($check);
-            default:
-                return ['Invalid input data'];
-        }
-
+        $check[] = $this->validator->validateLogin($object->login);
+        $check[] = $this->validator->validatePassword($object->password);
+        return $this->makeSimpleArray($check);
     }
 
-    public function checkForErrors(User $object, $flag)
+    public function validateRegisterInfo(User $object)
     {
-        $errors = $this->validateInfo($object, $flag);
-        switch ($flag){
-            case 'log':
-                if (empty($errors)) {
-                    $errors = $this->model->checkLoginInDB($flag, $object->login);
-                }
-                if (empty($errors)){
-                    $errors = $this->model->checkLoginPassword($object->login, $object->password);
-                }
-                return $errors;
-            case 'reg':
-                if (empty($errors)) {
-                    return $this->model->checkLoginInDB($flag, $object->login);
-                }
-                return $errors;
-            default:
-                return $errors;
+        $check[] = $this->validator->validateLogin($object->login);
+        $check[] = $this->validator->validatePassword($object->password);
+        $check[] = $this->validator->validateConfirm($object->password, $object->confirmPassword);
+        $check[] = $this->validator->validateEmail($object->email);
+        return $this->makeSimpleArray($check);
+    }
+
+
+    public function loginErrors(User $object)
+    {
+        $errors = $this->validateLoginInfo($object);
+
+        if (empty($errors)) {
+            $errors = $this->model->checkUserForLogInDB($object->login);
         }
+
+        if (empty($errors)) {
+            $errors = $this->model->checkPasswordForLogin($object->login, $object->password);
+        }
+        return $errors;
+    }
+
+    public function registerErrors(User $object)
+    {
+        $errors = $this->validateRegisterInfo($object);
+
+        if (empty($errors)) {
+            return $this->model->checkUserForRegInDB($object->login, $object->email);
+        }
+        return $errors;
     }
 
     public function addId(User $object)
     {
         $object->fillId($this->model->getUserId($object->login));
+    }
+
+    public function addOrdersInfo(User $user, $list)
+    {
+        $user->fillOrders($list);
     }
 
     public function submitUserInfo(User $object)
@@ -92,25 +99,19 @@ class UserMapper extends Mapper
         );
     }
 
-    public function loginUser($errors,$user)
+    public function loginUser(User $user)
     {
-        if (empty($errors)) {
-            Session::anotherSessionStart();
+            Session::additionalSessionStart();
             $this->addId($user);
-            $_SESSION['user'] = $user;
-        } else {
-            $_SESSION['errors'] = $errors;
-        }
-        header("Location: /user/login");
-    }
-    public function registerUser($errors,$user)
-    {
-        if (empty($errors)) {
-            $_SESSION['registered'] = $this->submitUserInfo($user);
-        } else {
-            $_SESSION['errors'] = $errors;
-        }
-        header("Location: /user/registration");
+            $user->clearPassword();
+            Session::set('user', $user);
+
+            return [];
     }
 
+    public function registerUser(User $user)
+    {
+            Session::set('registered', $this->submitUserInfo($user));
+            return [];
+    }
 }

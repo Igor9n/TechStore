@@ -5,6 +5,7 @@
  * Date: 11.01.19
  * Time: 16:02
  */
+
 namespace App\Data;
 
 class Item
@@ -21,7 +22,7 @@ class Item
     public $price;
 
     public function __construct(
-        $id,
+        int $id,
         string $serviceTitle,
         $categoryId,
         string $title,
@@ -29,7 +30,7 @@ class Item
         array $characteristicsValues,
         string $shortDescription,
         string $description,
-        $price
+        string $price
     ) {
         $this->id = $id;
         $this->serviceTitle = $serviceTitle;
@@ -42,13 +43,16 @@ class Item
         $this->characteristicsValues = $characteristicsValues;
         $this->listCharacteristics($this->characteristicsTitles, $this->characteristicsValues);
     }
-    private function listCharacteristics($titles,$values){
-        for ($i = 0; $i < count($titles); $i++){
+
+    private function listCharacteristics($titles, $values)
+    {
+        for ($i = 0; $i < count($titles); $i++) {
             $this->characteristics[$titles[$i]] = $values[$i];
         }
     }
 
-    public static function createObject(array $array): Item {
+    public static function createObject(array $array): Item
+    {
         return new self(
             $array['id'],
             $array['serviceTitle'],
