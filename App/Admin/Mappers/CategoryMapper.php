@@ -2,16 +2,16 @@
 /**
  * Created by PhpStorm.
  * User: igrec
- * Date: 11.01.19
- * Time: 16:03
+ * Date: 25.01.19
+ * Time: 18:26
  */
 
+namespace App\Admin\Mappers;
 
-namespace App\User\Mappers;
 
+use App\Admin\Data\Category;
+use App\Admin\Models\CategoryModel;
 use Core\Mapper;
-use App\User\Data\Category;
-use App\User\Models\CategoryModel;
 
 class CategoryMapper extends Mapper
 {
@@ -20,23 +20,39 @@ class CategoryMapper extends Mapper
     public function __construct()
     {
         $this->model = new CategoryModel();
-        $this->item = new ItemMapper();
     }
 
     /**
      * Returns category object
      *
-     * @param $id
+     * @param array $categoryInfo
+     * @param string $hasProducts
      * @return Category
      */
-    public function getCategoryObject($id): Category
+    public function getObject(array $categoryInfo, string $hasProducts): Category
     {
-        $categoryInfo = $this->model->getFullCategoryInfo($id);
         return Category::createObject([
             'id' => $categoryInfo['id'],
             'serviceTitle' => $categoryInfo['service_title'],
             'title' => $categoryInfo['title']
-        ]);
+        ], $hasProducts);
+    }
+
+    /**
+     * Return category object by category id
+     *
+     * @param $id
+     * @return Category
+     */
+    public function getCategoryObject($id)
+    {
+        $categoryInfo = $this->model->getFullCategoryInfo($id);
+        if ($this->model->checkCategoryProducts($id)) {
+            $hasProducts = 'Yes';
+        } else {
+            $hasProducts = 'No';
+        }
+        return $this->getObject($categoryInfo, $hasProducts);
     }
 
     /**

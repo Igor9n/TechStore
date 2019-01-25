@@ -69,11 +69,11 @@ class Model
         $query->execute($variables);
 
         if ($column === 'id' || preg_match('/[a-z]_id$/', $column)) {
-            while ($value = $query->fetch()) {
+            while ($value = $query->fetch(PDO::FETCH_ASSOC)) {
                 $array[] = (int)$value[$column];
             }
         } else {
-            while ($value = $query->fetch()) {
+            while ($value = $query->fetch(PDO::FETCH_ASSOC)) {
                 $array[] = $value[$column];
             }
         }

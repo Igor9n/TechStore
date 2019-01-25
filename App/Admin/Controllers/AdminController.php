@@ -10,16 +10,20 @@ namespace App\Admin\Controllers;
 
 
 use App\Admin\Mappers\AdminMapper;
+use App\Admin\Mappers\CategoryMapper;
 use App\Classes\Session;
 use Core\Controller;
 use App\Admin\Main\AdminView;
 
 class AdminController extends Controller
 {
+    public $categories;
+
     public function __construct()
     {
         $this->view = new AdminView();
         $this->mapper = new AdminMapper();
+        $this->categories = new CategoryMapper();
     }
 
     public function try(string $action)
@@ -73,7 +77,9 @@ class AdminController extends Controller
             header("Location: /admin/login");
         }
 
+        $data['categories'] = $this->categories->getAllCategories();
         $data['title'] = 'Categories page';
+
         $this->view->generate('admin_template.php', 'admin_categories.php', $data);
     }
 

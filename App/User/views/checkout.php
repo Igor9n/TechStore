@@ -128,6 +128,7 @@
                                 <th scope="row">Confirm your order</th>
                                 <th scope="row">
                                     <button class="btn btn-primary" name="order" value="true">Submit</button>
+                                </th>
                             </tr>
                             </tbody>
                         </table>

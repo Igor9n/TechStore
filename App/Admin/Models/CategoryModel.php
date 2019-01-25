@@ -13,6 +13,18 @@ use Core\Model;
 
 class CategoryModel extends Model
 {
+    public function getCategoriesList()
+    {
+        $query = "SELECT id FROM categories";
+        return $this->queryList($query, 'id');
+    }
+
+    public function getFullCategoryInfo($id)
+    {
+        $query = "SELECT id, title, service_title FROM categories WHERE id = :id";
+        return $this->queryRow($query, ['id' => $id]);
+    }
+
     public function updateCategoryInfo($title, $serviceTitle, $id)
     {
         $query = "UPDATE categories SET title = :title, service_title = :service, updated_at = NOW() WHERE id = :id";
@@ -51,7 +63,11 @@ class CategoryModel extends Model
 
     public function checkCategoryProducts($id)
     {
+        $result = false;
         $query = "SELECT service_title FROM products WHERE category_id = :id LIMIT 1";
-        return $this->queryColumn($query, ['id' => $id], 0);
+        if ($this->queryColumn($query, ['id' => $id], 0)) {
+            $result = true;
+        }
+        return  $result;
     }
 }
