@@ -40,7 +40,7 @@ class ItemController extends MainController
         }
 
         Session::additionalSessionStart();
-        $_SESSION['item'] = $this->mapper->getItemObject($id);
+        Session::set('item', $this->mapper->getItemObject($id));
         header("Location: /cart/add");
     }
 }

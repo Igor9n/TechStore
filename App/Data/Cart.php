@@ -52,18 +52,18 @@ class Cart
         $this->totalPrice = $this->getTotalPrice($this->itemsArray);
     }
 
-    public function endPrice($arr)
+    public function endPrice($productsList)
     {
-        foreach ($arr as $item) {
-            $arr[$item['info']->serviceTitle]['endPrice'] = $item['info']->price * $item['count'];
+        foreach ($productsList as $item) {
+            $productsList[$item['info']->serviceTitle]['endPrice'] = $item['info']->price * $item['count'];
         }
-        return $arr;
+        return $productsList;
     }
 
-    public function getTotalPrice($array)
+    public function getTotalPrice($productsList)
     {
         $total = 0;
-        foreach ($array as $item) {
+        foreach ($productsList as $item) {
             $total += $item['endPrice'];
         }
         return $total;

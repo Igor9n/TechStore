@@ -19,7 +19,6 @@ class CartModel extends Model
     }
 
 
-
     public function submitPersonal($array)
     {
         $personal = "

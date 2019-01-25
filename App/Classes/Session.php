@@ -46,7 +46,7 @@ class Session
 
     public static function get($title)
     {
-        $result = '';
+        $result = null;
         if (self::check($title)) {
             $result = $_SESSION[$title];
         }
