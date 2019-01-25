@@ -9,6 +9,7 @@
 namespace App\Controllers;
 
 
+use App\Classes\Session;
 use Core\Controller;
 use App\Mappers\OrderMapper;
 use App\Mappers\UserMapper;
@@ -16,6 +17,7 @@ use App\Mappers\UserMapper;
 class OrderController extends Controller
 {
     public $userMapper;
+
     public function __construct()
     {
         parent::__construct();
@@ -25,44 +27,46 @@ class OrderController extends Controller
 
     public function actionAll()
     {
-        if (!isset($_SESSION['user'])){
+        if (!Session::check('user')) {
             header("Location: /user/login");
         }
 
-        $id = $_SESSION['user']->id;
-        $this->userMapper->addOrdersInfo($_SESSION['user'],$this->mapper->getOrdersListForUser($id));
+        $id = Session::get('user')->id;
+        $this->userMapper->addOrdersInfo($_SESSION['user'], $this->mapper->getOrdersListForUser($id));
 
-        $data['info'] = $_SESSION['user'];
+        $data['info'] = Session::get('user');
         $data['title'] = 'Orders';
 
-        $this->view->generate('template.php','orders.php',$data);
+        $this->view->generate('template.php', 'orders.php', $data);
     }
+
     public function actionView()
     {
-        if (!isset($_SESSION['user'])){
+        if (!Session::check('user')) {
             header("Location: /user/login");
         }
 
         $order = false;
         $data['title'] = 'Order info';
+        $id = $_GET['id'];
 
-        if(isset($_GET['id']) && isset($_SESSION['user']->orders[$_GET['id']])){
-            $order = $this->mapper->getOrder($_GET['id']);
+        if (isset(Session::get('user')->orders[$id])) {
+            $order = $this->mapper->getOrder($id);
         }
 
-        if($order){
+        if ($order) {
             $data['info'] = $order;
         }
 
-        $this->view->generate('template.php','order.php',$data);
+        $this->view->generate('template.php', 'order.php', $data);
     }
+
     public function actionCheck()
     {
-        if(isset($_GET['id'])){
-            $data['info'] = $this->mapper->getShortenOrder($_GET['id']);
-            $data['orderId'] = $_GET['id'];
-        }
+        $data['info'] = $this->mapper->getShortenOrder($_GET['id']);
+        $data['orderId'] = $_GET['id'];
+
         $data['title'] = 'Order status';
-        $this->view->generate('template.php','check.php', $data);
+        $this->view->generate('template.php', 'check.php', $data);
     }
 }

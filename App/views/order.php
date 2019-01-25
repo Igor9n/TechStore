@@ -1,9 +1,9 @@
 <div class="col-sm-10">
     <div class="row">
         <div class="col-sm-9">
-            <?php if(isset($info)): ?>
+            <?php if (isset($info)) : ?>
                 <div class="alert alert-secondary">
-                    <h4 class="alert-heading">Order number <b><?=$info->id?></b></h4>
+                    <h4 class="alert-heading">Order number <b><?= $info->id ?></b></h4>
                 </div>
                 <ul class="nav nav-pills nav-fill">
                     <li class="nav-item">
@@ -29,28 +29,28 @@
                         <div class="tab-content">
                             <table class="table">
                                 <thead>
-                                    <tr>
-                                        <th scope="col" style="width: 50%;">Title</th>
-                                        <th scope="col" style="width: 50%;">Value</th>
-                                    </tr>
+                                <tr>
+                                    <th scope="col" style="width: 50%;">Title</th>
+                                    <th scope="col" style="width: 50%;">Value</th>
+                                </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <th scope="row">First name</th>
-                                        <td><?=$info->personalInfo['firstName']?></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Last name</th>
-                                        <td><?=$info->personalInfo['lastName']?></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Phone number</th>
-                                        <td><?=$info->personalInfo['phoneNumber']?></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Email</th>
-                                        <td><?=$info->personalInfo['email']?></td>
-                                    </tr>
+                                <tr>
+                                    <th scope="row">First name</th>
+                                    <td><?= $info->personalInfo['firstName'] ?></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Last name</th>
+                                    <td><?= $info->personalInfo['lastName'] ?></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Phone number</th>
+                                    <td><?= $info->personalInfo['phoneNumber'] ?></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Email</th>
+                                    <td><?= $info->personalInfo['email'] ?></td>
+                                </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -67,15 +67,15 @@
                                 <tbody>
                                 <tr>
                                     <th scope="row">City</th>
-                                    <td><?=$info->addressInfo['city']?></td>
+                                    <td><?= $info->addressInfo['city'] ?></td>
                                 </tr>
                                 <tr>
                                     <th scope="row">Address</th>
-                                    <td><?=$info->addressInfo['address']?></td>
+                                    <td><?= $info->addressInfo['address'] ?></td>
                                 </tr>
                                 <tr>
                                     <th scope="row">Apartments numbers</th>
-                                    <td><?=$info->addressInfo['apartmentsNumbers']?></td>
+                                    <td><?= $info->addressInfo['apartmentsNumbers'] ?></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -85,24 +85,24 @@
                         <div class="tab-content">
                             <table class="table">
                                 <thead>
-                                    <tr>
-                                        <th scope="col" style="width: 50%;">Title</th>
-                                        <th scope="col" style="width: 50%;">Value</th>
-                                    </tr>
+                                <tr>
+                                    <th scope="col" style="width: 50%;">Title</th>
+                                    <th scope="col" style="width: 50%;">Value</th>
+                                </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <th scope="row">Type</th>
-                                        <td><?=$info->deliveryInfo['type']?></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Date</th>
-                                        <td><?=$info->deliveryInfo['date']?></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Time</th>
-                                        <td><?=$info->deliveryInfo['time']?></td>
-                                    </tr>
+                                <tr>
+                                    <th scope="row">Type</th>
+                                    <td><?= $info->deliveryInfo['type'] ?></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Date</th>
+                                    <td><?= $info->deliveryInfo['date'] ?></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Time</th>
+                                    <td><?= $info->deliveryInfo['time'] ?></td>
+                                </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -119,17 +119,19 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <?php $i=1;?>
-                                <?php foreach ($info->productsInfo as $var):?>
+                                <?php $i = 1; ?>
+                                <?php foreach ($info->productsInfo as $var): ?>
                                     <tr>
-                                        <th scope="row"><?= $i++;?></th>
-                                        <th scope="row"><a href="/item/view/<?=$var['info']->serviceTitle?>"><?=$var['info']->title?></a></th>
+                                        <th scope="row"><?= $i++; ?></th>
+                                        <th scope="row"><a
+                                                    href="/item/view/<?= $var['info']->serviceTitle ?>"><?= $var['info']->title ?></a>
+                                        </th>
                                         <td>
                                             <div>
-                                                <input size="1" value="<?=$var['count']?>" disabled>
+                                                <input size="1" value="<?= $var['count'] ?>" disabled>
                                             </div>
                                         </td>
-                                        <th scope="row"><?=$var['endprice']?></th>
+                                        <th scope="row"><?= $var['endprice'] ?></th>
                                     </tr>
                                 <?php endforeach; ?>
                                 </tbody>
@@ -145,27 +147,27 @@
             <?php endif; ?>
         </div>
         <div class="col-sm-3">
-        <div class="list-group">
-            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
-                <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1">Article number one</h5>
-                </div>
-                <p class="mb-1">Some interesting info about any goods from any category</p>
-            </a>
-            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
-                <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1">Article number two</h5>
-                </div>
-                <p class="mb-1">Some interesting info about any goods from any category</p>
-            </a>
-            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
-                <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1">Article number three</h5>
-                </div>
-                <p class="mb-1">Some interesting info about any goods from any category</p>
-            </a>
+            <div class="list-group">
+                <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">Article number one</h5>
+                    </div>
+                    <p class="mb-1">Some interesting info about any goods from any category</p>
+                </a>
+                <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">Article number two</h5>
+                    </div>
+                    <p class="mb-1">Some interesting info about any goods from any category</p>
+                </a>
+                <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">Article number three</h5>
+                    </div>
+                    <p class="mb-1">Some interesting info about any goods from any category</p>
+                </a>
+            </div>
         </div>
-    </div>
     </div>
 </div>
 

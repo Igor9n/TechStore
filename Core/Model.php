@@ -47,8 +47,7 @@ class Model
         } else {
             $condition = 'service_title';
         }
-        $query = sprintf($query, $condition);
-        return $query;
+        return sprintf($query, $condition);
     }
 
     protected function selectTypeAndQuery($query, $value, $flag, $column = 0)

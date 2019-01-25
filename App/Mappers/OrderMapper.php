@@ -21,6 +21,17 @@ class OrderMapper extends Mapper
         $this->mapper = new ItemMapper();
     }
 
+    public function getObject($id, array $array): Order
+    {
+        return Order::getObject(
+            $id,
+            $array['personal'],
+            $array['address'],
+            $array['delivery'],
+            $array['products']
+        );
+    }
+
     public function getOrdersListForUser($id)
     {
         $array = [];
@@ -39,9 +50,31 @@ class OrderMapper extends Mapper
 
     public function getProductsPriceInfo(array $array)
     {
-        foreach ($array as $var) {
-            $array[$var['info']->id]['count'] = $this->model->getOrderProductCount($var['info']->id);
-            $array[$var['info']->id]['endprice'] = $this->model->getOrderProductEndprice($var['info']->id);
+        foreach ($array as $product) {
+            $array[$product['info']->id]['count'] = $this->model->getOrderProductCount($product['info']->id);
+            $array[$product['info']->id]['endprice'] = $this->model->getOrderProductEndprice($product['info']->id);
+        }
+
+        return $array;
+    }
+
+
+    public function getOrder($id)
+    {
+        $result = false;
+        if ($this->model->checkOrderById($id)) {
+            $array = $this->getOrderInfo($id);
+            $result = $this->getObject($id, $array);
+        }
+        return $result;
+    }
+
+    public function getShortenOrder($id)
+    {
+        $array = [];
+        if ($this->model->checkOrderById($id)) {
+            $array['delivery'] = $this->model->getDeliveryInfoByOrderId($id);
+            $array['status'] = $this->model->getOrderStatus($id);
         }
         return $array;
     }
@@ -49,8 +82,8 @@ class OrderMapper extends Mapper
     public function getProductsForOrder($id)
     {
         $list = $this->model->getProductsListByOrderId($id);
-        foreach ($list as $var) {
-            $products[$var]['info'] = $this->mapper->getItemObject($var);
+        foreach ($list as $product) {
+            $products[$product]['info'] = $this->mapper->getItemObject($product);
         }
         return $this->getProductsPriceInfo($products);
     }
@@ -62,35 +95,5 @@ class OrderMapper extends Mapper
         $array['delivery'] = $this->model->getDeliveryInfoByOrderId($id);
         $array['products'] = $this->getProductsForOrder($id);
         return $array;
-    }
-
-    public function getOrder($id)
-    {
-        if ($this->model->checkOrderById($id)) {
-            $array = $this->getOrderInfo($id);
-            return $this->getObject($id, $array);
-        }
-        return false;
-    }
-
-    public function getShortenOrder($id)
-    {
-        if ($this->model->checkOrderById($id)) {
-            $array[0] = $this->model->getDeliveryInfoByOrderId($id);
-            $array[1] = $this->model->getOrderStatus($id);
-            return $array;
-        }
-        return false;
-    }
-
-    public function getObject($id, array $array): Order
-    {
-        return Order::getObject(
-            $id,
-            $array['personal'],
-            $array['address'],
-            $array['delivery'],
-            $array['products']
-        );
     }
 }

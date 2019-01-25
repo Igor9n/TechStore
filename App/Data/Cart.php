@@ -18,8 +18,7 @@ class Cart
 
     public function __construct($item)
     {
-        $this->calculateItemEndPrice($item);
-        $this->totalPrice = $this->getTotalPrice($this->itemsArray);
+        $this->addItem($item);
     }
 
     public static function createObject($item): Cart
@@ -34,7 +33,7 @@ class Cart
         if ($flag === 'plus') {
             $this->itemsArray[$item->id]['count']++;
         } else {
-                $this->itemsArray[$item->id]['count']--;
+            $this->itemsArray[$item->id]['count']--;
         }
         $this->calculateItemEndPrice($item, $this->itemsArray[$item->id]['count']);
         $this->totalPrice = $this->getTotalPrice($this->itemsArray);
@@ -83,11 +82,11 @@ class Cart
     {
         $this->addressArray['city'] = $city;
         $this->addressArray['address'] = $address;
-        if (!empty($apartment)) {
-            $this->addressArray['apartments'] = $house . '-' . $apartment;
-        } else {
-            $this->addressArray['apartments'] = $house;
-        }
+        $this->addressArray['apartments'] = $house;
         $this->addressArray['zip'] = $zip;
+
+        if (!empty($apartment)) {
+            $this->addressArray['apartments'] .= '-' . $apartment;
+        }
     }
 }

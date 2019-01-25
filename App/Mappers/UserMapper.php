@@ -99,25 +99,19 @@ class UserMapper extends Mapper
         );
     }
 
-    public function loginUser(User $user, array $errors)
+    public function loginUser(User $user)
     {
-        if (empty($errors)) {
+            Session::additionalSessionStart();
             $this->addId($user);
             $user->clearPassword();
             Session::set('user', $user);
-        } else {
-            Session::set('errors', $errors);
-        }
-        header("Location: /user/login");
+
+            return [];
     }
 
-    public function registerUser(User $user, array $errors)
+    public function registerUser(User $user)
     {
-        if (empty($errors)) {
             Session::set('registered', $this->submitUserInfo($user));
-        } else {
-            Session::set('errors', $errors);
-        }
-        header("Location: /user/registration");
+            return [];
     }
 }

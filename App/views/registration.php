@@ -10,8 +10,8 @@
                     <a class="btn btn-secondary" href="/">Return</a>
                     <a class="btn btn-secondary" href="/user/login">Login</a>
                 </div>
-            <?php else : ?>
-                <?php if ($errors) : ?>
+            <?php else :?>
+                <?php if (!empty($errors)) : ?>
                     <div class="alert alert-danger">
                         <ul>
                             <?php foreach ($errors as $var) : ?>
@@ -24,7 +24,7 @@
                     <h4 class="alert-heading">Don't have an account yet?</h4>
                     <p class="mb-0">Fix it right now</p>
                 </div>
-                <form method="post" action="/user/try">
+                <form method="post" action="/user/registration">
                     <div class="row">
                         <div class="col">
                             <label>Your login</label>

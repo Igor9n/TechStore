@@ -8,6 +8,7 @@
 
 namespace App\Mappers;
 
+use App\Validators\CartValidator;
 use Core\Mapper;
 use App\Data\Cart;
 use App\Models\CartModel;
@@ -17,6 +18,7 @@ class CartMapper extends Mapper
     public function __construct()
     {
         $this->model = new CartModel();
+        $this->validator = new CartValidator();
     }
 
     public function getObject($item): Cart
@@ -57,24 +59,24 @@ class CartMapper extends Mapper
         );
     }
 
-    public function checkForPersonalErrors($array)
+    public function checkForPersonalErrors(array $array): array
     {
-        $check['firstNameErrors'] = $this->model->validateName('first', $array['firstName']);
-        $check['lastNameErrors'] = $this->model->validateName('last', $array['lastName']);
-        $check['phoneErrors'] = $this->model->validatePhone($array['phone']);
+        $check['firstNameErrors'] = $this->validator->validateName('first', $array['firstName']);
+        $check['lastNameErrors'] = $this->validator->validateName('last', $array['lastName']);
+        $check['phoneErrors'] = $this->validator->validatePhone($array['phone']);
         if (!empty($array['email'])) {
-            $check['emailErrors'] = $this->model->validateEmail($array['email']);
+            $check['emailErrors'] = $this->validator->validateEmail($array['email']);
         }
         return $this->makeSimpleArray($check);
     }
 
     public function checkForAddressErrors($array)
     {
-        $check['cityErrors'] = $this->model->validateCity($array['city']);
-        $check['addressErrors'] = $this->model->validateAddress($array['address']);
-        $check['apartmentsErrors'] = $this->model->validateApartments($array['apartments']);
+        $check['cityErrors'] = $this->validator->validateCity($array['city']);
+        $check['addressErrors'] = $this->validator->validateAddress($array['address']);
+        $check['apartmentsErrors'] = $this->validator->validateApartments($array['apartments']);
         if (!empty($array['zip'])) {
-            $check['zipErrors'] = $this->model->validateZip($array['zip']);
+            $check['zipErrors'] = $this->validator->validateZip($array['zip']);
         }
         return $this->makeSimpleArray($check);
     }
@@ -89,8 +91,9 @@ class CartMapper extends Mapper
     public function submitOrder(Cart $object)
     {
         $personalSubmit = $this->model->submitPersonal($object->personalArray);
-        $this->model->submitAddress($personalSubmit, $object->addressArray);
         $orderSubmit = $this->model->submitOrder($personalSubmit, $object->totalPrice);
+
+        $this->model->submitAddress($personalSubmit, $object->addressArray);
         $this->model->submitOrderDelivery($orderSubmit);
         $this->model->submitOrderProducts($orderSubmit, $object->itemsArray);
         return $orderSubmit;
@@ -108,7 +111,7 @@ class CartMapper extends Mapper
         if (isset($_SESSION['user'])) {
             $id = (int)$_SESSION['user']->id;
         } else {
-            $id = 0;
+            $id = 0; // It means 'unregistered' user
         }
         $this->addPersonalInfo($cart, [
             'firstName' => $_POST['firstName'],

@@ -26,23 +26,23 @@ class UserController extends Controller
 
     /**
      * Trying to login/register
+     *
+     * @param string $action
+     * @return string
      */
-    public function actionTry(): void
+    public function try(string $action)
     {
-        if (!isset($_POST['try'])) {
-            header("Location: /user/login");
-        }
-
-        Session::additionalSessionStart();
-
-        $action = $_POST['try'];
         $method = $action . 'User';
         $errors = $action . 'Errors';
 
         $user = $this->mapper->getObject($action);
         $errors = $this->mapper->$errors($user, $action);
 
-        $this->mapper->$method($user, $errors);
+        if (empty($errors)) {
+            $errors = $this->mapper->$method($user, $errors);
+        }
+
+        return $errors;
     }
 
     public function actionLogout()
@@ -56,13 +56,15 @@ class UserController extends Controller
      */
     public function actionLogin()
     {
+        if (isset($_POST['try'])) {
+            $data['errors'] = $this->try($_POST['try']);
+        }
+
         if (Session::check('user')) {
             header("Location: /order/all");
         }
 
         $data['title'] = 'Login';
-        $data['errors'] = Session::get('errors');
-        Session::unset('errors');
 
         $this->view->generate('template.php', 'login.php', $data);
     }
@@ -72,14 +74,15 @@ class UserController extends Controller
      */
     public function actionRegistration()
     {
+        if (isset($_POST['try'])) {
+            $data['errors'] = $this->try($_POST['try']);
+        }
+
         if (Session::check('user')) {
             header("Location: /order/all");
         }
 
         $data['title'] = 'Registration';
-
-        $data['errors'] = Session::get('errors');
-        Session::unset('errors');
 
         if (Session::check('registered')) {
             $data['registered'] = Session::get('registered');

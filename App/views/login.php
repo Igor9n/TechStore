@@ -1,7 +1,7 @@
 <div class="col-sm-10">
     <div class="row">
         <div class="col-sm-9">
-            <?php if ($errors) : ?>
+            <?php if (!empty($errors)) : ?>
                 <div class="alert alert-danger">
                     <ul>
                         <?php foreach ($errors as $var) : ?>
@@ -14,7 +14,7 @@
                 <h4 class="alert-heading">Hi, guest!</h4>
                 <p class="mb-0">Sign in for tracking your orders</p>
             </div>
-            <form method="post" action="/user/try">
+            <form method="post" action="/user/login">
                 <div class="row">
                     <div class="col">
                         <label>Your login</label>

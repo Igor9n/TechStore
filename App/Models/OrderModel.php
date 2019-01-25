@@ -15,6 +15,7 @@ class OrderModel extends Model
 {
     public $product;
     public $order;
+
     public function __construct()
     {
         parent::__construct();
@@ -28,25 +29,29 @@ class OrderModel extends Model
 
     public function checkOrderById($id)
     {
+        $result = false;
         $info = "SELECT COUNT(id) FROM orders WHERE orders.id = :order";
-        if ($this->queryColumn($info, ['order' => $id], 0)){
-            return true;
-        };
-        return false;
+        if ($this->queryColumn($info, ['order' => $id], 0)) {
+            $result = true;
+        }
+        return $result;
     }
 
     public function getOrdersIdByUserId($id)
     {
-        return $this->queryList($this->order,'id',['user' => $id]);
+        return $this->queryList($this->order, 'id', ['user' => $id]);
     }
+
     public function getOrdersStatusByUserId($id)
     {
-        return $this->queryList($this->order,'status',['user' => $id]);
+        return $this->queryList($this->order, 'status', ['user' => $id]);
     }
+
     public function getOrdersPriceByUserId($id)
     {
-        return $this->queryList($this->order,'total_price',['user' => $id]);
+        return $this->queryList($this->order, 'total_price', ['user' => $id]);
     }
+
     public function getPersonalInfoByOrderId($id)
     {
         $array = [];
@@ -57,14 +62,17 @@ class OrderModel extends Model
             ON users_personal.id = orders.personal_id
             WHERE orders.id = :order
         ";
-        $array['firstName'] = $this->queryColumn($info,['order' => $id],0);
-        $array['lastName'] = $this->queryColumn($info,['order' => $id],1);
-        $array['phoneNumber'] = $this->queryColumn($info,['order' => $id],2);
-        $array['email'] = $this->queryColumn($info,['order' => $id],3);
-        $array['user'] = $this->queryColumn($info,['order' => $id],4);
+        $result = $this->queryRow($info, ['order' => $id]);
+
+        $array['firstName'] = $result['first_name'];
+        $array['lastName'] = $result['last_name'];
+        $array['phoneNumber'] = $result['phone_number'];
+        $array['email'] = $result['email'];
+        $array['user'] = $result['user_id'];
 
         return $array;
     }
+
     public function getAddressInfoByOrderId($id)
     {
         $array = [];
@@ -75,12 +83,15 @@ class OrderModel extends Model
             ON users_addresses.personal_id = orders.personal_id
             WHERE orders.id = :order
         ";
-        $array['city'] = $this->queryColumn($info,['order' => $id],0);
-        $array['address'] = $this->queryColumn($info,['order' => $id],1);
-        $array['apartmentsNumbers'] = $this->queryColumn($info,['order' => $id],2);
+        $result = $this->queryRow($info, ['order' => $id]);
+
+        $array['city'] = $result['city'];
+        $array['address'] = $result['address'];
+        $array['apartmentsNumbers'] = $result['apartments_numbers'];
 
         return $array;
     }
+
     public function getDeliveryInfoByOrderId($id)
     {
         $array = [];
@@ -91,12 +102,15 @@ class OrderModel extends Model
             ON orders_delivery.order_id = orders.id
             WHERE orders.id = :order
         ";
-        $array['type'] = $this->queryColumn($info,['order' => $id],0);
-        $array['date'] = $this->queryColumn($info,['order' => $id],1);
-        $array['time'] = $this->queryColumn($info,['order' => $id],2);
+        $result = $this->queryRow($info, ['order' => $id]);
+
+        $array['type'] = $result['type'];
+        $array['date'] = $result['date'];
+        $array['time'] = $result['time'];
 
         return $array;
     }
+
     public function getProductsListByOrderId($id)
     {
         $query = "
@@ -104,19 +118,22 @@ class OrderModel extends Model
             FROM orders_products
             WHERE order_id = :order
         ";
-        return $this->queryList($query,'product_id',['order' => $id]);
+        return $this->queryList($query, 'product_id', ['order' => $id]);
     }
+
     public function getOrderProductCount($id)
     {
-        return $this->queryColumn($this->product,['product' => $id], 'count');
+        return $this->queryColumn($this->product, ['product' => $id], 'count');
     }
+
     public function getOrderProductEndprice($id)
     {
-        return $this->queryColumn($this->product,['product' => $id], 'endprice');
+        return $this->queryColumn($this->product, ['product' => $id], 'endprice');
     }
+
     public function getOrderStatus($id)
     {
         $query = "SELECT status FROM orders WHERE id = :order";
-        return $this->queryColumn($query,['order' => $id], 'status');
+        return $this->queryColumn($query, ['order' => $id], 'status');
     }
 }
