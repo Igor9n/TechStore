@@ -18,9 +18,7 @@
             ---------------------------
         </div>
         <div class="container-fluid">
-            <div class="row">
-                <?php include $path . $content; ?>
-            </div>
+            <?php include $path . $content; ?>
         </div>
     </div>
     <div class="footer">

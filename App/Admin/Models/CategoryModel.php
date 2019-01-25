@@ -48,4 +48,10 @@ class CategoryModel extends Model
         $query = "DELETE FROM categories_characteristics WHERE id = :id";
         return $this->queryColumn($query, ['id' => $id]);
     }
+
+    public function checkCategoryProducts($id)
+    {
+        $query = "SELECT service_title FROM products WHERE category_id = :id LIMIT 1";
+        return $this->queryColumn($query, ['id' => $id], 0);
+    }
 }

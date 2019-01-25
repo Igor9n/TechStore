@@ -10,27 +10,29 @@
             <li class="nav-item">
                 <a class="btn btn-primary" href="/">To site</a>
             </li>
-            <li class="nav-item">
-                <a class="btn btn-primary" href="/admin">Main</a>
-            </li>
-            <li class="nav-item">
-                <a class="btn btn-primary" href="/admin/categories">Categories</a>
-            </li>
-            <li class="nav-item">
-                <a class="btn btn-primary" href="/admin/items">Items</a>
+            <?php if (isset($_SESSION['admin'])) : ?>
+                <li class="nav-item">
+                    <a class="btn btn-primary" href="/admin">Main</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-primary" href="/admin/categories">Categories</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-primary" href="/admin/items">Items</a>
+                </li>
+            <?php endif; ?>
         </ul>
-        <?php if (!isset($_SESSION['admin'])) : ?>
-            <div class="col-3 row justify-content-end form-around">
+        <div class="col-3 row justify-content-end form-around">
+            <?php if (!isset($_SESSION['admin'])) : ?>
                 <a class="btn btn-primary" href="/admin/login">Login</a>
-            </div>
-        <?php else : ?>
-            <div class="col-3 row justify-content-end form-around">
+            <?php else : ?>
                 <a class="btn btn-primary" href="/admin"><?= $_SESSION['admin']->login ?></a>
-            </div>
-            <div class="col-3 row justify-content-end form-around">
-                <a class="btn btn-primary" href="/admin/add">Admins</a>
-            </div>
-        <?php endif; ?>
+                <a class="btn btn-primary" href="/admin/logout">Logout</a>
+                <?php if ($_SESSION['admin']->role === 'main') : ?>
+                    <a class="btn btn-primary" href="/admin/control">Control admins</a>
+                <?php endif; ?>
+            <?php endif; ?>
+        </div>
     </div>
 </nav>
 

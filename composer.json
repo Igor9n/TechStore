@@ -15,6 +15,7 @@
         "psr-4": {
             "Core\\": "Core/",
             "App\\": "App/",
+            "App\\User\\": "App/User/",
             "App\\Admin\\": "App/Admin/"
         }
     }
