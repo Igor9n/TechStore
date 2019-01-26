@@ -19,9 +19,21 @@ class CategoryModel extends Model
         return $this->queryList($query, 'id');
     }
 
+    public function getCharacteristicsListByCategory(int $id)
+    {
+        $query = "SELECT id FROM categories_characteristics WHERE category_id = :category";
+        return $this->queryList($query, 'id', ['category' => $id]);
+    }
+
     public function getFullCategoryInfo($id)
     {
         $query = "SELECT id, title, service_title FROM categories WHERE id = :id";
+        return $this->queryRow($query, ['id' => $id]);
+    }
+
+    public function getFullCategoryCharacteristicInfo($id)
+    {
+        $query = "SELECT id, title, category_id FROM categories_characteristics WHERE id = :id";
         return $this->queryRow($query, ['id' => $id]);
     }
 
@@ -65,6 +77,16 @@ class CategoryModel extends Model
     {
         $result = false;
         $query = "SELECT service_title FROM products WHERE category_id = :id LIMIT 1";
+        if ($this->queryColumn($query, ['id' => $id], 0)) {
+            $result = true;
+        }
+        return  $result;
+    }
+
+    public function checkCategoryCharacteristics($id)
+    {
+        $result = false;
+        $query = "SELECT product_id FROM products_characteristics WHERE characteristic_id = :id LIMIT 1";
         if ($this->queryColumn($query, ['id' => $id], 0)) {
             $result = true;
         }

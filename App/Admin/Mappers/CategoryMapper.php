@@ -15,8 +15,6 @@ use Core\Mapper;
 
 class CategoryMapper extends Mapper
 {
-    public $item;
-
     public function __construct()
     {
         $this->model = new CategoryModel();

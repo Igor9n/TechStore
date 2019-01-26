@@ -16,12 +16,14 @@ use App\Admin\Main\AdminView;
 class AdminController extends Controller
 {
     public $categories;
+    public $categoryCharacteristics;
 
     public function __construct()
     {
         $this->view = new AdminView();
         $this->mapper = new AdminMapper();
         $this->categories = new CategoryController();
+        $this->categoryCharacteristics = new CategoryCharacteristicController();
     }
 
     public function try(string $action)
@@ -69,11 +71,34 @@ class AdminController extends Controller
         $this->view->generate('admin_template.php', 'admin_main.php', $data);
     }
 
+    public function actionCategory($action)
+    {
+        if (!Session::check('admin')) {
+            header("Location: /admin/login");
+        }
+
+        $id = 0;
+        if (isset($_GET['id'])) {
+            $id = (int)$_GET['id'];
+        }
+
+        if ($action) {
+            $action = 'action' . ucfirst($action);
+            $this->categoryCharacteristics->$action();
+        }
+
+        $data['info'] = $this->categoryCharacteristics->getCharacteristicsByCategory($id);
+        $data['title'] = 'Categories characteristics';
+
+        $this->view->generate('admin_template.php', 'admin_category.php', $data);
+    }
+
     public function actionCategories($action)
     {
         if (!Session::check('admin')) {
             header("Location: /admin/login");
         }
+
 
         if ($action) {
             $action = 'action' . ucfirst($action);

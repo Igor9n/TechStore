@@ -45,7 +45,11 @@ class Item
     {
         $array = [];
         foreach ($titles as $key => $value) {
-            $array[$value] = $values[$key];
+            if (isset($values[$key])) {
+                $array[$value] = $values[$key];
+                continue;
+            }
+            $array[$value] = 'No info';
         }
         $this->characteristics = $array;
     }

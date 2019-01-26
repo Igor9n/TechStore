@@ -32,7 +32,7 @@ class OrderController extends Controller
         }
 
         $id = Session::get('user')->id;
-        $this->userMapper->addOrdersInfo($_SESSION['user'], $this->mapper->getOrdersListForUser($id));
+        $this->userMapper->addOrdersInfo(Session::get('user'), $this->mapper->getOrdersListForUser($id));
 
         $data['info'] = Session::get('user');
         $data['title'] = 'Orders';
