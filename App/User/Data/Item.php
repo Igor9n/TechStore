@@ -29,8 +29,7 @@ class Item
         string $shortDescription,
         string $description,
         string $price
-    )
-    {
+    ) {
         $this->id = $id;
         $this->serviceTitle = $serviceTitle;
         $this->categoryId = $categoryId;

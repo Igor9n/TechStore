@@ -94,7 +94,10 @@ class CategoryMapper extends Mapper
 
     public function deleteCategoryInfo($id)
     {
-        return $this->model->deleteCategoryInfo($id);
+        return [
+            $this->model->deleteCategoryCharacteristicsByCategory($id),
+            $this->model->deleteCategoryInfo($id)
+        ];
     }
 
     public function updateCategoryInfo($id)
