@@ -102,4 +102,26 @@ class AdminController extends Controller
         $data['title'] = 'Control page';
         $this->view->generate('admin_template.php', 'admin_control.php', $data);
     }
+
+    public function actionInsert()
+    {
+        if (!isset($_POST['insert'])) {
+            header("Location: /admin");
+        }
+
+        $this->categories->insertCategoryInfo();
+
+        header("Location: /admin/categories");
+    }
+
+    public function actionDelete()
+    {
+        if (!isset($_POST['delete'])) {
+            header("Location: /admin");
+        }
+
+        $this->categories->deleteCategoryInfo($_POST['delete']);
+
+        header("Location: /admin/categories");
+    }
 }
