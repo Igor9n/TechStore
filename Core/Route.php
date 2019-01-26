@@ -6,14 +6,13 @@ class Route
 {
     public static $controllerName = 'Main';
     public static $actionName = 'index';
-    public static $actionId = '';
+    public static $actionId = null;
 
     public static function start()
     {
         Route::parseUrl();
         $controllers = require '../App/Config/controllers.php';
         if (Route::checkExist(Route::$controllerName, $controllers)) {
-
             if (preg_match('/^admin/', Route::$controllerName)) {
                 $controllerName = '\\App\\Admin\\Controllers\\' . ucfirst(Route::$controllerName) . 'Controller';
             } else {
@@ -22,18 +21,18 @@ class Route
 
             $actionName = 'action' . ucfirst(Route::$actionName);
 
-            $controller = new $controllerName;
+            $controller = new $controllerName();
             if (method_exists($controller, $actionName)) {
                 $controller->$actionName(Route::$actionId);
             } else {
-                Route::ErrorPage404();
+                Route::errorPage404();
             }
         } else {
-            Route::ErrorPage404();
+            Route::errorPage404();
         }
     }
 
-    public static function ErrorPage404()
+    public static function errorPage404()
     {
         $view = new View();
         $view->generate('template.php', '404.php', ['title' => 'Not found']);
@@ -66,6 +65,6 @@ class Route
         if (in_array(mb_strtolower($name), $array)) {
             return true;
         }
-        Route::ErrorPage404();
+        Route::errorPage404();
     }
 }

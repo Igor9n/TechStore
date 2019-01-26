@@ -81,7 +81,7 @@ class CategoryMapper extends Mapper
         return $this->getCategoriesArray($list);
     }
 
-    public function getCategoryInfoForInsert()
+    public function getCategoryInfo()
     {
         $info['title'] = $_POST['title'];
         $info['serviceTitle'] = $_POST['serviceTitle'];
@@ -90,12 +90,18 @@ class CategoryMapper extends Mapper
 
     public function insertCategoryInfo()
     {
-        $info = $this->getCategoryInfoForInsert();
+        $info = $this->getCategoryInfo();
         return $this->model->insertCategoryInfo($info['title'], $info['serviceTitle']);
     }
 
     public function deleteCategoryInfo($id)
     {
         return $this->model->deleteCategoryInfo($id);
+    }
+
+    public function updateCategoryInfo($id)
+    {
+        $info = $this->getCategoryInfo();
+        return $this->model->updateCategoryInfo($info['title'], $info['serviceTitle'], $id);
     }
 }

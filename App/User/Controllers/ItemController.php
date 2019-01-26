@@ -19,7 +19,7 @@ class ItemController extends MainController
     public function actionView($id)
     {
         if (!Route::checkExist($id, $this->model->getItemsSTList())) {
-            Route::ErrorPage404();
+            Route::errorPage404();
         }
 
         $data['info'] = $this->mapper->getItemObject($id);

@@ -12,29 +12,30 @@
         </thead>
         <tbody>
         <?php for (; $i < count($categories); $i++) : ?>
-            <form method="POST" action="/admin/delete">
-                <tr>
+            <tr>
+                <form method="POST" action="/admin/categories/update">
                     <th scope="row"><?= $categories[$i]->id ?></th>
-                    <td scope="row"><?= $categories[$i]->title ?></td>
-                    <td scope="row"><?= $categories[$i]->serviceTitle ?></td>
+                    <td scope="row"><input type="text" name="title" value="<?= $categories[$i]->title ?>"></td>
+                    <td scope="row"><input type="text" name="serviceTitle" value="<?= $categories[$i]->serviceTitle ?>">
+                    </td>
                     <td scope="row"><?= $categories[$i]->hasProducts ?></td>
                     <td scope="row">
-                        <button class="btn btn-primary" name="update" value="true">Update</button>
-                        <?php if ($categories[$i]->hasProducts === 'Yes') : ?>
-                            <button class="btn btn-primary" name="delete" value="true" disabled>Delete</button>
-                        <?php else : ?>
-                            <form method="POST" action="/admin/delete">
-                                <button class="btn btn-primary" name="delete" value="<?= $categories[$i]->id ?>">Delete
-                                </button>
-                            </form>
-                        <?php endif; ?>
-                        <button class="btn btn-primary" href="/admin/category?id=<?= $categories[$i]->id ?>">More
+                        <button class="btn btn-primary" name="update" value="<?= $categories[$i]->id ?>">Update</button>
+                </form>
+                <?php if ($categories[$i]->hasProducts === 'Yes') : ?>
+                    <button class="btn btn-primary" name="delete" value="true" disabled>Delete</button>
+                <?php else : ?>
+                    <form method="POST" action="/admin/categories/delete" class="d-inline-block">
+                        <button class="btn btn-primary" name="delete" value="<?= $categories[$i]->id ?>">Delete
                         </button>
-                    </td>
-                </tr>
-            </form>
+                    </form>
+                <?php endif; ?>
+                <button class="btn btn-primary" href="/admin/category?id=<?= $categories[$i]->id ?>">More
+                </button>
+                </td>
+            </tr>
         <?php endfor; ?>
-        <form method="POST" action="/admin/insert">
+        <form method="POST" action="/admin/categories/insert">
             <tr>
                 <td scope="row"></td>
                 <td scope="row"><input type="text" name="title" placeholder="Enter category title"></td>

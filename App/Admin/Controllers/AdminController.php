@@ -8,9 +8,7 @@
 
 namespace App\Admin\Controllers;
 
-
 use App\Admin\Mappers\AdminMapper;
-use App\Admin\Mappers\CategoryMapper;
 use App\Classes\Session;
 use Core\Controller;
 use App\Admin\Main\AdminView;
@@ -23,7 +21,7 @@ class AdminController extends Controller
     {
         $this->view = new AdminView();
         $this->mapper = new AdminMapper();
-        $this->categories = new CategoryMapper();
+        $this->categories = new CategoryController();
     }
 
     public function try(string $action)
@@ -71,13 +69,18 @@ class AdminController extends Controller
         $this->view->generate('admin_template.php', 'admin_main.php', $data);
     }
 
-    public function actionCategories()
+    public function actionCategories($action = null)
     {
         if (!Session::check('admin')) {
             header("Location: /admin/login");
         }
 
-        $data['categories'] = $this->categories->getAllCategories();
+        if (isset($action)) {
+            $action = 'action' . ucfirst($action);
+            $this->categories->$action();
+        }
+
+        $data['categories'] = $this->categories->getCategories();
         $data['title'] = 'Categories page';
 
         $this->view->generate('admin_template.php', 'admin_categories.php', $data);
@@ -101,27 +104,5 @@ class AdminController extends Controller
 
         $data['title'] = 'Control page';
         $this->view->generate('admin_template.php', 'admin_control.php', $data);
-    }
-
-    public function actionInsert()
-    {
-        if (!isset($_POST['insert'])) {
-            header("Location: /admin");
-        }
-
-        $this->categories->insertCategoryInfo();
-
-        header("Location: /admin/categories");
-    }
-
-    public function actionDelete()
-    {
-        if (!isset($_POST['delete'])) {
-            header("Location: /admin");
-        }
-
-        $this->categories->deleteCategoryInfo($_POST['delete']);
-
-        header("Location: /admin/categories");
     }
 }

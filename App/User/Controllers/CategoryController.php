@@ -22,7 +22,7 @@ class CategoryController extends Controller
     public function actionView($id)
     {
         if (!Route::checkExist($id, $this->model->getCategoriesSTList())) {
-            Route::ErrorPage404();
+            Route::errorPage404();
         }
 
         $data['category'] = $this->mapper->getCategoryObject($id);
