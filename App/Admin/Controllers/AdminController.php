@@ -69,13 +69,13 @@ class AdminController extends Controller
         $this->view->generate('admin_template.php', 'admin_main.php', $data);
     }
 
-    public function actionCategories($action = null)
+    public function actionCategories($action)
     {
         if (!Session::check('admin')) {
             header("Location: /admin/login");
         }
 
-        if (isset($action)) {
+        if ($action) {
             $action = 'action' . ucfirst($action);
             $this->categories->$action();
         }

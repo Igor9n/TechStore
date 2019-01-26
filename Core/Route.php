@@ -6,7 +6,7 @@ class Route
 {
     public static $controllerName = 'Main';
     public static $actionName = 'index';
-    public static $actionId = null;
+    public static $actionId = '';
 
     public static function start()
     {
