@@ -9,7 +9,6 @@
 namespace App\Admin\Controllers;
 
 use App\Admin\Mappers\AdminMapper;
-use App\Admin\Mappers\ItemMapper;
 use App\Classes\Session;
 use Core\Controller;
 use App\Admin\Main\AdminView;
@@ -18,7 +17,7 @@ class AdminController extends Controller
 {
     public $categories;
     public $categoryCharacteristics;
-    public $items;
+    public $item;
 
     public function __construct()
     {
@@ -26,7 +25,7 @@ class AdminController extends Controller
         $this->mapper = new AdminMapper();
         $this->categories = new CategoryController();
         $this->categoryCharacteristics = new CategoryCharacteristicController();
-        $this->items = new ItemController();
+        $this->item = new ItemController();
     }
 
     public function try(string $action)
@@ -114,6 +113,30 @@ class AdminController extends Controller
         $this->view->generate('admin_template.php', 'admin_categories.php', $data);
     }
 
+    public function actionItem($action)
+    {
+        if (!Session::check('admin')) {
+            header("Location: /admin/login");
+        }
+
+        $id = 0;
+        if (isset($_GET['id'])) {
+            $id = (int)$_GET['id'];
+        }
+
+        if ($action) {
+            $action = 'action' . ucfirst($action);
+            $this->item->$action();
+        }
+
+        $data['item'] = $this->item->getItem($id);
+        $data['categories'] = $this->categories->getCategories();
+        $data['characteristics'] = $this->item->getCharacteristics($data['item']);
+        $data['title'] = 'Item page';
+
+        $this->view->generate('admin_template.php', 'admin_item.php', $data);
+    }
+
     public function actionItems($action)
     {
         if (!Session::check('admin')) {
@@ -122,10 +145,10 @@ class AdminController extends Controller
 
         if ($action) {
             $action = 'action' . ucfirst($action);
-            $this->items->$action();
+            $this->item->$action();
         }
 
-        $data['items'] = $this->items->getItems();
+        $data['items'] = $this->item->getItems();
         $data['categories'] = $this->categories->getCategories();
         $data['title'] = 'Items page';
 

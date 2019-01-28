@@ -16,10 +16,13 @@ use Core\Mapper;
 class ItemMapper extends Mapper
 {
     public $categoryMapper;
+    public $characteristics;
+
     public function __construct()
     {
         $this->model = new ItemModel();
         $this->categoryMapper = new CategoryMapper();
+        $this->characteristics = new CategoryCharacteristicMapper();
     }
 
     public function getObject(array $itemInfo, string $inUsage): Item
@@ -29,7 +32,7 @@ class ItemMapper extends Mapper
             'title' => $itemInfo['title'],
             'serviceTitle' => $itemInfo['service_title'],
             'warranty' => $itemInfo['warranty'],
-            'price' => $itemInfo['price'],
+            'price' => (int)$itemInfo['price'],
             'category' => $itemInfo['category_id'],
             'visible' => $itemInfo['visible'],
             'shortDescription' => $itemInfo['short_description'],
@@ -60,6 +63,32 @@ class ItemMapper extends Mapper
         return $itemsArray;
     }
 
+    private function groupCharacteristics($titles, $values)
+    {
+        $array = [];
+        foreach ($titles as $title) {
+            foreach ($values as $value) {
+                $array[$title->id]['info'] = $title;
+
+                if ($title->id === (int)$value['characteristic_id']) {
+                    $array[$title->id]['value'] = $value;
+                    break;
+                } else {
+                    $array[$title->id]['value'] = 'No info';
+                }
+            }
+        }
+        return $array;
+    }
+
+    public function getItemCharacteristics(Item $item)
+    {
+        $characteristicsList = $this->characteristics->getCharacteristicsListByCategory($item->category->id);
+        $characteristicsArray = $this->characteristics->getCharacteristicsArray($characteristicsList);
+        $values = $this->model->getProductCharacteristics($item->id);
+
+        return $this->groupCharacteristics($characteristicsArray, $values);
+    }
 
     public function getAlItems(): array
     {
@@ -78,6 +107,14 @@ class ItemMapper extends Mapper
         $info['description'] = $_POST['description'];
         $info['visible'] = $_POST['visible'];
 
+        return $info;
+    }
+
+    public function getCharacteristicInfo()
+    {
+        $info['product'] = (int)$_POST['product'];
+        $info['value'] = $_POST['value'];
+        $info['characteristic'] = (int)$_POST['insert'];
         return $info;
     }
 
@@ -103,10 +140,43 @@ class ItemMapper extends Mapper
             $this->model->deleteProductsCharacteristics($id)
         ];
     }
-//
-//    public function updateCategoryInfo($id)
-//    {
-//        $info = $this->getCategoryInfo();
-//        return $this->model->updateCategoryInfo($info['title'], $info['serviceTitle'], $id);
-//    }
+
+    public function updateItemInfo($id)
+    {
+        $info = $this->getItemInfo();
+        return $this->model->updateProductInfo(
+            $id,
+            $info['title'],
+            $info['serviceTitle'],
+            $info['warranty'],
+            $info['shortDescription'],
+            $info['description'],
+            $info['category'],
+            $info['price'],
+            $info['visible']
+        );
+    }
+
+    public function deleteItemCharacteristic($id)
+    {
+        return $this->model->deleteProductCharacteristicById($id);
+    }
+
+    public function updateItemCharacteristic($id)
+    {
+        return $this->model->updateProductCharacteristicValue(
+            $id,
+            $_POST['value']
+        );
+    }
+
+    public function insertCharacteristic()
+    {
+        $info = $this->getCharacteristicInfo();
+        return $this->model->insertProductCharacteristic(
+            $info['product'],
+            $info['characteristic'],
+            $info['value']
+        );
+    }
 }

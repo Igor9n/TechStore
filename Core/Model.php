@@ -80,6 +80,14 @@ class Model
         return $array;
     }
 
+    protected function queryArray($query, $variables = [])
+    {
+        $query = $this->pdo->prepare($query);
+        $query->execute($variables);
+
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     protected function matchData($arrayOne, $arrayTwo)
     {
         $result = [];

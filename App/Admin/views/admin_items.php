@@ -44,13 +44,13 @@
                                 <?php if ($item->inUsage === 'Yes') : ?>
                                     <button class="btn btn-primary" disabled>Delete</button>
                                 <?php else : ?>
-                                    <form method="POST" action="/admin/items/delete" class="d-inline-block">
-                                        <button class="btn btn-primary" name="delete" value="<?= $item->id ?>">Delete
+                                    <form method="POST" action="/admin/items/remove" class="d-inline-block">
+                                        <button class="btn btn-primary" name="remove" value="<?= $item->id ?>">Delete
                                         </button>
                                     </form>
                                 <?php endif; ?>
-                                <button class="btn btn-primary" name="delete" value="">More
-                                </button>
+                                <a class="btn btn-primary" href="/admin/item?id=<?= $item->id ?>">More
+                                </a>
                             </th>
                         </tr>
                     <?php endforeach; ?>
@@ -90,8 +90,8 @@
                                                 </button>
                                             </form>
                                         <?php endif; ?>
-                                        <button class="btn btn-primary" name="delete" value="<?= $category->id ?>">More
-                                        </button>
+                                        <a class="btn btn-primary" href="/admin/item?id=<?= $item->id ?>">More
+                                        </a>
                                     </th>
                                 </tr>
                             <?php endif; ?>
@@ -100,7 +100,7 @@
                 </div>
             <?php endforeach; ?>
             <div class="tab-pane fade" id="new">
-                <form method="POST" action="/admin/items/insert">
+                <form method="POST" action="/admin/items/new">
                     <div class="row">
                         <div class="form-group col">
                             <label for="title"><strong>Title</strong></label>
@@ -129,6 +129,9 @@
                             <select class="custom-select" name="category">
                                 <option selected>Choose category</option>
                                 <?php foreach ($categories as $category) : ?>
+                                    <?php if ($category->id === 0) {
+                                        continue;
+                                    } ?>
                                     <option value="<?= $category->id ?>"><?= $category->title ?></option>
                                 <?php endforeach; ?>
                             </select>
@@ -162,7 +165,7 @@
                         <textarea class="form-control" name="description" placeholder="Enter description for item"
                                   rows="5"></textarea>
                     </div>
-                    <button class="btn btn-primary" name="insert" value="true">Add new item</button>
+                    <button class="btn btn-primary" name="new" value="true">Add new item</button>
                 </form>
             </div>
         </div>
@@ -172,7 +175,7 @@
         <h4 class="alert-heading">Items list is <strong>empty.</strong></h4>
         <p class="mb-0">Add a new one.</p>
     </div>
-    <form method="POST" action="/admin/items/insert">
+    <form method="POST" action="/admin/items/new">
         <div class="row">
             <div class="form-group col">
                 <label for="title"><strong>Title</strong></label>
@@ -199,6 +202,9 @@
                 <select class="custom-select" name="category">
                     <option selected>Choose category</option>
                     <?php foreach ($categories as $category) : ?>
+                        <?php if ($category->id === 0) {
+                            continue;
+                        } ?>
                         <option value="<?= $category->id ?>"><?= $category->title ?></option>
                     <?php endforeach; ?>
                 </select>
@@ -231,6 +237,6 @@
             <textarea class="form-control" name="description" placeholder="Enter description for item"
                       rows="5"></textarea>
         </div>
-        <button class="btn btn-primary" name="insert" value="true">Add new item</button>
+        <button class="btn btn-primary" name="new" value="true">Add new item</button>
     </form>
 <?php endif; ?>

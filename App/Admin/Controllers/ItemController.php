@@ -9,6 +9,7 @@
 namespace App\Admin\Controllers;
 
 
+use App\Admin\Data\Item;
 use App\Admin\Main\AdminView;
 use App\Admin\Mappers\ItemMapper;
 use Core\Controller;
@@ -26,9 +27,19 @@ class ItemController extends Controller
         return $this->mapper->getAlItems();
     }
 
-    public function actionInsert()
+    public function getCharacteristics(Item $item)
     {
-        if (!isset($_POST['insert'])) {
+        return $this->mapper->getItemCharacteristics($item);
+    }
+
+    public function getItem($id)
+    {
+        return $this->mapper->getItemObject($id);
+    }
+
+    public function actionNew()
+    {
+        if (!isset($_POST['new'])) {
             header("Location: /admin");
         }
 
@@ -37,25 +48,57 @@ class ItemController extends Controller
         header("Location: /admin/items");
     }
 
+    public function actionRemove()
+    {
+        if (!isset($_POST['remove'])) {
+            header("Location: /admin");
+        }
+
+        $this->mapper->deleteItemInfo($_POST['remove']);
+
+        header("Location: /admin/items");
+    }
+
+    public function actionUpdate()
+    {
+        if (!isset($_POST['update'])) {
+            header("Location: /admin");
+        }
+
+        $this->mapper->updateItemInfo($_POST['update']);
+
+        header("Location: " . $_SERVER['HTTP_REFERER']);
+    }
+
     public function actionDelete()
     {
         if (!isset($_POST['delete'])) {
             header("Location: /admin");
         }
 
-        $this->mapper->deleteItemInfo($_POST['delete']);
+        $this->mapper->deleteItemCharacteristic($_POST['delete']);
 
-        header("Location: /admin/items");
+        header("Location: " . $_SERVER['HTTP_REFERER']);
     }
-//
-//    public function actionUpdate()
-//    {
-//        if (!isset($_POST['update'])) {
-//            header("Location: /admin");
-//        }
-//
-//        $this->mapper->updateItemInfo($_POST['update']);
-//
-//        header("Location: /admin/categories");
-//    }
+
+    public function actionModify()
+    {
+        if (!isset($_POST['modify'])) {
+            header("Location: /admin");
+        }
+        $this->mapper->updateItemCharacteristic($_POST['modify']);
+
+        header("Location: " . $_SERVER['HTTP_REFERER']);
+    }
+
+    public function actionInsert()
+    {
+        if (!isset($_POST['insert'])) {
+            header("Location: /admin");
+        }
+
+        $this->mapper->insertCharacteristic();
+
+        header("Location: " . $_SERVER['HTTP_REFERER']);
+    }
 }
