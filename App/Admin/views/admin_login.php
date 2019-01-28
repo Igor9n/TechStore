@@ -1,5 +1,14 @@
 <div class="col-sm-12">
-    <form method="post" action="/admin/try">
+    <?php if (!empty($errors)) : ?>
+        <div class="alert alert-danger">
+            <ul>
+                <?php foreach ($errors as $var) : ?>
+                    <li><?= $var ?></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    <?php endif; ?>
+    <form method="post" action="/admin/login">
         <div class="row">
             <div class="col">
                 <label>Your login</label>
@@ -17,7 +26,7 @@
         </div>
         <div class="row">
             <div class="col">
-                <button class="btn btn-primary" name="try" value="log">Submit</button>
+                <button class="btn btn-primary" name="try" value="login">Submit</button>
             </div>
         </div>
     </form>

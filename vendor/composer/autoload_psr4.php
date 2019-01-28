@@ -10,6 +10,7 @@ return array(
     'Psr\\Log\\' => array($vendorDir . '/psr/log/Psr/Log'),
     'Monolog\\' => array($vendorDir . '/monolog/monolog/src/Monolog'),
     'Core\\' => array($baseDir . '/Core'),
+    'App\\User\\' => array($baseDir . '/App/User'),
     'App\\Admin\\' => array($baseDir . '/App/Admin'),
     'App\\' => array($baseDir . '/App'),
 );

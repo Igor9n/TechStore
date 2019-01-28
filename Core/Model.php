@@ -69,14 +69,31 @@ class Model
         $query->execute($variables);
 
         if ($column === 'id' || preg_match('/[a-z]_id$/', $column)) {
-            while ($value = $query->fetch()) {
+            while ($value = $query->fetch(PDO::FETCH_ASSOC)) {
                 $array[] = (int)$value[$column];
             }
         } else {
-            while ($value = $query->fetch()) {
+            while ($value = $query->fetch(PDO::FETCH_ASSOC)) {
                 $array[] = $value[$column];
             }
         }
         return $array;
+    }
+
+    protected function queryArray($query, $variables = [])
+    {
+        $query = $this->pdo->prepare($query);
+        $query->execute($variables);
+
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    protected function matchData($arrayOne, $arrayTwo)
+    {
+        $result = [];
+        for ($i = 0; $i < count($arrayOne); $i++) {
+            $result[$arrayOne[$i]] = $arrayTwo[$i];
+        }
+        return $result;
     }
 }

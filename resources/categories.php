@@ -1,4 +1,4 @@
-<?php $categoryMapper = new App\Mappers\CategoryMapper();?>
+<?php $categoryMapper = new App\User\Mappers\CategoryMapper();?>
 <div class="col-sm-2">
     <div class="list-group row justify-content-start">
         <?php foreach ($categoryMapper->getAllCategories() as $key => $value):?>

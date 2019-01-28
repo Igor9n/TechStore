@@ -5,14 +5,15 @@
  * Date: 23.01.19
  * Time: 11:00
  */
+
 namespace App\Admin\Main;
 
 use Core\View;
 
 class AdminView extends View
 {
-    function generate($template, $content, $data = [], $path = '../App/Admin/views/')
+    public function generate($template, $content, $data = [], $path = '../App/Admin/views/')
     {
-        parent::generate($template,$content,$data,$path);
+        parent::generate($template, $content, $data, $path);
     }
 }

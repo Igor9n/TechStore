@@ -1,4 +1,4 @@
-<?php $item = new \App\Mappers\ItemMapper(); ?>
+<?php $item = new \App\User\Mappers\ItemMapper(); ?>
 <?php $items = $item->getFiveItems(); ?>
 <div class="col-sm-12";>
     <div class="row justify-content-between">
