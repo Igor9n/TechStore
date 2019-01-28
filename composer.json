@@ -18,5 +18,8 @@
             "App\\User\\": "App/User/",
             "App\\Admin\\": "App/Admin/"
         }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7"
     }
 }
