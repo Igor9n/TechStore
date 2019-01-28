@@ -67,11 +67,10 @@ class ItemMapper extends Mapper
     {
         $array = [];
         foreach ($titles as $title) {
-            foreach ($values as $value) {
+            for ($i = 0; $i < count($titles); $i++) {
                 $array[$title->id]['info'] = $title;
-
-                if ($title->id === (int)$value['characteristic_id']) {
-                    $array[$title->id]['value'] = $value;
+                if (isset($values[$i]) && $title->id === (int)$values[$i]['characteristic_id']) {
+                    $array[$title->id]['value'] = $values[$i];
                     break;
                 } else {
                     $array[$title->id]['value'] = 'No info';
