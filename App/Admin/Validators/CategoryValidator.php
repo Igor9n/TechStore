@@ -14,7 +14,7 @@ class CategoryValidator
     public function validateTitle(string $title)
     {
         $errors = [];
-        if (!preg_match('/^[a-zA-Z\s]+$/', $title)) {
+        if (!preg_match('/^[a-zA-Z]+([\s]?)[a-zA-Z]+$/', $title)) {
             $errors['titleChars'] = '<strong>Title </strong> must contains only english characters and spaces';
         }
         if (strlen($title) < 3 || strlen($title) > 30) {
