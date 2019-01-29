@@ -20,13 +20,13 @@
                 <input class="form-control mr-sm-1" type="text" placeholder="Enter order number" name="id">
 <!--                <button class="btn btn-secondary" type="submit">Search</button>-->
             </form>
-        <?php if (!isset($_SESSION['user'])): ?>
+        <?php if (!isset($_SESSION['user'])) : ?>
             <div class="col-3 row justify-content-end form-around">
                 <a class="btn btn-primary" href="/user/login">Login</a>
                 <a class="btn btn-primary" href="/user/registration">Register</a>
                 <a class="btn btn-primary" href="/cart/view">Cart</a>
             </div>
-        <?php else: ?>
+        <?php else : ?>
             <div class="col-3 row justify-content-end form-around">
                 <a class="btn btn-primary" href="/order/all"><?=$_SESSION['user']->login?></a>
                 <a class="btn btn-primary" href="/user/logout">Logout</a>
