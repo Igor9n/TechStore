@@ -11,6 +11,7 @@ namespace App\Admin\Mappers;
 
 use App\Admin\Data\CategoryCharacteristic;
 use App\Admin\Models\CategoryModel;
+use App\Admin\Validators\CategoryCharacteristicValidator;
 use Core\Mapper;
 
 
@@ -21,6 +22,7 @@ class CategoryCharacteristicMapper extends Mapper
     public function __construct()
     {
         $this->model = new CategoryModel();
+        $this->validator = new CategoryCharacteristicValidator();
     }
 
     public function getObject(array $characteristicInfo, string $inUsage): CategoryCharacteristic
@@ -92,5 +94,39 @@ class CategoryCharacteristicMapper extends Mapper
     {
         $info = $this->getCharacteristicInfo();
         return $this->model->updateCategoryCharacteristic($id, $info['title']);
+    }
+
+    public function checkAction(string $title)
+    {
+        $result = false;
+
+        if (preg_match('/^insert$/', $title) || preg_match('/^update$/', $title)) {
+            $result = true;
+        }
+
+        return $result;
+    }
+
+    public function validateData(array $data)
+    {
+        $errors[] = $this->validator->validateTitle($data['title']);
+        return $this->makeSimpleArray($errors);
+    }
+
+    public function checkForErrors(string $actionName)
+    {
+        $errors = [];
+
+        $info = $this->getCharacteristicInfo();
+        $errors['list'] = $this->validateData($info);
+        $errors['action'] = $actionName;
+
+        if ($actionName === 'insert') {
+            $errors['id'] = 'new';
+        } else {
+            $errors['id'] = $_POST[$actionName];
+        }
+
+        return $errors;
     }
 }

@@ -84,13 +84,17 @@ class AdminController extends Controller
             $id = (int)$_GET['id'];
         }
 
-        if ($action) {
+        $data['title'] = 'Categories characteristics';
+
+        if ($action && isset($_POST[$action])) {
+            $this->categoryCharacteristics->getErrors($action);
             $action = 'action' . ucfirst($action);
             $this->categoryCharacteristics->$action();
+        } else {
+            $data['info'] = $this->categoryCharacteristics->getCharacteristicsByCategory($id);
+            $data['errors'] = Session::get('errors');
+            Session::unset('errors');
         }
-
-        $data['info'] = $this->categoryCharacteristics->getCharacteristicsByCategory($id);
-        $data['title'] = 'Categories characteristics';
 
         $this->view->generate('admin_template.php', 'admin_category.php', $data);
     }
