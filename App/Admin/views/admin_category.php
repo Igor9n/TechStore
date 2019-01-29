@@ -2,6 +2,19 @@
     <div class="alert alert-secondary">
         <h4 class="alert-heading">Category characteristics for <strong>'<?= $info['category']['title'] ?>'</strong></h4>
     </div>
+    <?php if (!empty($errors['list'])) : ?>
+        <div class="alert alert-danger">
+            <h4 class="mb-1"><?= ucfirst($errors['action']) ?> <strong>'<?= $errors['id'] ?>'</strong>
+                category failed.</strong></h4>
+            <ul>
+                <?php foreach ($errors['list'] as $error) : ?>
+                    <li class="mb-0">
+                        <?= $error ?>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    <?php endif; ?>
     <table class="table">
         <thead>
         <tr>
@@ -43,6 +56,19 @@
         </h4>
         <p class="mb-0">Add a new one.</p>
     </div>
+    <?php if (!empty($errors['list'])) : ?>
+        <div class="alert alert-danger">
+            <h4 class="mb-1"><?= ucfirst($errors['action']) ?> <strong>'<?= $errors['id'] ?>'</strong>
+                category failed.</strong></h4>
+            <ul>
+                <?php foreach ($errors['list'] as $error) : ?>
+                    <li class="mb-0">
+                        <?= $error ?>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    <?php endif; ?>
 <?php endif; ?>
 <table class="table">
     <form method="POST" action="/admin/category/insert">

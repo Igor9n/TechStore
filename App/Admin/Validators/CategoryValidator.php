@@ -15,7 +15,7 @@ class CategoryValidator
     {
         $errors = [];
         if (!preg_match('/^[a-zA-Z]+([\s]?)[a-zA-Z]+$/', $title)) {
-            $errors['titleChars'] = '<strong>Title </strong> must contains only english characters and spaces';
+            $errors['titleChars'] = '<strong>Title </strong> must contains only english characters and one space between';
         }
         if (strlen($title) < 3 || strlen($title) > 30) {
             $errors['titleCount'] = '<strong>Title </strong>must have min 3 and max 30 symbols';
