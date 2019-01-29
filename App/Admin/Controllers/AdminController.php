@@ -101,8 +101,11 @@ class AdminController extends Controller
             header("Location: /admin/login");
         }
 
+        if ($action && isset($_POST[$action])) {
+            $data['errors'] = $this->categories->getErrors($action);
+        }
 
-        if ($action) {
+        if ($action && empty($data['errors']['list'])) {
             $action = 'action' . ucfirst($action);
             $this->categories->$action();
         }
