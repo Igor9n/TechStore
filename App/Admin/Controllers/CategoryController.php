@@ -21,6 +21,17 @@ class CategoryController extends Controller
         $this->view = new AdminView();
     }
 
+    public function getErrors(string $action)
+    {
+        $errors = [];
+
+        if ($this->mapper->checkAction($action)) {
+            $errors = $this->mapper->checkForErrors($action);
+        }
+
+        return $errors;
+    }
+
     public function getCategories()
     {
         return $this->mapper->getAllCategories();

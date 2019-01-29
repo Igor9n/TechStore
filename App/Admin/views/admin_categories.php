@@ -1,7 +1,20 @@
 <?php if (!empty($categories)) : ?>
     <div class="alert alert-secondary">
-        <h4 class="alert-heading">All categories</strong></h4>
+        <h4 class="alert-heading"><strong>All categories</strong></h4>
     </div>
+    <?php if (!empty($errors['list'])) : ?>
+        <div class="alert alert-danger">
+            <h4 class="mb-1"><?= ucfirst($errors['action']) ?> <strong>'<?= $errors['id'] ?>'</strong>
+                category failed.</strong></h4>
+            <ul>
+                <?php foreach ($errors['list'] as $error) : ?>
+                    <li class="mb-0">
+                        <?= $error ?>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    <?php endif; ?>
     <table class="table">
         <thead>
         <tr>
@@ -59,7 +72,7 @@
                                placeholder="Enter category service title"></th>
         <th scope="row" style="width: 15%;"></th>
         <th scope="row" style="width: 20%;">
-            <button class="btn btn-primary" name="insert" value="true">Add new category</button>
+            <button class="btn btn-primary" name="insert" value="new">Add new category</button>
         </th>
     </form>
 </table>

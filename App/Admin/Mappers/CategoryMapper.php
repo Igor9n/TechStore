@@ -11,6 +11,7 @@ namespace App\Admin\Mappers;
 
 use App\Admin\Data\Category;
 use App\Admin\Models\CategoryModel;
+use App\Admin\Validators\CategoryValidator;
 use Core\Mapper;
 
 class CategoryMapper extends Mapper
@@ -18,6 +19,7 @@ class CategoryMapper extends Mapper
     public function __construct()
     {
         $this->model = new CategoryModel();
+        $this->validator = new CategoryValidator();
     }
 
     /**
@@ -104,5 +106,35 @@ class CategoryMapper extends Mapper
     {
         $info = $this->getCategoryInfo();
         return $this->model->updateCategoryInfo($info['title'], $info['serviceTitle'], $id);
+    }
+
+    public function checkAction(string $title)
+    {
+        $result = false;
+
+        if (preg_match('/insert/', $title) || preg_match('/update/', $title)) {
+            $result = true;
+        }
+
+        return $result;
+    }
+
+    public function validateData(array $data)
+    {
+        $errors[] = $this->validator->validateServiceTitle($data['serviceTitle']);
+        $errors[] = $this->validator->validateTitle($data['title']);
+        return $this->makeSimpleArray($errors);
+    }
+
+    public function checkForErrors(string $actionName)
+    {
+        $errors = [];
+
+        $info = $this->getCategoryInfo();
+        $errors['list'] = $this->validateData($info);
+        $errors['action'] = $actionName;
+        $errors['id'] = $_POST[$actionName];
+
+        return $errors;
     }
 }
