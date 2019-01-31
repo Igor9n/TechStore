@@ -1,11 +1,11 @@
 <?php
 
 return [
-    'main',
-    'category',
-    'item',
-    'cart',
-    'user',
-    'order',
-    'admin'
+    'MainController',
+    'CategoryController',
+    'ItemController',
+    'CartController',
+    'UserController',
+    'OrderController',
+    'AdminController'
 ];
