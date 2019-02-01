@@ -1,3 +1,8 @@
+<?php
+/**
+ * @var $this \Core\View;
+ */
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,9 +14,10 @@
     <link rel="shortcut icon" href="/media/tech.png" type="image/x-icon">
 </head>
 <body>
+
 <div class="wrapper">
     <div class="content">
-        <?php include '../resources/header.php' ?>
+        <?= $this->getLayoutElement('header') ?>
         <div class="dropdown-divider">
             ------------------------------------------------------------------------------------------------------
             ------------------------------------------------------------------------------------------------------
@@ -19,13 +25,11 @@
         </div>
         <div class="container-fluid">
             <div class="row">
-                <div class="col-sm-2">
-                    <?php include '../resources/categories.php'; ?>
-                </div>
+                <?= $this->getLayoutElement('categories') ?>
                 <div class="col-sm-10">
                     <div class="row">
                         <div class="col-sm-9">
-                            <?php include '../App//User/views/' . $content; ?>
+                            <?= $this->getContent(); ?>
                         </div>
                         <div class="col-sm-3">
                             <script type="text/javascript"
@@ -36,22 +40,11 @@
                 </div>
             </div>
         </div>
-        <?php include '../resources/arrivals.php'; ?>
+        <?= $this->getLayoutElement('arrivals') ?>
     </div>
-    <div class="footer">
-        <?php include '../resources/footer.php' ?>
-    </div>
+    <?= $this->getLayoutElement('footer') ?>
 </div>
-
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-        crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-        crossorigin="anonymous"></script>
+<?= $this->getLayoutElement('scripts') ?>
 </body>
 </html>
 
