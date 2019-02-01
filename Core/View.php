@@ -4,7 +4,6 @@ namespace Core;
 
 class View
 {
-    protected $path;
     protected $template;
     protected $content;
     protected $elements;
@@ -12,7 +11,7 @@ class View
     public function render($content, $data = [], $template = 'template', $elements = USER_ELEMENTS)
     {
         $this->setLayoutElements($elements);
-        $this->setContent($content, USER_VIEWS);
+        $this->setContent($content, USER_VIEWS, $data);
         $this->setTemplate($template, USER_TEMPLATE);
 
         ob_start();
@@ -23,30 +22,16 @@ class View
         Response::sendResponse($view);
     }
 
-
-    public function generate($template, $content, $data = [], $path = "../App/User/views/")
-    {
-        extract($data);
-        ob_start();
-        include $path . $template;
-        $result = ob_get_clean();
-        echo $result;
-    }
-
-    public function getPath()
-    {
-        return $this->path;
-    }
-
     public function getContent()
     {
         return $this->content;
     }
 
-    public function setContent($title, $path)
+    public function setContent($name, $path, $data)
     {
         ob_start();
-        include $path . $title . PHP_EXT;
+        extract($data);
+        include $path . $name . PHP_EXT;
         $this->content = ob_get_clean();
     }
 

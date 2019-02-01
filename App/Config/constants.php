@@ -10,6 +10,8 @@ define("CONTROLLER", 'Controller');
 define("ACTION", 'action');
 
 define("USER_RESOURCES", '../App/User/resources/');
+define("APP_CONFIG", '../App/Config/');
+define("USER_CONTROLLERS", '../App/User/Controllers/');
 define("USER_TEMPLATE", '../App/User/patterns/');
 define("USER_VIEWS", '../App/User/views/');
 define("USER_ELEMENTS", [

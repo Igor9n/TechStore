@@ -7,7 +7,7 @@ class Route
     public static function errorPage404()
     {
         $view = new View();
-        $view->generate('template.php', '404.php', ['title' => 'Not found']);
+        $view->render('404', ['title' => 'Not found']);
     }
 
     public static function checkExist($name, $array)
@@ -34,7 +34,7 @@ class Route
     {
         $var = false;
         $request = self::parseUri();
-        $controllers = require '../App/Config/controllers.php';
+        $controllers = require APP_CONFIG . 'controllers.php';
 
         if (self::checkExist($request->getControllerName(), $controllers)) {
             $var = true;
