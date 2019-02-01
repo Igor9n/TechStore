@@ -25,7 +25,7 @@ class ItemController extends MainController
         $data['info'] = $this->mapper->getItemObject($id);
         $data['title'] = $data['info']->title;
 
-        $this->view->generate('template.php', 'item.php', $data);
+        $this->view->render('item', $data);
     }
 
     /**

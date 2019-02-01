@@ -66,7 +66,7 @@ class UserController extends Controller
 
         $data['title'] = 'Login';
 
-        $this->view->generate('template.php', 'login.php', $data);
+        $this->view->render('login', $data);
     }
 
     /**
@@ -89,6 +89,6 @@ class UserController extends Controller
             Session::unset('registered');
         }
 
-        $this->view->generate('template.php', 'registration.php', $data);
+        $this->view->render('registration', $data);
     }
 }

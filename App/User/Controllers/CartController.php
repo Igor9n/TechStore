@@ -53,7 +53,7 @@ class CartController extends Controller
 
         $data['cart'] = Session::get('cart');
 
-        $this->view->generate('template.php', 'cart.php', $data);
+        $this->view->render('cart', $data);
     }
 
     public function actionCheckout()
@@ -76,7 +76,7 @@ class CartController extends Controller
             }
             Session::set('orderRang', 0);
         }
-        $this->view->generate('template.php', 'checkout.php', $data);
+        $this->view->render('checkout', $data);
     }
 
     public function actionClean()

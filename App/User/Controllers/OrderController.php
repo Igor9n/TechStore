@@ -37,7 +37,7 @@ class OrderController extends Controller
         $data['info'] = Session::get('user');
         $data['title'] = 'Orders';
 
-        $this->view->generate('template.php', 'orders.php', $data);
+        $this->view->render('orders', $data);
     }
 
     public function actionView()
@@ -58,7 +58,7 @@ class OrderController extends Controller
             $data['info'] = $order;
         }
 
-        $this->view->generate('template.php', 'order.php', $data);
+        $this->view->render('order', $data);
     }
 
     public function actionCheck()
@@ -67,6 +67,6 @@ class OrderController extends Controller
         $data['orderId'] = $_GET['id'];
 
         $data['title'] = 'Order status';
-        $this->view->generate('template.php', 'check.php', $data);
+        $this->view->render('check', $data);
     }
 }
