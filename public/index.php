@@ -5,7 +5,7 @@ require __DIR__ . '/../App/Config/constants.php';
 
 use Core\Route;
 use App\Classes\Session;
+use Core\CustomRedirect;
 
 Session::sessionStart();
-
 Route::start();

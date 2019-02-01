@@ -42,7 +42,6 @@ class Response
         }
     }
 
-
     public static function getHeaders()
     {
         return self::$headers;

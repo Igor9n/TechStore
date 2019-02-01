@@ -8,6 +8,7 @@
 
 define("CONTROLLER", 'Controller');
 define("ACTION", 'action');
+define("BASE_SERVER", 'http://localhost/');
 
 define("USER_RESOURCES", '../App/User/resources/');
 define("APP_CONFIG", '../App/Config/');

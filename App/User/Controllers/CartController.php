@@ -12,6 +12,7 @@ use App\Classes\Session;
 use Core\Controller;
 use App\User\Mappers\CartMapper;
 use App\User\Models\CartModel;
+use Core\CustomRedirect;
 
 class CartController extends Controller
 {
