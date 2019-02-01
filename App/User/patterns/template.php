@@ -1,6 +1,7 @@
 <?php
 /**
  * @var $this \Core\View;
+ * @var $title string
  */
 ?>
 <!DOCTYPE html>
