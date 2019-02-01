@@ -43,10 +43,9 @@ class Route
         }
 
         $action = $request->getActionName();
-        $key = $request->getActionKey();
 
         if ($var && method_exists($controller, $action)) {
-            $controller->$action($key);
+            $controller->$action($request->getParams());
         } else {
             self::errorPage404();
         }

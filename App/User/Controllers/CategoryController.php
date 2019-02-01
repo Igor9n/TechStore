@@ -3,7 +3,7 @@
 namespace App\User\Controllers;
 
 use App\User\Mappers\ItemMapper;
-use Core\{Controller, Route};
+use Core\{Controller, CustomRedirect, Request, Route};
 use App\User\Mappers\CategoryMapper;
 use App\User\Models\CategoryModel;
 
@@ -19,22 +19,23 @@ class CategoryController extends Controller
         $this->item = new ItemMapper();
     }
 
-    public function actionView($id)
+    public function actionView($params)
     {
+        $id = $params['id'];
 
-        if (!Route::checkExist($id, $this->model->getCategoriesSTList())) {
-            Route::errorPage404();
+        if (!Route::checkExist($id, $this->model->getCategoriesSTList()) && !Route::checkExist($id, $this->model->getCategoriesList())) {
+            CustomRedirect::redirect('404');
         }
 
-        $data['category'] = $this->mapper->getCategoryObject($id);
+        $data[CATEGORY] = $this->mapper->getCategoryObject($id);
 
-        if ($id === 'all') {
+        if ($id === 'all' || $id === '0') {
             $data['products'] = $this->item->getAllItems();
         } else {
-            $data['products'] = $this->item->getItemsByCategoryId($data['category']->id);
+            $data['products'] = $this->item->getItemsByCategoryId($data[CATEGORY]->id);
         }
 
-        $data['title'] = $data['category']->title;
+        $data['title'] = $data[CATEGORY]->title;
         $this->view->render('category', $data);
     }
 }

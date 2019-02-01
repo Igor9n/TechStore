@@ -8,6 +8,7 @@
 
 define("CONTROLLER", 'Controller');
 define("ACTION", 'action');
+define("CATEGORY", 'category');
 define("BASE_SERVER", 'http://localhost/');
 
 define("USER_RESOURCES", '../App/User/resources/');
@@ -26,5 +27,7 @@ define("USER_HEADERS", [
     'Content-Type' => 'text/html;charset=UTF-8',
     "Cache-Control" => 'no-cache, must-revalidate'
 ]);
+define("ADMIN_NAMESPACE", '\App\Admin\Controllers\\');
+define("USER_NAMESPACE", '\App\User\Controllers\\');
 
 define("PHP_EXT", '.php');

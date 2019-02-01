@@ -19,7 +19,7 @@
             <tr>
                 <th scope="row"><?= $i++; ?></th>
                 <th scope="row"><a
-                            href="/item/view/<?= $var['info']->serviceTitle ?>"><?= $var['info']->title ?></a></th>
+                            href="/item/view?=<?= $var['info']->serviceTitle ?>"><?= $var['info']->title ?></a></th>
                 <td>
                     <div>
                         <?php if ($var['count'] === 1) : ?>

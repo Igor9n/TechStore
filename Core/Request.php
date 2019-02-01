@@ -14,7 +14,8 @@ class Request
     protected $controllerName;
     protected $actionName;
     protected $actionKey;
-    protected $params;
+    protected $getParams;
+    protected $postParams;
     protected $namespace;
     protected $path;
 
@@ -25,6 +26,7 @@ class Request
         $this->setActionName($action);
         $this->setActionKey($key);
         $this->setParams($query);
+        $this->setPostParams();
         $this->setPath();
     }
 
@@ -52,9 +54,9 @@ class Request
     public function setNamespace($value)
     {
         if (preg_match('/^admin$/', $value)) {
-            $this->namespace = '\\App\\Admin\\Controllers\\';
+            $this->namespace = ADMIN_NAMESPACE;
         } else {
-            $this->namespace = '\\App\\User\\Controllers\\';
+            $this->namespace = USER_NAMESPACE;
         }
     }
 
@@ -104,7 +106,7 @@ class Request
 
     public function getParams()
     {
-        return $this->params;
+        return $this->getParams;
     }
 
     public function setParams($value)
@@ -121,14 +123,14 @@ class Request
 
     public function setParam($title, $value)
     {
-        $this->params[$title] = $value;
+        $this->getParams[$title] = $value;
     }
 
     public function getParam($title)
     {
         $result = false;
-        if (isset($this->params[$title])) {
-            $result = $this->params[$title];
+        if (isset($this->getParams[$title])) {
+            $result = $this->getParams[$title];
         }
         return $result;
     }
@@ -141,5 +143,28 @@ class Request
     public function getPath()
     {
         return $this->path;
+    }
+
+    public function setPostParam($title, $value)
+    {
+        $this->postParams[$title] = $value;
+    }
+
+    public function getPostParam($title)
+    {
+        $result = false;
+        if (isset($this->postParams[$title])) {
+            $result = $this->postParams[$title];
+        }
+        return $result;
+    }
+
+    public function setPostParams()
+    {
+        if (!empty($_POST)) {
+            foreach ($_POST as $title => $param) {
+                $this->setPostParam($title, $param);
+            }
+        }
     }
 }

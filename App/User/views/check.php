@@ -31,7 +31,7 @@
 <?php else : ?>
     <div class="alert alert-warning">
         <h4 class="alert-heading">Wrong order number</h4>
-        <p class="mb-0">Choose <a href="/category/view/all">something</a></p>
+        <p class="mb-0">Choose <a href="/category/view?=all">something</a></p>
     </div>
 <?php endif; ?>
 

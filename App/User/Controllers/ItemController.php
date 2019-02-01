@@ -3,6 +3,7 @@
 namespace App\User\Controllers;
 
 use App\Classes\Session;
+use Core\CustomRedirect;
 use Core\Route;
 use App\User\Mappers\ItemMapper;
 use App\User\Models\ItemModel;
@@ -16,10 +17,12 @@ class ItemController extends MainController
         $this->mapper = new ItemMapper();
     }
 
-    public function actionView($id)
+    public function actionView($params)
     {
-        if (!Route::checkExist($id, $this->model->getItemsSTList())) {
-            Route::errorPage404();
+        $id = $params['id'];
+
+        if (!Route::checkExist($id, $this->model->getItemsSTList()) && !Route::checkExist($id, $this->model->getItemsIdList())) {
+            CustomRedirect::redirect('404');
         }
 
         $data['info'] = $this->mapper->getItemObject($id);

@@ -11,7 +11,7 @@
                 <div class="card-footer">
                     <h5 class="card-title"><b><?= $value->title ?></b></h5>
                     <p class="card-text"><?= $value->shortDescription; ?></p>
-                    <a class="btn btn-primary" href="/item/view/<?= $value->serviceTitle ?>">More</a>
+                    <a class="btn btn-primary" href="/item/view?id=<?= $value->serviceTitle ?>">More</a>
                 </div>
             </div>
         <?php endforeach; ?>
