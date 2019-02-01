@@ -4,7 +4,6 @@ namespace App\User\Controllers;
 
 use App\Classes\Session;
 use Core\CustomRedirect;
-use Core\Route;
 use App\User\Mappers\ItemMapper;
 use App\User\Models\ItemModel;
 
@@ -21,7 +20,7 @@ class ItemController extends MainController
     {
         $id = $params['id'];
 
-        if (!Route::checkExist($id, $this->model->getItemsSTList()) && !Route::checkExist($id, $this->model->getItemsIdList())) {
+        if (!$this->mapper->checkExists($id)) {
             CustomRedirect::redirect('404');
         }
 

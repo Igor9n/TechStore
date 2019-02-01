@@ -64,4 +64,18 @@ class CategoryMapper extends Mapper
         $list = $this->model->getCategoriesList();
         return $this->getCategoriesArray($list);
     }
+
+    public function checkExists($title)
+    {
+        if (preg_match('/^[0-9]+$/', $title)) {
+            $title = (int)$title;
+        }
+        $array = $this->getAllCategories();
+        foreach ($array as $category) {
+            if ($category->id === $title || $category->serviceTitle === $title) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

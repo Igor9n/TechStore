@@ -3,9 +3,8 @@
 namespace App\User\Controllers;
 
 use App\User\Mappers\ItemMapper;
-use Core\{Controller, CustomRedirect, Request, Route};
+use Core\{Controller, CustomRedirect, Route};
 use App\User\Mappers\CategoryMapper;
-use App\User\Models\CategoryModel;
 
 class CategoryController extends Controller
 {
@@ -14,7 +13,6 @@ class CategoryController extends Controller
     public function __construct()
     {
         parent::__construct();
-        $this->model = new CategoryModel();
         $this->mapper = new CategoryMapper();
         $this->item = new ItemMapper();
     }
@@ -23,7 +21,7 @@ class CategoryController extends Controller
     {
         $id = $params['id'];
 
-        if (!Route::checkExist($id, $this->model->getCategoriesSTList()) && !Route::checkExist($id, $this->model->getCategoriesList())) {
+        if (!$this->mapper->checkExists($id)) {
             CustomRedirect::redirect('404');
         }
 

@@ -86,4 +86,18 @@ class ItemMapper extends Mapper
     {
         return $this->getItemsArray($this->model->getItemsIdListByCategoryId($id));
     }
+
+    public function checkExists($title)
+    {
+        if (preg_match('/^[0-9]+$/', $title)) {
+            $title = (int)$title;
+        }
+        $array = $this->getAllItems();
+        foreach ($array as $item) {
+            if ($item->id === $title || $item->serviceTitle === $title) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
