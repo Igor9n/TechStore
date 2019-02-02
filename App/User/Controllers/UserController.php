@@ -12,6 +12,8 @@ use App\Classes\Session;
 use Core\Controller;
 use App\User\Mappers\UserMapper;
 use App\User\Models\OrderModel;
+use Core\CustomRedirect;
+use Core\Request;
 
 class UserController extends Controller
 {
@@ -45,23 +47,16 @@ class UserController extends Controller
         return $errors;
     }
 
-    public function actionLogout()
+    public function actionLogin(Request $request)
     {
-        Session::unset('user');
-        header("Location: /user/login");
-    }
+        $action = $request->getPostParam('try');
 
-    /**
-     * Login page
-     */
-    public function actionLogin()
-    {
-        if (isset($_POST['try'])) {
-            $data['errors'] = $this->try($_POST['try']);
+        if ($action) {
+            $data['errors'] = $this->try($action);
         }
 
         if (Session::check('user')) {
-            header("Location: /order/all");
+            CustomRedirect::redirect('order/all');
         }
 
         $data['title'] = 'Login';
@@ -69,26 +64,31 @@ class UserController extends Controller
         $this->view->render('login', $data);
     }
 
-    /**
-     * Registration page
-     */
-    public function actionRegistration()
+    public function actionRegistration(Request $request)
     {
-        if (isset($_POST['try'])) {
-            $data['errors'] = $this->try($_POST['try']);
+        $action = $request->getPostParam('try');
+
+        if ($action) {
+            $data['errors'] = $this->try($action);
         }
 
         if (Session::check('user')) {
-            header("Location: /order/all");
+            CustomRedirect::redirect('order/all');
         }
 
         $data['title'] = 'Registration';
 
-        if (Session::check('registered')) {
-            $data['registered'] = Session::get('registered');
-            Session::unset('registered');
+        if (Session::check(REGISTERED)) {
+            $data[REGISTERED] = Session::get(REGISTERED);
+            Session::unset(REGISTERED);
         }
 
         $this->view->render('registration', $data);
+    }
+
+    public function actionLogout()
+    {
+        Session::unset('user');
+        CustomRedirect::redirect('user/login');
     }
 }

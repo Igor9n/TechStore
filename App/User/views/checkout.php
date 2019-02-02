@@ -106,8 +106,8 @@
                         <?php foreach ($cart->itemsArray as $var) : ?>
                             <tr>
                                 <th scope="row"><?= $i++; ?></th>
-                                <th scope="row"><a
-                                            href="/item/view?id=<?= $var['info']->serviceTitle ?>"><?= $var['info']->title ?></a>
+                                <th scope="row"><a href="/item/view?id=<?= $var['info']->serviceTitle ?>">
+                                        <?= $var['info']->title ?></a>
                                 </th>
                                 <td>
                                     <input size="1" value="<?= $var['count'] ?>" disabled>

@@ -3,7 +3,7 @@
 namespace App\User\Controllers;
 
 use App\User\Mappers\ItemMapper;
-use Core\{Controller, CustomRedirect, Route};
+use Core\{Controller, CustomRedirect, Request};
 use App\User\Mappers\CategoryMapper;
 
 class CategoryController extends Controller
@@ -17,9 +17,9 @@ class CategoryController extends Controller
         $this->item = new ItemMapper();
     }
 
-    public function actionView($params)
+    public function actionView(Request $request)
     {
-        $id = $params['id'];
+        $id = $request->getParam('id');
 
         if (!$this->mapper->checkExists($id)) {
             CustomRedirect::redirect('404');

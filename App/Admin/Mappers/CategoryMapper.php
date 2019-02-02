@@ -137,4 +137,18 @@ class CategoryMapper extends Mapper
 
         return $errors;
     }
+
+    public function checkExists($title)
+    {
+        if (preg_match('/^[0-9]+$/', $title)) {
+            $title = (int)$title;
+        }
+        $array = $this->getAllCategories();
+        foreach ($array as $category) {
+            if ($category->id === $title || $category->serviceTitle === $title) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

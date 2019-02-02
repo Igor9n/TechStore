@@ -27,8 +27,8 @@ class CategoryModel extends Model
 
     public function getFullCategoryInfo($id)
     {
-        $query = "SELECT id, title, service_title FROM categories WHERE id = :id";
-        return $this->queryRow($query, ['id' => $id]);
+        $query = "SELECT id, title, service_title FROM categories WHERE %s = :value";
+        return $this->selectTypeAndQuery($query, $id, 'row');
     }
 
     public function getFullCategoryCharacteristicInfo($id)
@@ -86,7 +86,7 @@ class CategoryModel extends Model
         if ($this->queryColumn($query, ['id' => $id], 0)) {
             $result = true;
         }
-        return  $result;
+        return $result;
     }
 
     public function checkCategoryCharacteristics($id)
@@ -96,6 +96,6 @@ class CategoryModel extends Model
         if ($this->queryColumn($query, ['id' => $id], 0)) {
             $result = true;
         }
-        return  $result;
+        return $result;
     }
 }

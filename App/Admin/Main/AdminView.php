@@ -8,12 +8,22 @@
 
 namespace App\Admin\Main;
 
+use Core\Response;
 use Core\View;
 
 class AdminView extends View
 {
-    public function generate($template, $content, $data = [], $path = '../App/Admin/views/')
+    public function render($content, $data = [], $template = 'admin_template', $elements = ADMIN_ELEMENTS)
     {
-        parent::generate($template, $content, $data, $path);
+        $this->setLayoutElements($elements);
+        $this->setContent($content, ADMIN_VIEWS, $data);
+        $this->setTemplate($template, ADMIN_TEMPLATE);
+
+        ob_start();
+        extract($data);
+        include $this->getTemplate();
+        $view = ob_get_clean();
+
+        Response::sendResponse($view);
     }
 }

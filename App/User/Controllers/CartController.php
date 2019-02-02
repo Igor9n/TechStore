@@ -9,10 +9,12 @@
 namespace App\User\Controllers;
 
 use App\Classes\Session;
+use App\User\Data\Item;
 use Core\Controller;
 use App\User\Mappers\CartMapper;
 use App\User\Models\CartModel;
 use Core\CustomRedirect;
+use Core\Request;
 
 class CartController extends Controller
 {
@@ -23,11 +25,10 @@ class CartController extends Controller
         $this->mapper = new CartMapper();
     }
 
-
     public function actionAdd()
     {
         if (!Session::check('item')) {
-            header("Location: /");
+            CustomRedirect::redirect('cart/view');
         }
 
         $newAdded = 0;
@@ -45,17 +46,9 @@ class CartController extends Controller
 
         Session::unset('item');
 
-        header("Location: /item/view/" . $item->serviceTitle);
+        CustomRedirect::redirect('item/view?id=' . $item->serviceTitle);
     }
 
-    public function actionView()
-    {
-        $data['title'] = 'Cart';
-
-        $data['cart'] = Session::get('cart');
-
-        $this->view->render('cart', $data);
-    }
 
     public function actionCheckout()
     {
@@ -75,7 +68,6 @@ class CartController extends Controller
                 $data['errors'] = Session::get('errors');
                 Session::unset('errors');
             }
-            Session::set('orderRang', 0);
         }
         $this->view->render('checkout', $data);
     }
@@ -83,38 +75,32 @@ class CartController extends Controller
     public function actionClean()
     {
         Session::unset('cart');
-        header("Location: /cart/view");
+        CustomRedirect::back();
     }
 
-    public function actionDelete()
+    public function actionDelete(Request $request)
     {
-        $id = $_GET['id'];
+        $id = $request->getPostParam('id');
 
         unset($_SESSION['cart']->itemsArray[$id]);
         Session::get('cart')->totalPrice = Session::get('cart')->getTotalPrice(Session::get('cart')->itemsArray);
-        header("Location: /cart/view");
+
+        CustomRedirect::back();
     }
 
-    public function actionPlus()
+    public function actionCount(Request $request)
     {
-        $id = $_GET['id'];
+        $id = $request->getPostParam('id');
+        $key = $request->getActionKey();
 
-        $this->mapper->changeItemCount('plus', Session::get('cart'), Session::get('cart')->itemsArray[$id]['info']);
-        header("Location: /cart/view");
+        $this->mapper->changeItemCount($key, Session::get('cart'), Session::get('cart')->itemsArray[$id]['info']);
+        CustomRedirect::back();
     }
 
-    public function actionMinus()
+    public function actionOrder(Request $request)
     {
-        $id = $_GET['id'];
-
-        $this->mapper->changeItemCount('minus', Session::get('cart'), Session::get('cart')->itemsArray[$id]['info']);
-        header("Location: /cart/view");
-    }
-
-    public function actionOrder()
-    {
-        if (Session::get('orderRang') === 1) {
-            header("Location: /category/view/all");
+        if (!$request->getPostParam('order')) {
+            CustomRedirect::redirect('cart/view');
         }
 
         $this->mapper->addInfoForOrder(Session::get('cart'));
@@ -124,10 +110,18 @@ class CartController extends Controller
         if (!empty($errors)) {
             Session::set('errors', $errors);
         } else {
-            Session::set('orderRang', 1);
             Session::set('ordered', true);
             Session::set('orderNumber', $this->mapper->submitOrder($info));
         }
-        header("Location: /cart/checkout");
+        CustomRedirect::back();
+    }
+
+    public function actionView()
+    {
+        $data['title'] = 'Cart';
+
+        $data['cart'] = Session::get('cart');
+
+        $this->view->render('cart', $data);
     }
 }

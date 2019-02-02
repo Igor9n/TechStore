@@ -30,7 +30,7 @@
                         <th scope="row">Item CATEGORY</th>
                         <th scope="row">Item TITLE</th>
                         <th scope="row" style="width: 10%;">Item IN USAGE</th>
-                        <th scope="row" style="width: 12%">Buttons</th>
+                        <th scope="row" style="width: 15%">Buttons</th>
                     </tr>
                     </thead>
                     <tbody>

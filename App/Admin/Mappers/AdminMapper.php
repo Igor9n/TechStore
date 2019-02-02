@@ -13,6 +13,7 @@ use App\Admin\Models\AdminModel;
 use App\Admin\Validators\AdminValidator;
 use App\Classes\Session;
 use Core\Mapper;
+use Core\Request;
 
 class AdminMapper extends Mapper
 {
@@ -22,6 +23,10 @@ class AdminMapper extends Mapper
         $this->validator = new AdminValidator();
     }
 
+    /**
+     * @var $request Request
+     * @return Admin
+     */
     public function getObject(): Admin
     {
         return Admin::createObject(
@@ -54,15 +59,29 @@ class AdminMapper extends Mapper
     public function loginAdmin(Admin $admin)
     {
         Session::additionalSessionStart();
-        $this->addId($admin);
+        $this->addRole($admin);
         $admin->clearPassword();
         Session::set('admin', $admin);
 
         return [];
     }
 
-    public function addId(Admin $object)
+    public function addRole(Admin $object)
     {
         $object->fillRole($this->model->getAdminRole($object->login));
+    }
+
+    public function chooseController($key)
+    {
+        $result = false;
+
+        if ($key === 'categories' || $key === 'category') {
+            $result = 'categories';
+        }
+
+        if (!$result && ($key === 'items' || $key === 'item')) {
+            $result = 'item';
+        }
+        return $result;
     }
 }

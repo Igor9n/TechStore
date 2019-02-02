@@ -13,6 +13,8 @@ use App\Classes\Session;
 use Core\Controller;
 use App\User\Mappers\OrderMapper;
 use App\User\Mappers\UserMapper;
+use Core\CustomRedirect;
+use Core\Request;
 
 class OrderController extends Controller
 {
@@ -28,7 +30,7 @@ class OrderController extends Controller
     public function actionAll()
     {
         if (!Session::check('user')) {
-            header("Location: /user/login");
+            CustomRedirect::redirect('user/login');
         }
 
         $id = Session::get('user')->id;
@@ -40,15 +42,15 @@ class OrderController extends Controller
         $this->view->render('orders', $data);
     }
 
-    public function actionView()
+    public function actionView(Request $request)
     {
         if (!Session::check('user')) {
-            header("Location: /user/login");
+            CustomRedirect::redirect('user/login');
         }
 
         $order = false;
         $data['title'] = 'Order info';
-        $id = $_GET['id'];
+        $id = $request->getParam('id');
 
         if (isset(Session::get('user')->orders[$id])) {
             $order = $this->mapper->getOrder($id);
@@ -61,10 +63,11 @@ class OrderController extends Controller
         $this->view->render('order', $data);
     }
 
-    public function actionCheck()
+    public function actionCheck(Request $request)
     {
-        $data['info'] = $this->mapper->getShortenOrder($_GET['id']);
-        $data['orderId'] = $_GET['id'];
+        $data['orderId'] = $request->getParam('id');
+
+        $data['info'] = $this->mapper->getShortenOrder($data['orderId']);
 
         $data['title'] = 'Order status';
         $this->view->render('check', $data);

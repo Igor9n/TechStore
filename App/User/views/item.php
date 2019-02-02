@@ -1,5 +1,9 @@
+<?php
+/**
+ * @var $info \App\User\Data\Item
+ **/ ?>
 <div class="alert alert-secondary">
-    <h4 class="alert-heading"><h1><?= $info->title ?></h1></h4>
+    <h4 class="alert-heading"><strong><?= $info->title ?></strong></h4>
 </div>
 <div class="row">
     <div class="col-sm-3">
@@ -31,7 +35,7 @@
     </div>
 </div>
 <div class="row justify-content-center">
-    <form method="GET" action="/item/add">
+    <form method="POST" action="/item/add">
         <button class="btn btn-primary" name="id" value="<?= $info->id ?>"> Add to cart</button>
     </form>
 </div>

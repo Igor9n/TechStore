@@ -20,7 +20,7 @@ class CategoryCharacteristicController extends Controller
         $this->mapper = new CategoryCharacteristicMapper();
     }
 
-    public function getCharacteristicsByCategory(int $id)
+    public function getCharacteristicsByCategory($id)
     {
         return $this->mapper->getCharacteristicsByCategory($id);
     }

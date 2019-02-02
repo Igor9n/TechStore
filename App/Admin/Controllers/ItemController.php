@@ -16,10 +16,12 @@ use Core\Controller;
 
 class ItemController extends Controller
 {
+    public $categories;
     public function __construct()
     {
         $this->mapper = new ItemMapper();
         $this->view = new AdminView();
+        $this->categories = new CategoryController();
     }
 
     public function getItems()
@@ -100,5 +102,14 @@ class ItemController extends Controller
         $this->mapper->insertCharacteristic();
 
         header("Location: " . $_SERVER['HTTP_REFERER']);
+    }
+
+    public function actionAll()
+    {
+        $data['items'] = $this->getItems();
+        $data['title'] = 'All items';
+        $data['categories'] = $this->categories->getCategories();
+
+        $this->view->render('admin_items', $data);
     }
 }

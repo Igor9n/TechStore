@@ -13,9 +13,13 @@ class CustomRedirect
 {
     protected static $url;
 
-    public static function setUrl($uri, $host = BASE_SERVER): void
+    public static function setUrl($uri, $host): void
     {
-        self::$url = $host . $uri;
+        if (is_null($host)) {
+            self::$url = $uri;
+        } else {
+            self::$url = $host . $uri;
+        }
     }
 
     public static function getUrl()
@@ -23,10 +27,15 @@ class CustomRedirect
         return self::$url;
     }
 
-    public static function redirect($path): void
+    public static function redirect($path, $host = BASE_SERVER): void
     {
-        self::setUrl($path);
+        self::setUrl($path, $host);
         $to = self::getUrl();
         Response::sendResponse(null, ['Location' => $to]);
+    }
+
+    public static function back(): void
+    {
+        self::redirect($_SERVER['HTTP_REFERER'], null);
     }
 }

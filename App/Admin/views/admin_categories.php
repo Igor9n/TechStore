@@ -18,11 +18,11 @@
     <table class="table">
         <thead>
         <tr>
-            <th scope="row" style="width: 10%;">Category ID</th>
-            <th scope="row">Category TITLE</th>
-            <th scope="row">Category SERVICE TITLE</th>
-            <th scope="row" style="width: 15%;">Category HAS PRODUCTS</th>
-            <th scope="row" style="width: 20%;">Buttons</th>
+            <th scope="row" style="width: 10%">Category ID</th>
+            <th scope="row" style="width: 15%">Category TITLE</th>
+            <th scope="row" style="width: 20%">Category SERVICE TITLE</th>
+            <th scope="row">Category HAS PRODUCTS</th>
+            <th scope="row" style="width: 25%">Buttons</th>
         </tr>
         </thead>
         <tbody>
@@ -39,7 +39,7 @@
                                            value="<?= $category->serviceTitle ?>">
                     </td>
                     <td scope="row"><?= $category->hasProducts ?></td>
-                    <td scope="row">
+                    <td scope="row" style="width: 25%">
                         <button class="btn btn-primary" name="update" value="<?= $category->id ?>">Update</button>
                 </form>
                 <?php if ($category->hasProducts === 'Yes') : ?>
@@ -50,7 +50,7 @@
                         </button>
                     </form>
                 <?php endif; ?>
-                <a class="btn btn-primary" href="/admin/category?id=<?= $category->id ?>">Characteristics
+                <a class="btn btn-primary" href="/admin/one/category?id=<?= $category->id ?>">Characteristics
                 </a>
                 </td>
             </tr>
@@ -66,12 +66,13 @@
 <table class="table">
     <form method="POST" action="/admin/categories/insert">
         <th scope="row" style="width: 10%;"></th>
-        <th scope="row"><input type="text" class="form-control" name="title" placeholder="Enter category title">
+        <th scope="row" style="width: 15%;"><input type="text" class="form-control" name="title"
+                                                   placeholder="Enter category title">
         </th>
-        <th scope="row"><input type="text" class="form-control" name="serviceTitle"
-                               placeholder="Enter category service title"></th>
-        <th scope="row" style="width: 15%;"></th>
-        <th scope="row" style="width: 20%;">
+        <th scope="row" style="width: 20%;"><input type="text" class="form-control" name="serviceTitle"
+                                                   placeholder="Enter category service title"></th>
+        <th scope="row"></th>
+        <th scope="row" style="width: 25%;">
             <button class="btn btn-primary" name="insert" value="new">Add new category</button>
         </th>
     </form>

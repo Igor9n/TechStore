@@ -33,6 +33,6 @@
 <?php else : ?>
     <div class="alert alert-warning">
         <h4 class="alert-heading">You haven't orders yet</h4>
-        <p class="mb-0">Choose <a href="/category/view?=all">something</a></p>
+        <p class="mb-0">Choose <a href="/category/view?id=all">something</a></p>
     </div>
 <?php endif; ?>

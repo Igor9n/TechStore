@@ -12,6 +12,9 @@ use App\Admin\Mappers\AdminMapper;
 use App\Classes\Session;
 use Core\Controller;
 use App\Admin\Main\AdminView;
+use Core\CustomRedirect;
+use Core\Request;
+use Core\Response;
 
 class AdminController extends Controller
 {
@@ -21,10 +24,10 @@ class AdminController extends Controller
 
     public function __construct()
     {
+        parent::__construct();
         $this->view = new AdminView();
         $this->mapper = new AdminMapper();
         $this->categories = new CategoryController();
-        $this->categoryCharacteristics = new CategoryCharacteristicController();
         $this->item = new ItemController();
     }
 
@@ -46,31 +49,33 @@ class AdminController extends Controller
     public function actionLogout()
     {
         Session::unset('admin');
-        header("Location: /admin/login");
+        CustomRedirect::redirect('admin/login');
     }
 
-    public function actionLogin()
+    public function actionLogin(Request $request)
     {
-        if (isset($_POST['try'])) {
-            $data['errors'] = $this->try($_POST['try']);
+        $action = $request->getPostParam('try');
+
+        if ($action) {
+            $data['errors'] = $this->try($action);
         }
 
         if (Session::check('admin')) {
-            header("Location: /admin");
+            CustomRedirect::redirect('admin');
         }
 
         $data['title'] = 'Admin login';
-        $this->view->generate('admin_template.php', 'admin_login.php', $data);
+        $this->view->render('admin_login', $data);
     }
 
     public function actionIndex()
     {
         if (!Session::check('admin')) {
-            header("Location: /admin/login");
+            CustomRedirect::redirect('admin/login');
         }
 
         $data['title'] = 'Admin page';
-        $this->view->generate('admin_template.php', 'admin_main.php', $data);
+        $this->view->render('admin_main', $data);
     }
 
     public function actionCategory($action)
@@ -99,27 +104,6 @@ class AdminController extends Controller
         $this->view->generate('admin_template.php', 'admin_category.php', $data);
     }
 
-    public function actionCategories($action)
-    {
-        if (!Session::check('admin')) {
-            header("Location: /admin/login");
-        }
-
-        if ($action && isset($_POST[$action])) {
-            $data['errors'] = $this->categories->getErrors($action);
-        }
-
-        if ($action && empty($data['errors']['list'])) {
-            $action = 'action' . ucfirst($action);
-            $this->categories->$action();
-        }
-
-        $data['categories'] = $this->categories->getCategories();
-        $data['title'] = 'Categories page';
-
-        $this->view->generate('admin_template.php', 'admin_categories.php', $data);
-    }
-
     public function actionItem($action)
     {
         if (!Session::check('admin')) {
@@ -144,24 +128,6 @@ class AdminController extends Controller
         $this->view->generate('admin_template.php', 'admin_item.php', $data);
     }
 
-    public function actionItems($action)
-    {
-        if (!Session::check('admin')) {
-            header("Location: /admin/login");
-        }
-
-        if ($action) {
-            $action = 'action' . ucfirst($action);
-            $this->item->$action();
-        }
-
-        $data['items'] = $this->item->getItems();
-        $data['categories'] = $this->categories->getCategories();
-        $data['title'] = 'Items page';
-
-        $this->view->generate('admin_template.php', 'admin_items.php', $data);
-    }
-
     public function actionControl()
     {
         if (!Session::check('admin')) {
@@ -170,5 +136,31 @@ class AdminController extends Controller
 
         $data['title'] = 'Control page';
         $this->view->generate('admin_template.php', 'admin_control.php', $data);
+    }
+
+    public function chooseController(Request $request)
+    {
+        if (!Session::check('admin')) {
+            CustomRedirect::redirect('admin');
+        }
+
+        $key = $request->getActionKey();
+        $controller = $this->mapper->chooseController($key);
+
+        if (!$key && !$controller) {
+            CustomRedirect::redirect('admin/main');
+        }
+        $action = $request->getActionName();
+        $this->$controller->$action($request);
+    }
+
+    public function actionAll(Request $request)
+    {
+        $this->chooseController($request);
+    }
+
+    public function actionOne(Request $request)
+    {
+        $this->chooseController($request);
     }
 }

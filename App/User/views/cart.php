@@ -1,3 +1,4 @@
+<?php /** @var $cart \App\User\Data\Cart * */ ?>
 <?php if (!empty($cart->itemsArray)) : ?>
     <div class="alert alert-secondary">
         <h4 class="alert-heading"><b>Your cart</b></h4>
@@ -19,7 +20,7 @@
             <tr>
                 <th scope="row"><?= $i++; ?></th>
                 <th scope="row"><a
-                            href="/item/view?=<?= $var['info']->serviceTitle ?>"><?= $var['info']->title ?></a></th>
+                            href="/item/view?id=<?= $var['info']->serviceTitle ?>"><?= $var['info']->title ?></a></th>
                 <td>
                     <div>
                         <?php if ($var['count'] === 1) : ?>
@@ -27,16 +28,26 @@
                                 <a class="page-link">-</a>
                             </div>
                         <?php else : ?>
-                            <a class="page-link d-inline-block" href="/cart/minus?id=<?= $var['info']->id ?>">-</a>
+                            <div class="page-item d-inline-block">
+                                <form method="POST" action="/cart/count/minus">
+                                    <button class="page-link" name="id" value="<?= $var['info']->id ?>">-
+                                    </button>
+                                </form>
+                            </div>
                         <?php endif; ?>
-                        <input href="/cart/quantity?id=<?= $var['info']->id ?>" size="1" class="input-text qty text"
-                               title="Change quantity" value="<?= $var['count'] ?>" min="0" step="1" disabled>
-                        <a class="page-link d-inline-block" href="/cart/plus?id=<?= $var['info']->id ?>">+</a>
+                        <input size="1" class="input-text qty text" title="Change quantity" value="<?= $var['count'] ?>"
+                               disabled>
+                        <div class="page-item d-inline-block">
+                            <form method="POST" action="/cart/count/plus">
+                                <button class="page-link" name="id" value="<?= $var['info']->id ?>">+
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </td>
                 <th scope="row"><?= $var['endPrice'] ?></th>
                 <td>
-                    <form method="GET" action="/cart/delete">
+                    <form method="POST" action="/cart/delete">
                         <button class="btn btn-secondary" name="id" value="<?= $var['info']->id ?>">Delete</button>
                     </form>
                 </td>
