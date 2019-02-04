@@ -1,6 +1,6 @@
 <?php
 /**
- * @var $this \App\Admin\Main\AdminView
+ * @var $this \App\Admin\Main\MainView
  * @var $title string
  */ ?>
 <!DOCTYPE html>

@@ -11,7 +11,7 @@ namespace App\Admin\Main;
 use Core\Response;
 use Core\View;
 
-class AdminView extends View
+class MainView extends View
 {
     public function render($content, $data = [], $template = 'admin_template', $elements = ADMIN_ELEMENTS)
     {

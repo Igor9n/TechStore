@@ -10,11 +10,11 @@ namespace App\Admin\Mappers;
 
 
 use App\Admin\Data\Category;
+use App\Admin\Main\MainMapper;
 use App\Admin\Models\CategoryModel;
 use App\Admin\Validators\CategoryValidator;
-use Core\Mapper;
 
-class CategoryMapper extends Mapper
+class CategoryMapper extends MainMapper
 {
     public function __construct()
     {
@@ -116,20 +116,6 @@ class CategoryMapper extends Mapper
             }
         }
         return false;
-    }
-
-    public function chooseMapper($key)
-    {
-        $result = false;
-
-        if ($key === 'info') {
-            $result = 'mapper';
-        }
-
-        if (!$result && ($key === 'characteristics')) {
-            $result = 'characteristics';
-        }
-        return $result;
     }
 
     public function insert(array $info)

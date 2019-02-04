@@ -13,7 +13,9 @@
     </div>
     <div class="tab-content col-sm-10">
         <div class="tab-pane fade active show" id="info">
-            <form method="POST" action="/admin/item/update">
+            <form method="POST" action="/admin/update/item">
+                <input type="hidden" name="key" value="info">
+                <input type="hidden" name="id" value="<?= $item->id ?>">
                 <div class="row">
                     <div class="form-group col">
                         <label for="title"><strong>Title</strong></label>
@@ -88,7 +90,7 @@
                     <textarea class="form-control" name="description" id="description"
                               rows="5"><?= $item->description ?></textarea>
                 </div>
-                <button class="btn btn-primary" name="update" value="<?= $item->id ?>">Update product info</button>
+                <button class="btn btn-primary" name="action" value="update">Update product info</button>
             </form>
         </div>
         <div class="tab-pane fade" id="characteristics">
@@ -102,36 +104,43 @@
                 </thead>
                 <tbody>
                 <?php foreach ($characteristics as $characteristic) : ?>
-                    <?php if ($characteristic['value'] === 'No info') : ?>
+                    <?php if ($characteristic->value === 'No info') : ?>
                         <tr>
-                            <form method="POST" action="/admin/item/insert">
+                            <form method="POST" action="/admin/insert/item">
+                                <input type="hidden" name="key" value="characteristics">
+                                <input type="hidden" name="characteristic"
+                                       value="<?= $characteristic->characteristic ?>">
                                 <input type="hidden" name="product" value="<?= $item->id ?>">
                                 <td scope="row"><input type="text" name="title" class="form-control"
-                                                       value="<?= $characteristic['info']->title ?>" disabled></td>
+                                                       value="<?= $characteristic->title ?>" disabled></td>
                                 <td scope="row"><input type="text" name="value" class="form-control"
-                                                       value="<?= $characteristic['value'] ?>"></td>
+                                                       value="<?= $characteristic->value ?>"></td>
                                 <td scope="row">
-                                    <button class="btn btn-primary" name="insert"
-                                            value="<?= $characteristic['info']->id ?>">Insert characteristic value
+                                    <button class="btn btn-primary" name="action"
+                                            value="insert">Insert characteristic value
                                     </button>
                                 </td>
                             </form>
                         </tr>
                     <?php else : ?>
                         <tr>
-                            <form method="POST" action="/admin/item/modify">
+                            <form method="POST" action="/admin/update/item">
+                                <input type="hidden" name="key" value="characteristics">
+                                <input type="hidden" name="id" value="<?= $characteristic->id ?>">
                                 <td scope="row"><input type="text" name="title" class="form-control"
-                                                       value="<?= $characteristic['info']->title ?>" disabled></td>
+                                                       value="<?= $characteristic->title ?>" disabled></td>
                                 <td scope="row"><input type="text" name="value" class="form-control"
-                                                       value="<?= $characteristic['value']['value'] ?>"></td>
+                                                       value="<?= $characteristic->value ?>"></td>
                                 <td scope="row">
-                                    <button class="btn btn-primary" name="modify"
-                                            value="<?= $characteristic['value']['id'] ?>">Modify
+                                    <button class="btn btn-primary" name="action"
+                                            value="update">Modify
                                     </button>
                             </form>
-                            <form method="POST" action="/admin/item/delete" class="d-inline-block">
-                                <button class="btn btn-primary" name="delete"
-                                        value="<?= $characteristic['value']['id'] ?>">Delete
+                            <form method="POST" action="/admin/delete/item" class="d-inline-block">
+                                <input type="hidden" name="key" value="characteristics">
+                                <input type="hidden" name="id" value="<?= $characteristic->id ?>">
+                                <button class="btn btn-primary" name="action"
+                                        value="delete">Delete
                                 </button>
                             </form>
                             </td>
@@ -143,3 +152,16 @@
         </div>
     </div>
 </div>
+<?php if (!empty($errors['list'])) : ?>
+    <div class="alert alert-danger">
+        <h4 class="mb-1"><?= ucfirst($errors['action']) ?> <strong>'<?= $errors['key'] ?>'</strong>
+            item failed.</strong></h4>
+        <ul>
+            <?php foreach ($errors['list'] as $error) : ?>
+                <li class="mb-0">
+                    <?= $error ?>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+<?php endif; ?>

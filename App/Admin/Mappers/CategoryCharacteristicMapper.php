@@ -10,16 +10,13 @@ namespace App\Admin\Mappers;
 
 
 use App\Admin\Data\CategoryCharacteristic;
+use App\Admin\Main\MainMapper;
 use App\Admin\Models\CategoryModel;
 use App\Admin\Validators\CategoryCharacteristicValidator;
-use App\Classes\Session;
-use Core\Mapper;
 
 
-class CategoryCharacteristicMapper extends Mapper
+class CategoryCharacteristicMapper extends MainMapper
 {
-    public $userModel;
-
     public function __construct()
     {
         $this->model = new CategoryModel();
@@ -56,10 +53,15 @@ class CategoryCharacteristicMapper extends Mapper
         return $result;
     }
 
+    public function getCharacteristicsListByCategory($id)
+    {
+        return $this->model->getCharacteristicsListByCategory($id);
+    }
+
     public function getCharacteristicsByCategory($id)
     {
         $category = $this->model->getFullCategoryInfo($id);
-        $list = $this->model->getCharacteristicsListByCategory($category['id']);
+        $list = $this->getCharacteristicsListByCategory($category['id']);
         return [
             'category' => $category,
             'characteristics' => $this->getCharacteristicsArray($list)

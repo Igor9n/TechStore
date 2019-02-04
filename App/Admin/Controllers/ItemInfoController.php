@@ -9,17 +9,19 @@
 namespace App\Admin\Controllers;
 
 
+use App\Admin\Main\MainController;
 use App\Admin\Mappers\ItemInfoMapper;
 use App\Admin\Mappers\ItemMapper;
-use Core\Controller;
 
-class ItemInfoController extends Controller
+class ItemInfoController extends MainController
 {
     public $info;
+
     public function __construct()
     {
+        parent::__construct();
         $this->mapper = new ItemMapper();
-        $this->info = new ItemInfoMapper();
+        $this->info = new ItemMapper();
     }
 
 

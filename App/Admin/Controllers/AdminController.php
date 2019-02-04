@@ -11,7 +11,7 @@ namespace App\Admin\Controllers;
 use App\Admin\Mappers\AdminMapper;
 use App\Classes\Session;
 use Core\Controller;
-use App\Admin\Main\AdminView;
+use App\Admin\Main\MainView;
 use Core\CustomRedirect;
 use Core\Request;
 use Core\Response;
@@ -25,7 +25,7 @@ class AdminController extends Controller
     public function __construct()
     {
         parent::__construct();
-        $this->view = new AdminView();
+        $this->view = new MainView();
         $this->mapper = new AdminMapper();
         $this->categories = new CategoryController();
         $this->item = new ItemController();
@@ -76,56 +76,6 @@ class AdminController extends Controller
 
         $data['title'] = 'Admin page';
         $this->view->render('admin_main', $data);
-    }
-
-    public function actionCategory($action)
-    {
-        if (!Session::check('admin')) {
-            header("Location: /admin/login");
-        }
-
-        $id = 0;
-        if (isset($_GET['id'])) {
-            $id = (int)$_GET['id'];
-        }
-
-        $data['title'] = 'Categories characteristics';
-
-        if ($action && isset($_POST[$action])) {
-            $this->categoryCharacteristics->getErrors($action);
-            $action = 'action' . ucfirst($action);
-            $this->categoryCharacteristics->$action();
-        } else {
-            $data['info'] = $this->categoryCharacteristics->getCharacteristicsByCategory($id);
-            $data['errors'] = Session::get('errors');
-            Session::unset('errors');
-        }
-
-        $this->view->generate('admin_template.php', 'admin_category.php', $data);
-    }
-
-    public function actionItem($action)
-    {
-        if (!Session::check('admin')) {
-            header("Location: /admin/login");
-        }
-
-        $id = 0;
-        if (isset($_GET['id'])) {
-            $id = (int)$_GET['id'];
-        }
-
-        if ($action) {
-            $action = 'action' . ucfirst($action);
-            $this->item->$action();
-        }
-
-        $data['item'] = $this->item->getItem($id);
-        $data['categories'] = $this->categories->getCategories();
-        $data['characteristics'] = $this->item->getCharacteristics($data['item']);
-        $data['title'] = 'Item page';
-
-        $this->view->generate('admin_template.php', 'admin_item.php', $data);
     }
 
     public function actionControl()

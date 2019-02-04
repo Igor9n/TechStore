@@ -10,32 +10,31 @@ namespace App\Admin\Controllers;
 
 
 use App\Admin\Data\Item;
-use App\Admin\Main\AdminView;
+use App\Admin\Main\MainController;
+use App\Admin\Main\MainView;
+use App\Admin\Mappers\CategoryMapper;
+use App\Admin\Mappers\ItemCharacteristicMapper;
 use App\Admin\Mappers\ItemMapper;
-use Core\Controller;
 use Core\CustomRedirect;
 use Core\Request;
 
-class ItemController extends Controller
+class ItemController extends MainController
 {
     public $categories;
+    public $characteristics;
 
     public function __construct()
     {
         parent::__construct();
         $this->mapper = new ItemMapper();
-        $this->view = new AdminView();
-        $this->categories = new CategoryController();
-    }
-
-    public function getItems()
-    {
-        return $this->mapper->getAlItems();
+        $this->view = new MainView();
+        $this->categories = new CategoryMapper();
+        $this->characteristics = new ItemCharacteristicMapper();
     }
 
     public function getCharacteristics(Item $item)
     {
-        return $this->mapper->getItemCharacteristics($item);
+        return $this->characteristics->getItemCharacteristics($item);
     }
 
     public function getItem($id)
@@ -43,76 +42,27 @@ class ItemController extends Controller
         return $this->mapper->getItemObject($id);
     }
 
-    public function actionNew()
+    public function actionDelete(Request $request)
     {
-        if (!isset($_POST['new'])) {
-            header("Location: /admin");
-        }
-
-        $this->mapper->insertItemInfo();
-
-        header("Location: /admin/items");
+        $this->chooseMapper($request);
     }
 
-    public function actionRemove()
+    public function actionUpdate(Request $request)
     {
-        if (!isset($_POST['remove'])) {
-            header("Location: /admin");
-        }
-
-        $this->mapper->deleteItemInfo($_POST['remove']);
-
-        header("Location: /admin/items");
+        $this->chooseMapper($request);
     }
 
-    public function actionUpdate()
+    public function actionInsert(Request $request)
     {
-        if (!isset($_POST['update'])) {
-            header("Location: /admin");
-        }
-
-        $this->mapper->updateItemInfo($_POST['update']);
-
-        header("Location: " . $_SERVER['HTTP_REFERER']);
-    }
-
-    public function actionDelete()
-    {
-        if (!isset($_POST['delete'])) {
-            header("Location: /admin");
-        }
-
-        $this->mapper->deleteItemCharacteristic($_POST['delete']);
-
-        header("Location: " . $_SERVER['HTTP_REFERER']);
-    }
-
-    public function actionModify()
-    {
-        if (!isset($_POST['modify'])) {
-            header("Location: /admin");
-        }
-        $this->mapper->updateItemCharacteristic($_POST['modify']);
-
-        header("Location: " . $_SERVER['HTTP_REFERER']);
-    }
-
-    public function actionInsert()
-    {
-        if (!isset($_POST['insert'])) {
-            header("Location: /admin");
-        }
-
-        $this->mapper->insertCharacteristic();
-
-        header("Location: " . $_SERVER['HTTP_REFERER']);
+        $this->chooseMapper($request);
     }
 
     public function actionAll()
     {
-        $data['items'] = $this->getItems();
+        $data['items'] = $this->mapper->getAllItems();
         $data['title'] = 'All items';
-        $data['categories'] = $this->categories->getCategories();
+        $data['categories'] = $this->categories->getAllCategories();
+        $data['errors'] = $this->getErrors();
 
         $this->view->render('admin_items', $data);
     }
@@ -125,11 +75,12 @@ class ItemController extends Controller
             CustomRedirect::redirect('404');
         }
 
-
         $data['item'] = $this->mapper->getItemObject($id);
-        $data['categories'] = $this->categories->getCategories();
+        $data['categories'] = $this->categories->getAllCategories();
         $data['characteristics'] = $this->getCharacteristics($data['item']);
         $data['title'] = 'Product info';
+        $data['errors'] = $this->getErrors();
+
 
         $this->view->render('admin_item', $data);
     }

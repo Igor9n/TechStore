@@ -56,7 +56,7 @@ class ItemModel extends Model
     public function updateProductCharacteristicValue($id, $value)
     {
         $query = "UPDATE products_characteristics
-                           SET value = :value 
+                           SET value = :value, updated_at = NOW() 
                            WHERE id = :id";
         return $this->queryColumn($query, ['value' => $value, 'id' => $id]);
     }

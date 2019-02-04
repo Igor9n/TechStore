@@ -8,6 +8,8 @@
 
 namespace Core;
 
+use App\Classes\Session;
+
 class Controller
 {
     public $model;
@@ -18,5 +20,6 @@ class Controller
     {
         $this->view = new View();
     }
+
 
 }

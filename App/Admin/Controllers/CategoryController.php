@@ -9,15 +9,14 @@
 namespace App\Admin\Controllers;
 
 
-use App\Admin\Main\AdminView;
+use App\Admin\Main\MainController;
+use App\Admin\Main\MainView;
 use App\Admin\Mappers\CategoryCharacteristicMapper;
 use App\Admin\Mappers\CategoryMapper;
-use App\Classes\Session;
-use Core\Controller;
 use Core\CustomRedirect;
 use Core\Request;
 
-class CategoryController extends Controller
+class CategoryController extends MainController
 {
     public $characteristics;
 
@@ -27,46 +26,7 @@ class CategoryController extends Controller
         $this->mapper = new CategoryMapper();
         $this->characteristics = new CategoryCharacteristicMapper();
 
-        $this->view = new AdminView();
-    }
-
-    public function getErrors(string $action)
-    {
-        $errors = [];
-
-        if ($this->mapper->checkAction($action)) {
-            $errors = $this->mapper->checkForErrors($action);
-        }
-
-        return $errors;
-    }
-
-    public function getCategories()
-    {
-        return $this->mapper->getAllCategories();
-    }
-
-    public function chooseMapper(Request $request)
-    {
-        $mapper = $this->mapper->chooseMapper($request->getPostParam('key'));
-
-        if (!$mapper) {
-            CustomRedirect::redirect('404');
-        }
-
-        $errors = [];
-        if ($request->getPostParam('action') !== 'delete') {
-            $errors = $this->$mapper->checkForErrors($request->getPostParams());
-        }
-
-        if (!empty($errors['list'])) {
-            Session::set('errors', $errors);
-        } else {
-            $method = strtolower(substr($request->getActionName(), 6));
-            $this->$mapper->$method($request->getPostParams());
-        }
-
-        CustomRedirect::back();
+        $this->view = new MainView();
     }
 
     public function actionDelete(Request $request)
@@ -86,13 +46,9 @@ class CategoryController extends Controller
 
     public function actionAll()
     {
-        $data['categories'] = $this->getCategories();
+        $data['categories'] = $this->mapper->getAllCategories();
         $data['title'] = 'All categories';
-
-        if (Session::check('errors')) {
-            $data['errors'] = Session::get('errors');
-            Session::unset('errors');
-        }
+        $data['errors'] = $this->getErrors();
 
         $this->view->render('admin_categories', $data);
     }
@@ -105,11 +61,7 @@ class CategoryController extends Controller
             CustomRedirect::redirect('404');
         }
 
-        if (Session::check('errors')) {
-            $data['errors'] = Session::get('errors');
-            Session::unset('errors');
-        }
-
+        $data['errors'] = $this->getErrors();
         $data['info'] = $this->characteristics->getCharacteristicsByCategory($id);
         $data['title'] = 'Category info';
 
