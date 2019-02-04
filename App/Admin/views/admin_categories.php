@@ -31,7 +31,9 @@
                 continue;
             } ?>
             <tr>
-                <form method="POST" action="/admin/categories/update">
+                <form method="POST" action="/admin/update/category">
+                    <input type="hidden" name="key" value="info">
+                    <input type="hidden" name="id" value="<?= $category->id ?>">
                     <th scope="row"><?= $category->id ?></th>
                     <td scope="row"><input type="text" class="form-control" name="title"
                                            value="<?= $category->title ?>"></td>
@@ -40,13 +42,15 @@
                     </td>
                     <td scope="row"><?= $category->hasProducts ?></td>
                     <td scope="row" style="width: 25%">
-                        <button class="btn btn-primary" name="update" value="<?= $category->id ?>">Update</button>
+                        <button class="btn btn-primary" name="action" value="update">Update</button>
                 </form>
                 <?php if ($category->hasProducts === 'Yes') : ?>
                     <button class="btn btn-primary" name="delete" value="true" disabled>Delete</button>
                 <?php else : ?>
-                    <form method="POST" action="/admin/categories/delete" class="d-inline-block">
-                        <button class="btn btn-primary" name="delete" value="<?= $category->id ?>">Delete
+                    <form method="POST" action="/admin/delete/category" class="d-inline-block">
+                        <input type="hidden" name="key" value="info">
+                        <input type="hidden" name="id" value="<?= $category->id ?>">
+                        <button class="btn btn-primary" name="action" value="delete">Delete
                         </button>
                     </form>
                 <?php endif; ?>
@@ -60,11 +64,12 @@
 <?php else : ?>
     <div class="alert alert-warning">
         <h4 class="alert-heading">Categories list is <strong>empty.</strong></h4>
-        <p class="mb-0">Add a new one.</p>
+        <p class="mb-0">Add a new one.</p>атрибуты
     </div>
 <?php endif; ?>
 <table class="table">
-    <form method="POST" action="/admin/categories/insert">
+    <form method="POST" action="/admin/insert/category">
+        <input type="hidden" name="key" value="info">
         <th scope="row" style="width: 10%;"></th>
         <th scope="row" style="width: 15%;"><input type="text" class="form-control" name="title"
                                                    placeholder="Enter category title">
@@ -73,7 +78,7 @@
                                                    placeholder="Enter category service title"></th>
         <th scope="row"></th>
         <th scope="row" style="width: 25%;">
-            <button class="btn btn-primary" name="insert" value="new">Add new category</button>
+            <button class="btn btn-primary" name="action" value="insert">Add new category</button>
         </th>
     </form>
 </table>

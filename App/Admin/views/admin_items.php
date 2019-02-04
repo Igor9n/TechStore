@@ -49,7 +49,7 @@
                                         </button>
                                     </form>
                                 <?php endif; ?>
-                                <a class="btn btn-primary" href="/admin/item?id=<?= $item->id ?>">More
+                                <a class="btn btn-primary" href="/admin/one/item?id=<?= $item->id ?>">More
                                 </a>
                             </th>
                         </tr>
@@ -90,7 +90,7 @@
                                                 </button>
                                             </form>
                                         <?php endif; ?>
-                                        <a class="btn btn-primary" href="/admin/item?id=<?= $item->id ?>">More
+                                        <a class="btn btn-primary" href="/admin/one/item?id=<?= $item->id ?>">More
                                         </a>
                                     </th>
                                 </tr>

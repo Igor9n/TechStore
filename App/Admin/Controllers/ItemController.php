@@ -13,12 +13,16 @@ use App\Admin\Data\Item;
 use App\Admin\Main\AdminView;
 use App\Admin\Mappers\ItemMapper;
 use Core\Controller;
+use Core\CustomRedirect;
+use Core\Request;
 
 class ItemController extends Controller
 {
     public $categories;
+
     public function __construct()
     {
+        parent::__construct();
         $this->mapper = new ItemMapper();
         $this->view = new AdminView();
         $this->categories = new CategoryController();
@@ -111,5 +115,22 @@ class ItemController extends Controller
         $data['categories'] = $this->categories->getCategories();
 
         $this->view->render('admin_items', $data);
+    }
+
+    public function actionOne(Request $request)
+    {
+        $id = $request->getParam('id');
+
+        if (!$this->mapper->checkExists($id)) {
+            CustomRedirect::redirect('404');
+        }
+
+
+        $data['item'] = $this->mapper->getItemObject($id);
+        $data['categories'] = $this->categories->getCategories();
+        $data['characteristics'] = $this->getCharacteristics($data['item']);
+        $data['title'] = 'Product info';
+
+        $this->view->render('admin_item', $data);
     }
 }

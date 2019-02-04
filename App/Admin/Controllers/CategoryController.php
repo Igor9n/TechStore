@@ -10,19 +10,22 @@ namespace App\Admin\Controllers;
 
 
 use App\Admin\Main\AdminView;
+use App\Admin\Mappers\CategoryCharacteristicMapper;
 use App\Admin\Mappers\CategoryMapper;
+use App\Classes\Session;
 use Core\Controller;
 use Core\CustomRedirect;
 use Core\Request;
 
 class CategoryController extends Controller
 {
-    public $categoryCharacteristics;
+    public $characteristics;
 
     public function __construct()
     {
+        parent::__construct();
         $this->mapper = new CategoryMapper();
-        $this->categoryCharacteristics = new CategoryCharacteristicController();
+        $this->characteristics = new CategoryCharacteristicMapper();
 
         $this->view = new AdminView();
     }
@@ -43,37 +46,55 @@ class CategoryController extends Controller
         return $this->mapper->getAllCategories();
     }
 
-    public function actionInsert()
+    public function chooseMapper(Request $request)
     {
-        if (!isset($_POST['insert'])) {
-            header("Location: /admin");
+        $mapper = $this->mapper->chooseMapper($request->getPostParam('key'));
+
+        if (!$mapper) {
+            CustomRedirect::redirect('404');
         }
 
-        $this->mapper->insertCategoryInfo();
+        $errors = [];
+        if ($request->getPostParam('action') !== 'delete') {
+            $errors = $this->$mapper->checkForErrors($request->getPostParams());
+        }
 
-        header("Location: /admin/categories");
+        if (!empty($errors['list'])) {
+            Session::set('errors', $errors);
+        } else {
+            $method = strtolower(substr($request->getActionName(), 6));
+            $this->$mapper->$method($request->getPostParams());
+        }
+
+        CustomRedirect::back();
     }
 
-    public function actionDelete()
+    public function actionDelete(Request $request)
     {
-        if (!isset($_POST['delete'])) {
-            header("Location: /admin");
-        }
-
-        $this->mapper->deleteCategoryInfo($_POST['delete']);
-
-        header("Location: /admin/categories");
+        $this->chooseMapper($request);
     }
 
-    public function actionUpdate()
+    public function actionUpdate(Request $request)
     {
-        if (!isset($_POST['update'])) {
-            header("Location: /admin");
+        $this->chooseMapper($request);
+    }
+
+    public function actionInsert(Request $request)
+    {
+        $this->chooseMapper($request);
+    }
+
+    public function actionAll()
+    {
+        $data['categories'] = $this->getCategories();
+        $data['title'] = 'All categories';
+
+        if (Session::check('errors')) {
+            $data['errors'] = Session::get('errors');
+            Session::unset('errors');
         }
 
-        $this->mapper->updateCategoryInfo($_POST['update']);
-
-        header("Location: /admin/categories");
+        $this->view->render('admin_categories', $data);
     }
 
     public function actionOne(Request $request)
@@ -84,16 +105,14 @@ class CategoryController extends Controller
             CustomRedirect::redirect('404');
         }
 
-        $data['info'] = $this->categoryCharacteristics->getCharacteristicsByCategory($id);
+        if (Session::check('errors')) {
+            $data['errors'] = Session::get('errors');
+            Session::unset('errors');
+        }
+
+        $data['info'] = $this->characteristics->getCharacteristicsByCategory($id);
         $data['title'] = 'Category info';
+
         $this->view->render('admin_category', $data);
-    }
-
-    public function actionAll()
-    {
-        $data['categories'] = $this->getCategories();
-        $data['title'] = 'All categories';
-
-        $this->view->render('admin_categories', $data);
     }
 }

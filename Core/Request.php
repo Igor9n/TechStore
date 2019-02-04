@@ -159,6 +159,11 @@ class Request
         return $result;
     }
 
+    public function getPostParams()
+    {
+        return $this->postParams;
+    }
+
     public function setPostParams()
     {
         if (!empty($_POST)) {

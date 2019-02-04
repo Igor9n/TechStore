@@ -131,11 +131,11 @@ class AdminController extends Controller
     public function actionControl()
     {
         if (!Session::check('admin')) {
-            header("Location: /admin/login");
+            CustomRedirect::redirect('admin');
         }
 
         $data['title'] = 'Control page';
-        $this->view->generate('admin_template.php', 'admin_control.php', $data);
+        $this->view->render('admin_control', $data);
     }
 
     public function chooseController(Request $request)
@@ -160,6 +160,21 @@ class AdminController extends Controller
     }
 
     public function actionOne(Request $request)
+    {
+        $this->chooseController($request);
+    }
+
+    public function actionUpdate(Request $request)
+    {
+        $this->chooseController($request);
+    }
+
+    public function actionDelete(Request $request)
+    {
+        $this->chooseController($request);
+    }
+
+    public function actionInsert(Request $request)
     {
         $this->chooseController($request);
     }

@@ -178,4 +178,18 @@ class ItemMapper extends Mapper
             $info['value']
         );
     }
+
+    public function checkExists($title)
+    {
+        if (preg_match('/^[0-9]+$/', $title)) {
+            $title = (int)$title;
+        }
+        $array = $this->getAlItems();
+        foreach ($array as $item) {
+            if ($item->id === $title || $item->serviceTitle === $title) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

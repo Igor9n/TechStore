@@ -81,44 +81,6 @@ class CategoryMapper extends Mapper
         return $this->getCategoriesArray($list);
     }
 
-    public function getCategoryInfo()
-    {
-        $info['title'] = $_POST['title'];
-        $info['serviceTitle'] = $_POST['serviceTitle'];
-        return $info;
-    }
-
-    public function insertCategoryInfo()
-    {
-        $info = $this->getCategoryInfo();
-        return $this->model->insertCategoryInfo($info['title'], $info['serviceTitle']);
-    }
-
-    public function deleteCategoryInfo($id)
-    {
-        return [
-            $this->model->deleteCategoryCharacteristicsByCategory($id),
-            $this->model->deleteCategoryInfo($id)
-        ];
-    }
-
-    public function updateCategoryInfo($id)
-    {
-        $info = $this->getCategoryInfo();
-        return $this->model->updateCategoryInfo($info['title'], $info['serviceTitle'], $id);
-    }
-
-    public function checkAction(string $title)
-    {
-        $result = false;
-
-        if (preg_match('/insert/', $title) || preg_match('/update/', $title)) {
-            $result = true;
-        }
-
-        return $result;
-    }
-
     public function validateData(array $data)
     {
         $errors[] = $this->validator->validateServiceTitle($data['serviceTitle']);
@@ -126,14 +88,18 @@ class CategoryMapper extends Mapper
         return $this->makeSimpleArray($errors);
     }
 
-    public function checkForErrors(string $actionName)
+    public function checkForErrors(array $info)
     {
         $errors = [];
 
-        $info = $this->getCategoryInfo();
         $errors['list'] = $this->validateData($info);
-        $errors['action'] = $actionName;
-        $errors['id'] = $_POST[$actionName];
+        $errors['action'] = $info['action'];
+
+        if ($info['action'] === 'insert') {
+            $errors['id'] = 'new';
+        } else {
+            $errors['id'] = $info['id'];
+        }
 
         return $errors;
     }
@@ -150,5 +116,37 @@ class CategoryMapper extends Mapper
             }
         }
         return false;
+    }
+
+    public function chooseMapper($key)
+    {
+        $result = false;
+
+        if ($key === 'info') {
+            $result = 'mapper';
+        }
+
+        if (!$result && ($key === 'characteristics')) {
+            $result = 'characteristics';
+        }
+        return $result;
+    }
+
+    public function insert(array $info)
+    {
+        return $this->model->insertCategoryInfo($info['title'], $info['serviceTitle']);
+    }
+
+    public function delete(array $info)
+    {
+        return [
+            $this->model->deleteCategoryCharacteristicsByCategory($info['id']),
+            $this->model->deleteCategoryInfo($info['id'])
+        ];
+    }
+
+    public function update(array $info)
+    {
+        return $this->model->updateCategoryInfo($info['title'], $info['serviceTitle'], $info['id']);
     }
 }
