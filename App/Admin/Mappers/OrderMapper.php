@@ -79,6 +79,7 @@ class OrderMapper extends MainMapper
 
     public function getProductsForOrder($id): array
     {
+        $products = [];
         $list = $this->model->getProductsListByOrderId($id);
         foreach ($list as $product) {
             $products[$product]['info'] = $this->mapper->getItemObject($product);
@@ -95,4 +96,15 @@ class OrderMapper extends MainMapper
         $array['products'] = $this->getProductsForOrder($id);
         return $array;
     }
+
+    public function checkExists($orderId)
+    {
+        $array = $this->model->getOrdersIdList();
+
+        if (in_array($orderId, $array)) {
+            return true;
+        }
+        return false;
+    }
+
 }
