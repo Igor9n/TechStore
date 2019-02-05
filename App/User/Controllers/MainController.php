@@ -17,43 +17,42 @@ class MainController extends Controller
     public function actionIndex()
     {
         $data['title'] = 'Main page';
-        $this->view->generate('template.php', 'index.php', $data);
+        $this->view->render('index', $data);
     }
 
     public function actionAbout()
     {
         $data['title'] = 'Our company';
-        $this->view->generate('template.php', 'about.php', $data);
+        $this->view->render('about', $data);
     }
 
     public function actionVacancies()
     {
         $data['title'] = 'Vacancies';
-        $this->view->generate('template.php', 'vacancies.php', $data);
+        $this->view->render('vacancies', $data);
     }
 
     public function actionDelivery()
     {
         $data['title'] = 'Delivery';
-        $this->view->generate('template.php', 'delivery.php', $data);
+        $this->view->render('delivery', $data);
     }
 
     public function actionPayment()
     {
         $data['title'] = 'Payment types';
-        $this->view->generate('template.php', 'payment.php', $data);
+        $this->view->render('payment', $data);
     }
 
     public function actionGuarantee()
     {
         $data['title'] = 'Guarantee';
-        $this->view->generate('template.php', 'guarantee.php', $data);
+        $this->view->render('guarantee', $data);
     }
 
     public function actionContact()
     {
         $data['title'] = 'Our contacts';
-        $this->view->generate('template.php', 'contact.php', $data);
+        $this->view->render('contact', $data);
     }
-
 }

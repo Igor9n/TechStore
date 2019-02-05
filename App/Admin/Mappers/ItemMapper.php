@@ -10,10 +10,11 @@ namespace App\Admin\Mappers;
 
 
 use App\Admin\Data\Item;
+use App\Admin\Main\MainMapper;
 use App\Admin\Models\ItemModel;
-use Core\Mapper;
+use App\Admin\Validators\ItemValidator;
 
-class ItemMapper extends Mapper
+class ItemMapper extends MainMapper
 {
     public $categoryMapper;
     public $characteristics;
@@ -23,6 +24,7 @@ class ItemMapper extends Mapper
         $this->model = new ItemModel();
         $this->categoryMapper = new CategoryMapper();
         $this->characteristics = new CategoryCharacteristicMapper();
+        $this->validator = new ItemValidator();
     }
 
     public function getObject(array $itemInfo, string $inUsage): Item
@@ -63,63 +65,14 @@ class ItemMapper extends Mapper
         return $itemsArray;
     }
 
-    private function groupCharacteristics($titles, $values)
-    {
-        $array = [];
-        foreach ($titles as $title) {
-            for ($i = 0; $i < count($titles); $i++) {
-                $array[$title->id]['info'] = $title;
-                if (isset($values[$i]) && $title->id === (int)$values[$i]['characteristic_id']) {
-                    $array[$title->id]['value'] = $values[$i];
-                    break;
-                } else {
-                    $array[$title->id]['value'] = 'No info';
-                }
-            }
-        }
-        return $array;
-    }
-
-    public function getItemCharacteristics(Item $item)
-    {
-        $characteristicsList = $this->characteristics->getCharacteristicsListByCategory($item->category->id);
-        $characteristicsArray = $this->characteristics->getCharacteristicsArray($characteristicsList);
-        $values = $this->model->getProductCharacteristics($item->id);
-
-        return $this->groupCharacteristics($characteristicsArray, $values);
-    }
-
-    public function getAlItems(): array
+    public function getAllItems(): array
     {
         $list = $this->model->getProductsList();
         return $this->getItemsArray($list);
     }
 
-    public function getItemInfo()
+    public function insert(array $info)
     {
-        $info['title'] = $_POST['title'];
-        $info['serviceTitle'] = $_POST['serviceTitle'];
-        $info['warranty'] = $_POST['warranty'];
-        $info['price'] = $_POST['price'];
-        $info['category'] = (int)$_POST['category'];
-        $info['shortDescription'] = $_POST['shortDescription'];
-        $info['description'] = $_POST['description'];
-        $info['visible'] = $_POST['visible'];
-
-        return $info;
-    }
-
-    public function getCharacteristicInfo()
-    {
-        $info['product'] = (int)$_POST['product'];
-        $info['value'] = $_POST['value'];
-        $info['characteristic'] = (int)$_POST['insert'];
-        return $info;
-    }
-
-    public function insertItemInfo()
-    {
-        $info = $this->getItemInfo();
         return $this->model->insertProductInfo(
             $info['title'],
             $info['serviceTitle'],
@@ -132,19 +85,18 @@ class ItemMapper extends Mapper
         );
     }
 
-    public function deleteItemInfo($id)
+    public function delete(array $info)
     {
         return [
-            $this->model->deleteProductInfo($id),
-            $this->model->deleteProductsCharacteristics($id)
+            $this->model->deleteProductInfo($info['id']),
+            $this->model->deleteProductsCharacteristics($info['id'])
         ];
     }
 
-    public function updateItemInfo($id)
+    public function update(array $info)
     {
-        $info = $this->getItemInfo();
         return $this->model->updateProductInfo(
-            $id,
+            $info['id'],
             $info['title'],
             $info['serviceTitle'],
             $info['warranty'],
@@ -156,26 +108,40 @@ class ItemMapper extends Mapper
         );
     }
 
-    public function deleteItemCharacteristic($id)
+    public function checkExists($title)
     {
-        return $this->model->deleteProductCharacteristicById($id);
+        if (preg_match('/^[0-9]+$/', $title)) {
+            $title = (int)$title;
+        }
+        $array = $this->getAllItems();
+
+        foreach ($array as $item) {
+            if ($item->id === $title || $item->serviceTitle === $title) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    public function updateItemCharacteristic($id)
+    public function validateData(array $data)
     {
-        return $this->model->updateProductCharacteristicValue(
-            $id,
-            $_POST['value']
-        );
+        $errors[] = $this->validator->validateServiceTitle($data['serviceTitle']);
+        $errors[] = $this->validator->validateTitle($data['title']);
+        $errors[] = $this->validator->validateWarranty($data['warranty']);
+        $errors[] = $this->validator->validatePrice($data['price']);
+        $errors[] = $this->validator->validateShortDescription($data['shortDescription']);
+        return $this->makeSimpleArray($errors);
     }
 
-    public function insertCharacteristic()
+    public function checkForErrors(array $info)
     {
-        $info = $this->getCharacteristicInfo();
-        return $this->model->insertProductCharacteristic(
-            $info['product'],
-            $info['characteristic'],
-            $info['value']
-        );
+        $errors = [];
+
+        $errors['list'] = $this->validateData($info);
+        $errors['action'] = $info['action'];
+        $errors['key'] = $info['key'];
+
+        return $errors;
     }
 }
+

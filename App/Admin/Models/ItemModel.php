@@ -19,11 +19,11 @@ class ItemModel extends Model
         return $this->queryList($query, 'id');
     }
 
-    public function getFullProductInfo(int $id)
+    public function getFullProductInfo($id)
     {
         $query = "SELECT id, title, service_title, warranty, short_description, description, category_id, price, visible 
-                          FROM products WHERE id = :id";
-        return $this->queryRow($query, ['id' => $id]);
+                          FROM products WHERE %s = :value";
+        return $this->selectTypeAndQuery($query, $id, 'row');
     }
 
     public function getProductCharacteristics(int $productId)
@@ -56,7 +56,7 @@ class ItemModel extends Model
     public function updateProductCharacteristicValue($id, $value)
     {
         $query = "UPDATE products_characteristics
-                           SET value = :value 
+                           SET value = :value, updated_at = NOW() 
                            WHERE id = :id";
         return $this->queryColumn($query, ['value' => $value, 'id' => $id]);
     }

@@ -3,9 +3,10 @@
 namespace App\User\Controllers;
 
 use App\Classes\Session;
-use Core\Route;
+use Core\CustomRedirect;
 use App\User\Mappers\ItemMapper;
 use App\User\Models\ItemModel;
+use Core\Request;
 
 class ItemController extends MainController
 {
@@ -16,31 +17,30 @@ class ItemController extends MainController
         $this->mapper = new ItemMapper();
     }
 
-    public function actionView($id)
+    public function actionView(Request $request)
     {
-        if (!Route::checkExist($id, $this->model->getItemsSTList())) {
-            Route::errorPage404();
+        $id = $request->getParam('id');
+
+        if (!$this->mapper->checkExists($id)) {
+            CustomRedirect::redirect('404');
         }
 
         $data['info'] = $this->mapper->getItemObject($id);
         $data['title'] = $data['info']->title;
 
-        $this->view->generate('template.php', 'item.php', $data);
+        $this->view->render('item', $data);
     }
 
-    /**
-     * Adding item to cart
-     */
-    public function actionAdd()
+    public function actionAdd(Request $request)
     {
-        $id = (int)$_GET['id'];
+        $id = $request->getPostParam('id');
 
-        if (!isset($id)) {
-            header("Location: /");
+        if (!$this->mapper->checkExists($id)) {
+            CustomRedirect::redirect('404');
         }
 
         Session::additionalSessionStart();
         Session::set('item', $this->mapper->getItemObject($id));
-        header("Location: /cart/add");
+        CustomRedirect::redirect('cart/add');
     }
 }

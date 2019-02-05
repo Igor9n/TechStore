@@ -10,15 +10,13 @@ namespace App\Admin\Mappers;
 
 
 use App\Admin\Data\CategoryCharacteristic;
+use App\Admin\Main\MainMapper;
 use App\Admin\Models\CategoryModel;
 use App\Admin\Validators\CategoryCharacteristicValidator;
-use Core\Mapper;
 
 
-class CategoryCharacteristicMapper extends Mapper
+class CategoryCharacteristicMapper extends MainMapper
 {
-    public $userModel;
-
     public function __construct()
     {
         $this->model = new CategoryModel();
@@ -46,11 +44,6 @@ class CategoryCharacteristicMapper extends Mapper
         return $this->getObject($info, $inUsage);
     }
 
-    public function getCharacteristicsListByCategory(int $id)
-    {
-        return $this->model->getCharacteristicsListByCategory($id);
-    }
-
     public function getCharacteristicsArray(array $characteristicsList)
     {
         $result = [];
@@ -60,51 +53,19 @@ class CategoryCharacteristicMapper extends Mapper
         return $result;
     }
 
-    public function getCharacteristicsByCategory(int $id)
+    public function getCharacteristicsListByCategory($id)
+    {
+        return $this->model->getCharacteristicsListByCategory($id);
+    }
+
+    public function getCharacteristicsByCategory($id)
     {
         $category = $this->model->getFullCategoryInfo($id);
-        $list = $this->getCharacteristicsListByCategory($id);
+        $list = $this->getCharacteristicsListByCategory($category['id']);
         return [
             'category' => $category,
             'characteristics' => $this->getCharacteristicsArray($list)
         ];
-    }
-
-    public function getCharacteristicInfo()
-    {
-        if (isset($_POST['insert'])) {
-            $info['category'] = $_POST['insert'];
-        }
-        $info['title'] = $_POST['title'];
-        return $info;
-    }
-
-    public function insertCharacteristicInfo()
-    {
-        $info = $this->getCharacteristicInfo();
-        return $this->model->insertCategoryCharacteristic($info['title'], $info['category']);
-    }
-
-    public function deleteCharacteristicInfo($id)
-    {
-        return $this->model->deleteCategoryCharacteristic($id);
-    }
-
-    public function updateCharacteristicInfo($id)
-    {
-        $info = $this->getCharacteristicInfo();
-        return $this->model->updateCategoryCharacteristic($id, $info['title']);
-    }
-
-    public function checkAction(string $title)
-    {
-        $result = false;
-
-        if (preg_match('/^insert$/', $title) || preg_match('/^update$/', $title)) {
-            $result = true;
-        }
-
-        return $result;
     }
 
     public function validateData(array $data)
@@ -113,20 +74,34 @@ class CategoryCharacteristicMapper extends Mapper
         return $this->makeSimpleArray($errors);
     }
 
-    public function checkForErrors(string $actionName)
+    public function checkForErrors(array $info)
     {
         $errors = [];
 
-        $info = $this->getCharacteristicInfo();
         $errors['list'] = $this->validateData($info);
-        $errors['action'] = $actionName;
+        $errors['action'] = $info['action'];
 
-        if ($actionName === 'insert') {
+        if ($info['action'] === 'insert') {
             $errors['id'] = 'new';
         } else {
-            $errors['id'] = $_POST[$actionName];
+            $errors['id'] = $info['id'];
         }
 
         return $errors;
+    }
+
+    public function insert(array $info)
+    {
+        return $this->model->insertCategoryCharacteristic($info['title'], $info['id']);
+    }
+
+    public function delete(array $info)
+    {
+        return $this->model->deleteCategoryCharacteristic($info['id']);
+    }
+
+    public function update(array $info)
+    {
+        return $this->model->updateCategoryCharacteristic($info['id'], $info['title']);
     }
 }

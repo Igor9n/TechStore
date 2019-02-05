@@ -30,7 +30,7 @@
                         <th scope="row">Item CATEGORY</th>
                         <th scope="row">Item TITLE</th>
                         <th scope="row" style="width: 10%;">Item IN USAGE</th>
-                        <th scope="row" style="width: 12%">Buttons</th>
+                        <th scope="row" style="width: 15%">Buttons</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -44,12 +44,14 @@
                                 <?php if ($item->inUsage === 'Yes') : ?>
                                     <button class="btn btn-primary" disabled>Delete</button>
                                 <?php else : ?>
-                                    <form method="POST" action="/admin/items/remove" class="d-inline-block">
-                                        <button class="btn btn-primary" name="remove" value="<?= $item->id ?>">Delete
+                                    <form method="POST" action="/admin/delete/item" class="d-inline-block">
+                                        <input type="hidden" name="key" value="info">
+                                        <input type="hidden" name="id" value="<?= $item->id ?>">
+                                        <button class="btn btn-primary" name="action" value="delete">Delete
                                         </button>
                                     </form>
                                 <?php endif; ?>
-                                <a class="btn btn-primary" href="/admin/item?id=<?= $item->id ?>">More
+                                <a class="btn btn-primary" href="/admin/one/item?id=<?= $item->id ?>">More
                                 </a>
                             </th>
                         </tr>
@@ -84,13 +86,15 @@
                                         <?php if ($item->inUsage === 'Yes') : ?>
                                             <button class="btn btn-primary" disabled>Delete</button>
                                         <?php else : ?>
-                                            <form method="POST" action="/admin/items/delete" class="d-inline-block">
-                                                <button class="btn btn-primary" name="delete" value="<?= $item->id ?>">
+                                            <form method="POST" action="/admin/delete/item" class="d-inline-block">
+                                                <input type="hidden" name="key" value="info">
+                                                <input type="hidden" name="id" value="<?= $item->id ?>">
+                                                <button class="btn btn-primary" name="key" value="delete">
                                                     Delete
                                                 </button>
                                             </form>
                                         <?php endif; ?>
-                                        <a class="btn btn-primary" href="/admin/item?id=<?= $item->id ?>">More
+                                        <a class="btn btn-primary" href="/admin/one/item?id=<?= $item->id ?>">More
                                         </a>
                                     </th>
                                 </tr>
@@ -100,7 +104,8 @@
                 </div>
             <?php endforeach; ?>
             <div class="tab-pane fade" id="new">
-                <form method="POST" action="/admin/items/new">
+                <form method="POST" action="/admin/insert/item">
+                    <input type="hidden" name="key" value="info">
                     <div class="row">
                         <div class="form-group col">
                             <label for="title"><strong>Title</strong></label>
@@ -165,7 +170,7 @@
                         <textarea class="form-control" name="description" placeholder="Enter description for item"
                                   rows="5"></textarea>
                     </div>
-                    <button class="btn btn-primary" name="new" value="true">Add new item</button>
+                    <button class="btn btn-primary" name="action" value="insert">Add new item</button>
                 </form>
             </div>
         </div>
@@ -175,7 +180,8 @@
         <h4 class="alert-heading">Items list is <strong>empty.</strong></h4>
         <p class="mb-0">Add a new one.</p>
     </div>
-    <form method="POST" action="/admin/items/new">
+    <form method="POST" action="/admin/insert/item">
+        <input type="hidden" name="key" value="info">
         <div class="row">
             <div class="form-group col">
                 <label for="title"><strong>Title</strong></label>
@@ -237,6 +243,19 @@
             <textarea class="form-control" name="description" placeholder="Enter description for item"
                       rows="5"></textarea>
         </div>
-        <button class="btn btn-primary" name="new" value="true">Add new item</button>
+        <button class="btn btn-primary" name="action" value="delete">Add new item</button>
     </form>
+<?php endif; ?>
+<?php if (!empty($errors['list'])) : ?>
+    <div class="alert alert-danger">
+        <h4 class="mb-1"><?= ucfirst($errors['action']) ?> <strong>'<?= $errors['key'] ?>'</strong>
+            item failed.</strong></h4>
+        <ul>
+            <?php foreach ($errors['list'] as $error) : ?>
+                <li class="mb-0">
+                    <?= $error ?>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
 <?php endif; ?>

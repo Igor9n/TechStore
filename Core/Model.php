@@ -42,7 +42,7 @@ class Model
 
     protected function selectCondition($query, $value)
     {
-        if (gettype($value) === 'integer') {
+        if (preg_match('/^[0-9]+$/', $value)) {
             $condition = 'id';
         } else {
             $condition = 'service_title';
@@ -68,14 +68,8 @@ class Model
         $query = $this->pdo->prepare($query);
         $query->execute($variables);
 
-        if ($column === 'id' || preg_match('/[a-z]_id$/', $column)) {
-            while ($value = $query->fetch(PDO::FETCH_ASSOC)) {
-                $array[] = (int)$value[$column];
-            }
-        } else {
-            while ($value = $query->fetch(PDO::FETCH_ASSOC)) {
-                $array[] = $value[$column];
-            }
+        while ($value = $query->fetch(PDO::FETCH_ASSOC)) {
+            $array[] = $value[$column];
         }
         return $array;
     }

@@ -27,20 +27,24 @@
         <tbody>
         <?php foreach ($info['characteristics'] as $characteristic) : ?>
             <tr>
-                <form method="POST" action="/admin/category/update">
+                <form method="POST" action="/admin/update/category">
+                    <input type="hidden" name="key" value="characteristics">
+                    <input type="hidden" name="id" value="<?= $characteristic->id ?>">
                     <th scope="row"><?= $characteristic->id ?></th>
                     <td scope="row"><input type="text" class="form-control" name="title"
                                            value="<?= $characteristic->title ?>"></td>
                     <td scope="row"><?= $characteristic->inUsage ?></td>
                     <td scope="row">
-                        <button class="btn btn-primary" name="update" value="<?= $characteristic->id ?>">Update
+                        <button class="btn btn-primary" name="action" value="update">Update
                         </button>
                 </form>
                 <?php if ($characteristic->inUsage === 'Yes') : ?>
                     <button class="btn btn-primary" name="delete" value="true" disabled>Delete</button>
                 <?php else : ?>
-                    <form method="POST" action="/admin/category/delete" class="d-inline-block">
-                        <button class="btn btn-primary" name="delete" value="<?= $characteristic->id ?>">Delete
+                    <form method="POST" action="/admin/delete/category" class="d-inline-block">
+                        <input type="hidden" name="key" value="characteristics">
+                        <input type="hidden" name="id" value="<?= $characteristic->id ?>">
+                        <button class="btn btn-primary" name="action" value="delete">Delete
                         </button>
                     </form>
                 <?php endif; ?>
@@ -71,14 +75,16 @@
     <?php endif; ?>
 <?php endif; ?>
 <table class="table">
-    <form method="POST" action="/admin/category/insert">
+    <form method="POST" action="/admin/insert/category">
+        <input type="hidden" name="key" value="characteristics">
+        <input type="hidden" name="id" value="<?= $info['category']['id'] ?>">
         <th scope="row" style="width: 15%;"></th>
         <th scope="row"><input type="text" class="form-control" name="title"
                                placeholder="Enter category characteristic title">
         </th>
         <th scope="row" style="width: 20%;"></th>
         <th scope="row" style="width: 15%;">
-            <button class="btn btn-primary" name="insert" value="<?= $info['category']['id'] ?>">
+            <button class="btn btn-primary" name="action" value="insert">
                 Add new category characteristic
             </button>
         </th>
