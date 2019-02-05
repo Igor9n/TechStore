@@ -70,7 +70,7 @@
                         <input type="hidden" name="id" value="<?= $order->id ?>">
                         <button class="btn btn-primary" name="action" value="delete">Delete</button>
                     </form>
-                    <a class="btn btn-primary" href="/admin/one/order?id=<?= $order->id ?>">Details</a>
+                    <a class="btn btn-primary" href="/admin/one/order?id=<?= $order->id ?>">More</a>
                 </td>
             </tr>
         <?php endforeach; ?>
