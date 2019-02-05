@@ -107,4 +107,22 @@ class OrderMapper extends MainMapper
         return false;
     }
 
+    public function update(array $info)
+    {
+        return $this->model->updateOrderStatus($info['id'], $info['status']);
+    }
+
+    public function delete(array $info)
+    {
+        return [
+            $this->model->deleteOrderProducts($info['id']),
+            $this->model->deleteOrderDelivery($info['id']),
+            $this->model->deleteOrder($info['id']),
+        ];
+    }
+
+    public function checkForErrors()
+    {
+        return [];
+    }
 }
