@@ -42,7 +42,7 @@ class ItemMapper extends MainMapper
         ], $inUsage);
     }
 
-    public function getItemObject($id)
+    public function getItemObject($id): Item
     {
         $itemInfo = $this->model->getFullProductInfo($id);
         if ($this->model->checkItemUsage($id)) {

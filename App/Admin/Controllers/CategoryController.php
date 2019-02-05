@@ -10,7 +10,6 @@ namespace App\Admin\Controllers;
 
 
 use App\Admin\Main\MainController;
-use App\Admin\Main\MainView;
 use App\Admin\Mappers\CategoryCharacteristicMapper;
 use App\Admin\Mappers\CategoryMapper;
 use Core\CustomRedirect;
@@ -18,15 +17,11 @@ use Core\Request;
 
 class CategoryController extends MainController
 {
-    public $characteristics;
-
     public function __construct()
     {
         parent::__construct();
         $this->mapper = new CategoryMapper();
         $this->characteristics = new CategoryCharacteristicMapper();
-
-        $this->view = new MainView();
     }
 
     public function actionDelete(Request $request)

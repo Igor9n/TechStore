@@ -13,7 +13,7 @@ class ItemModel extends Model
     public function __construct()
     {
         parent::__construct();
-        $this->products = "SELECT id, service_title FROM products";
+        $this->products = "SELECT id, service_title FROM products WHERE visible = 'true'";
         $this->product = "SELECT id, title, service_title, short_description, description, category_id, price
                           FROM products WHERE %s = :value";
         $this->queryType = 'col';
@@ -119,7 +119,7 @@ class ItemModel extends Model
     public function getItemsIdListByCategoryId($id)
     {
         $query = "SELECT id, title, service_title, short_description, description, category_id 
-                          FROM products WHERE category_id = :category";
+                          FROM products WHERE category_id = :category AND visible = 'true'";
         return $this->queryList($query, 'id', ['category' => $id]);
     }
 }

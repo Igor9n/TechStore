@@ -21,6 +21,7 @@ class AdminController extends Controller
     public $categories;
     public $categoryCharacteristics;
     public $item;
+    public $order;
 
     public function __construct()
     {
@@ -29,6 +30,7 @@ class AdminController extends Controller
         $this->mapper = new AdminMapper();
         $this->categories = new CategoryController();
         $this->item = new ItemController();
+        $this->order = new OrderController();
     }
 
     public function try(string $action)
@@ -97,8 +99,8 @@ class AdminController extends Controller
         $key = $request->getActionKey();
         $controller = $this->mapper->chooseController($key);
 
-        if (!$key && !$controller) {
-            CustomRedirect::redirect('admin/main');
+        if (!$key || !$controller) {
+            CustomRedirect::redirect('admin');
         }
         $action = $request->getActionName();
         $this->$controller->$action($request);
