@@ -147,4 +147,30 @@ class OrderModel extends Model
         $query = "SELECT status FROM orders WHERE id = :order";
         return $this->queryColumn($query, ['order' => $id], 'status');
     }
+
+    public function updateOrderStatus($id, $status)
+    {
+        $query = "UPDATE orders 
+                          SET status = :status, updated_at = NOW() 
+                          WHERE id = :id";
+        return $this->queryColumn($query, ['status' => $status, 'id' => $id]);
+    }
+
+    public function deleteOrderProducts($order)
+    {
+        $query = "DELETE FROM orders_products WHERE order_id = :order";
+        return $this->queryColumn($query, ['order' => $order]);
+    }
+
+    public function deleteOrderDelivery($order)
+    {
+        $query = "DELETE FROM orders_delivery WHERE order_id = :order";
+        return $this->queryColumn($query, ['order' => $order]);
+    }
+
+    public function deleteOrder($id)
+    {
+        $query = "DELETE FROM orders WHERE id = :id";
+        return $this->queryColumn($query, ['id' => $id]);
+    }
 }
