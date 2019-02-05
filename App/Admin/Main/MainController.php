@@ -16,6 +16,8 @@ use Core\Request;
 
 class MainController extends Controller
 {
+    public $characteristics;
+
     public function __construct()
     {
         parent::__construct();
