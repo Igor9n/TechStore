@@ -25,6 +25,21 @@ class OrderController extends MainController
         $this->item = new ItemMapper();
     }
 
+    public function actionDelete(Request $request)
+    {
+        $this->chooseMapper($request);
+    }
+
+    public function actionUpdate(Request $request)
+    {
+        $this->chooseMapper($request);
+    }
+
+    public function actionInsert(Request $request)
+    {
+        $this->chooseMapper($request);
+    }
+
     public function actionAll()
     {
         $data['orders'] = $this->mapper->getAllOrders();

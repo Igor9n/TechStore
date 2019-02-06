@@ -12,13 +12,18 @@ namespace App\Admin\Mappers;
 use App\Admin\Data\Order;
 use App\Admin\Main\MainMapper;
 use App\Admin\Models\OrderModel;
+use App\Admin\Validators\OrderValidator;
 
 class OrderMapper extends MainMapper
 {
+    public $user;
+
     public function __construct()
     {
         $this->model = new OrderModel();
         $this->mapper = new ItemMapper();
+        $this->user = new UserMapper();
+        $this->validator = new OrderValidator();
     }
 
     public function getObject($id, array $array): Order
@@ -59,16 +64,19 @@ class OrderMapper extends MainMapper
         return $array;
     }
 
-    public function getProductsPriceInfo(array $array): array
+    public function getProductInfo(array $array, $order): array
     {
+
         foreach ($array as $product) {
-            $array[$product['info']->id]['count'] = $this->model->getOrderProductCount($product['info']->id);
-            $array[$product['info']->id]['endprice'] = $this->model->getOrderProductEndprice($product['info']->id);
+            $info = $info = $this->model->getOrderProductInfo($product['info']->id, $order);
+
+            $array[$product['info']->id]['count'] = $info['count'];
+            $array[$product['info']->id]['endprice'] = $info['endprice'];
+            $array[$product['info']->id]['rowID'] = $info['id'];
         }
 
         return $array;
     }
-
 
     public function getOrder($id)
     {
@@ -84,7 +92,7 @@ class OrderMapper extends MainMapper
         foreach ($list as $product) {
             $products[$product]['info'] = $this->mapper->getItemObject($product);
         }
-        return $this->getProductsPriceInfo($products);
+        return $this->getProductInfo($products, $id);
     }
 
     public function getOrderInfo($id)
@@ -105,6 +113,105 @@ class OrderMapper extends MainMapper
             return true;
         }
         return false;
+    }
+
+    public function validateDelivery(array $info)
+    {
+        if ($info['date'] !== 'None') {
+            $errors[] = $this->validator->validateDeliveryDate($info['date']);
+        }
+        if ($info['time'] !== 'None') {
+            $errors[] = $this->validator->validateDeliveryTime($info['time']);
+        }
+        return $this->makeSimpleArray($errors);
+    }
+
+    public function checkForErrors(array $info)
+    {
+        $errors = [];
+
+        if ($info['what'] === 'delivery') {
+            $errors['list'] = $this->validateDelivery($info);
+        }
+        $errors['action'] = $info['action'];
+        $errors['what'] = $info['what'];
+
+        return $errors;
+    }
+
+    public function updateOrderProduct($rowID, $count, $endprice)
+    {
+        return $this->model->updateOrderProductCount($rowID, $count, $endprice);
+    }
+
+    public function updateOrderStatus($order, $status)
+    {
+        return $this->model->updateOrderStatus($order, $status);
+    }
+
+    public function updateOrderDelivery($rowID, $type, $date, $time)
+    {
+        return $this->model->updateOrderDelivery($rowID, $type, $date, $time);
+    }
+
+    public function deleteOrderProduct($rowID)
+    {
+        return $this->model->deleteOrderProduct($rowID);
+    }
+
+    public function deleteOrder($id)
+    {
+        return [
+            $this->model->deleteOrderProducts($id),
+            $this->model->deleteOrderDelivery($id),
+            $this->model->deleteOrder($id)
+        ];
+    }
+
+    public function updateOrderTotalPrice($orderId)
+    {
+        $totalPrice = 0;
+        $products = $this->getProductsForOrder($orderId);
+        foreach ($products as $product) {
+            $totalPrice += $product['endprice'];
+        }
+        return $this->model->updateOrderTotalPrice($orderId, $totalPrice);
+    }
+
+
+    public function delete(array $info)
+    {
+        $result = null;
+        if ($info['what'] === 'order') {
+            $result = $this->deleteOrder($info['id']);
+        } elseif ($info['what'] === 'product') {
+            $this->deleteOrderProduct($info['id']);
+            $result = $this->updateOrderTotalPrice($info['order']);
+        }
+        return $result;
+    }
+
+    public function insert(array $info)
+    {
+        $product = explode('&', $info['product']);
+
+        $this->model->insertOrderProduct($info['order'], $product[0], $product[1]);
+        return $this->updateOrderTotalPrice($info['order']);
+    }
+
+    public function update(array $info)
+    {
+        $result = null;
+        if ($info['what'] === 'status') {
+            $result = $this->updateOrderStatus($info['id'], $info['status']);
+        } elseif ($info['what'] === 'product') {
+            $endprice = $info['count'] * $info['price'];
+            $this->updateOrderProduct($info['id'], $info['count'], $endprice);
+            $result = $this->updateOrderTotalPrice($info['order']);
+        } elseif ($info['what'] === 'delivery') {
+            $result = $this->updateOrderDelivery($info['id'], $info['type'], $info['date'], $info['time']);
+        }
+        return $result;
     }
 
 }

@@ -32,16 +32,6 @@ class ItemController extends MainController
         $this->characteristics = new ItemCharacteristicMapper();
     }
 
-    public function getCharacteristics(Item $item)
-    {
-        return $this->characteristics->getItemCharacteristics($item);
-    }
-
-    public function getItem($id)
-    {
-        return $this->mapper->getItemObject($id);
-    }
-
     public function actionDelete(Request $request)
     {
         $this->chooseMapper($request);
@@ -77,7 +67,7 @@ class ItemController extends MainController
 
         $data['item'] = $this->mapper->getItemObject($id);
         $data['categories'] = $this->categories->getAllCategories();
-        $data['characteristics'] = $this->getCharacteristics($data['item']);
+        $data['characteristics'] = $this->characteristics->getItemCharacteristics($data['item']);
         $data['title'] = 'Product info';
         $data['errors'] = $this->getErrors();
 
