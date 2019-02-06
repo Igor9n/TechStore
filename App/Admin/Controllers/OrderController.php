@@ -35,6 +35,11 @@ class OrderController extends MainController
         $this->chooseMapper($request);
     }
 
+    public function actionInsert(Request $request)
+    {
+        $this->chooseMapper($request);
+    }
+
     public function actionAll()
     {
         $data['orders'] = $this->mapper->getAllOrders();
