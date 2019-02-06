@@ -91,23 +91,28 @@
     </tr>
     </thead>
     <tbody>
-    <tr>
-        <td scope="row">
-            <input type="text" class="form-control" name="firstName"
-                   value="<?= $order->deliveryInfo['type'] ?>">
-        </td>
-        <td scope="row">
-            <input type="text" class="form-control" name="lastName"
-                   value="<?= $order->deliveryInfo['date'] ?>">
-        </td>
-        <td scope="row">
-            <input type="text" class="form-control" name="firstName"
-                   value="<?= $order->deliveryInfo['time'] ?>">
-        </td>
-        <td scope="row">
-            <button class="btn btn-primary">Update</button>
-        </td>
-    </tr>
+    <form method="POST" action="/admin/update/order">
+        <input type="hidden" name="key" value="info">
+        <input type="hidden" name="what" value="delivery">
+        <input type="hidden" name="id" value="<?= $order->id ?>">
+        <tr>
+            <td scope="row">
+                <input type="text" class="form-control" name="type"
+                       value="<?= $order->deliveryInfo['type'] ?>">
+            </td>
+            <td scope="row">
+                <input type="text" class="form-control" name="date"
+                       value="<?= $order->deliveryInfo['date'] ?>">
+            </td>
+            <td scope="row">
+                <input type="text" class="form-control" name="time"
+                       value="<?= $order->deliveryInfo['time'] ?>">
+            </td>
+            <td scope="row">
+                <button class="btn btn-primary" name="action" value="update">Update</button>
+            </td>
+        </tr>
+    </form>
     </tbody>
 </table>
 <div class="alert alert-info">

@@ -128,6 +128,11 @@ class OrderMapper extends MainMapper
         return $this->model->updateOrderStatus($order, $status);
     }
 
+    public function updateOrderDelivery($rowID, $type, $date, $time)
+    {
+        return $this->model->updateOrderDelivery($rowID, $type, $date, $time);
+    }
+
     public function deleteOrderProduct($rowID)
     {
         return $this->model->deleteOrderProduct($rowID);
@@ -151,6 +156,7 @@ class OrderMapper extends MainMapper
         }
         return $this->model->updateOrderTotalPrice($orderId, $totalPrice);
     }
+
 
     public function delete(array $info)
     {
@@ -180,7 +186,9 @@ class OrderMapper extends MainMapper
         } elseif ($info['what'] === 'product') {
             $endprice = $info['count'] * $info['price'];
             $this->updateOrderProduct($info['id'], $info['count'], $endprice);
-            return $this->updateOrderTotalPrice($info['order']);
+            $result = $this->updateOrderTotalPrice($info['order']);
+        } elseif ($info['what'] === 'delivery') {
+            $result = $this->updateOrderDelivery($info['id'], $info['type'], $info['date'], $info['time']);
         }
         return $result;
     }

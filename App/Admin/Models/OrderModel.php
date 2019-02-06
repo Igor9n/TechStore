@@ -174,11 +174,18 @@ class OrderModel extends Model
 
     public function updateOrderProductCount($id, $count, $price)
     {
-
         $query = "UPDATE orders_products 
                           SET count = :count, endprice = :price, updated_at = NOW() 
                           WHERE id = :id";
         return $this->queryColumn($query, ['id' => $id, 'count' => $count, 'price' => $price]);
+    }
+
+    public function updateOrderDelivery($id, $type, $date, $time)
+    {
+        $query = "UPDATE orders_delivery 
+                          SET type = :type, date = :date, time = :time, updated_at = NOW() 
+                          WHERE order_id = :id";
+        return $this->queryColumn($query, ['id' => $id, 'type' => $type, 'date' => $date, 'time' => $time]);
     }
 }
 
