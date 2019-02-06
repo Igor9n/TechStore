@@ -12,6 +12,7 @@ namespace App\Admin\Mappers;
 use App\Admin\Data\Order;
 use App\Admin\Main\MainMapper;
 use App\Admin\Models\OrderModel;
+use App\Admin\Validators\OrderValidator;
 
 class OrderMapper extends MainMapper
 {
@@ -22,6 +23,7 @@ class OrderMapper extends MainMapper
         $this->model = new OrderModel();
         $this->mapper = new ItemMapper();
         $this->user = new UserMapper();
+        $this->validator = new OrderValidator();
     }
 
     public function getObject($id, array $array): Order
@@ -113,9 +115,28 @@ class OrderMapper extends MainMapper
         return false;
     }
 
-    public function checkForErrors()
+    public function validateDelivery(array $info)
     {
-        return [];
+        if ($info['date'] !== 'None') {
+            $errors[] = $this->validator->validateDeliveryDate($info['date']);
+        }
+        if ($info['time'] !== 'None') {
+            $errors[] = $this->validator->validateDeliveryTime($info['time']);
+        }
+        return $this->makeSimpleArray($errors);
+    }
+
+    public function checkForErrors(array $info)
+    {
+        $errors = [];
+
+        if ($info['what'] === 'delivery') {
+            $errors['list'] = $this->validateDelivery($info);
+        }
+        $errors['action'] = $info['action'];
+        $errors['what'] = $info['what'];
+
+        return $errors;
     }
 
     public function updateOrderProduct($rowID, $count, $endprice)

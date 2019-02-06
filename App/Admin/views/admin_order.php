@@ -105,7 +105,7 @@
 <table class="table table-bordered">
     <thead>
     <tr>
-        <th scope="row" style="width: 15%;">Delivery type</th>
+        <th scope="row" style="width: 25%;">Delivery type</th>
         <th scope="row">Delivery date</th>
         <th scope="row">Delivery time</th>
         <th scope="row" style="width: 10%">Buttons</th>
@@ -118,8 +118,18 @@
         <input type="hidden" name="id" value="<?= $order->id ?>">
         <tr>
             <td scope="row">
-                <input type="text" class="form-control" name="type"
-                       value="<?= $order->deliveryInfo['type'] ?>">
+                <div class="row">
+                    <div class="col">
+                        <input type="text" class="form-control" value="<?= $order->deliveryInfo['type'] ?>" disabled>
+                    </div>
+                    <div class="col">
+                        <select class="custom-select" name="type">
+                            <option selected value="Courier">Courier</option>
+                            <option value="Self-withdrawal">Self-withdrawal</option>
+                            <option value="Mail">Mail</option>
+                        </select>
+                    </div>
+                </div>
             </td>
             <td scope="row">
                 <input type="text" class="form-control" name="date"
