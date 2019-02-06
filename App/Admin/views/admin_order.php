@@ -2,6 +2,19 @@
 <div class="alert alert-primary">
     <h2 class="mb-1">Order number <?= $order->id ?></h2>
 </div>
+<?php if (!empty($errors['list'])) : ?>
+    <div class="alert alert-danger">
+        <h4 class="mb-1"><?= ucfirst($errors['action']) ?> <strong>'<?= $errors['what'] ?>'</strong>
+            info failed.</strong></h4>
+        <ul>
+            <?php foreach ($errors['list'] as $error) : ?>
+                <li class="mb-0">
+                    <?= $error ?>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+<?php endif; ?>
 <div class="alert alert-info">
     <h4 class="mb-1"><strong>Personal info</strong></h4>
 </div>
