@@ -10,12 +10,14 @@ namespace App\Admin\Mappers;
 
 use App\Admin\Main\MainMapper;
 use App\Admin\Models\UserModel;
+use App\Admin\Validators\UserValidator;
 
 class UserMapper extends MainMapper
 {
     public function __construct()
     {
         $this->model = new UserModel();
+        $this->validator = new UserValidator();
     }
 
     public function updatePersonalInfo(array $info)
@@ -51,8 +53,40 @@ class UserMapper extends MainMapper
         return $result;
     }
 
-    public function checkForErrors()
+    public function validatePersonal(array $data)
     {
-        return [];
+        $errors[] = $this->validator->validateFirstName($data['firstName']);
+        $errors[] = $this->validator->validateLastName($data['lastName']);
+        $errors[] = $this->validator->validatePhone($data['phoneNumber']);
+        if (!empty($data['email'])) {
+            $errors[] = $this->validator->validateEmail($data['email']);
+        }
+        return $this->makeSimpleArray($errors);
+    }
+
+    public function validateAddress(array $data)
+    {
+        $errors[] = $this->validator->validateCity($data['city']);
+        $errors[] = $this->validator->validateAddress($data['address']);
+        $errors[] = $this->validator->validateApartments($data['apartmentsNumbers']);
+        if (!empty($data['zip'])) {
+            $errors[] = $this->validator->validateZip($data['zip']);
+        }
+        return $this->makeSimpleArray($errors);
+    }
+
+    public function checkForErrors(array $info)
+    {
+        $errors = [];
+
+        if ($info['what'] === 'personal') {
+            $errors['list'] = $this->validatePersonal($info);
+        } elseif ($info['what'] === 'address') {
+            $errors['list'] = $this->validateAddress($info);
+        }
+        $errors['action'] = $info['action'];
+        $errors['what'] = $info['what'];
+
+        return $errors;
     }
 }
