@@ -83,7 +83,10 @@ class ItemModel extends Model
     {
         $query = "INSERT INTO products_characteristics (product_id, characteristic_id, value) 
                           VALUES ( :product_id, :characteristic_id, :value)";
-        return $this->queryColumn($query, ['product_id' => $productId, 'characteristic_id' => $characteristicId, 'value' => $value]);
+        return $this->queryColumn(
+            $query,
+            ['product_id' => $productId, 'characteristic_id' => $characteristicId, 'value' => $value]
+        );
     }
 
     public function deleteProductsCharacteristics($id)

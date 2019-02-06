@@ -82,6 +82,15 @@ class AdminMapper extends MainMapper
         if (!$result && ($key === 'items' || $key === 'item')) {
             $result = 'item';
         }
+
+        if (!$result && ($key === 'orders' || $key === 'order')) {
+            $result = 'order';
+        }
+
+        if (!$result && ($key === 'users' || $key === 'user')) {
+            $result = 'user';
+        }
+
         return $result;
     }
 }

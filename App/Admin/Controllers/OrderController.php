@@ -2,26 +2,27 @@
 /**
  * Created by PhpStorm.
  * User: igrec
- * Date: 26.01.19
- * Time: 10:47
+ * Date: 05.02.19
+ * Time: 13:54
  */
 
 namespace App\Admin\Controllers;
 
-
 use App\Admin\Main\MainController;
-use App\Admin\Mappers\CategoryCharacteristicMapper;
-use App\Admin\Mappers\CategoryMapper;
+use App\Admin\Mappers\ItemMapper;
+use App\Admin\Mappers\OrderMapper;
 use Core\CustomRedirect;
 use Core\Request;
 
-class CategoryController extends MainController
+class OrderController extends MainController
 {
+    public $item;
+
     public function __construct()
     {
         parent::__construct();
-        $this->mapper = new CategoryMapper();
-        $this->characteristics = new CategoryCharacteristicMapper();
+        $this->mapper = new OrderMapper();
+        $this->item = new ItemMapper();
     }
 
     public function actionDelete(Request $request)
@@ -41,11 +42,11 @@ class CategoryController extends MainController
 
     public function actionAll()
     {
-        $data['categories'] = $this->mapper->getAllCategories();
-        $data['title'] = 'All categories';
+        $data['orders'] = $this->mapper->getAllOrders();
+        $data['title'] = 'All orders';
         $data['errors'] = $this->getErrors();
 
-        $this->view->render('admin_categories', $data);
+        $this->view->render('admin_orders', $data);
     }
 
     public function actionOne(Request $request)
@@ -56,10 +57,12 @@ class CategoryController extends MainController
             CustomRedirect::redirect('404');
         }
 
+        $data['title'] = 'Order info';
+        $data['order'] = $this->mapper->getOrder($id);
         $data['errors'] = $this->getErrors();
-        $data['info'] = $this->characteristics->getCharacteristicsByCategory($id);
-        $data['title'] = 'Category info';
+        $data['items'] = $this->item->getAllItems();
 
-        $this->view->render('admin_category', $data);
+        $this->view->render('admin_order', $data);
     }
 }
+
