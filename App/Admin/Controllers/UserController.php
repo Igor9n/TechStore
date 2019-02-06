@@ -10,6 +10,7 @@ namespace App\Admin\Controllers;
 
 use App\Admin\Main\MainController;
 use App\Admin\Mappers\UserMapper;
+use Core\Request;
 
 class UserController extends MainController
 {
@@ -19,4 +20,8 @@ class UserController extends MainController
         $this->mapper = new UserMapper();
     }
 
+    public function actionUpdate(Request $request)
+    {
+        $this->chooseMapper($request);
+    }
 }

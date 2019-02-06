@@ -22,6 +22,7 @@ class AdminController extends Controller
     public $categoryCharacteristics;
     public $item;
     public $order;
+    public $user;
 
     public function __construct()
     {
@@ -31,6 +32,7 @@ class AdminController extends Controller
         $this->categories = new CategoryController();
         $this->item = new ItemController();
         $this->order = new OrderController();
+        $this->user = new UserController();
     }
 
     public function try(string $action)

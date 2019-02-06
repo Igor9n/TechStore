@@ -33,10 +33,26 @@ class UserMapper extends MainMapper
     {
         return $this->model->updateAddressInfo(
             $info['id'],
-            $info['firstName'],
-            $info['lastName'],
-            $info['phoneNumber'],
-            $info['email']
+            $info['city'],
+            $info['address'],
+            $info['apartmentsNumbers'],
+            $info['zip']
         );
+    }
+
+    public function update(array $info)
+    {
+        $result = null;
+        if ($info['what'] === 'personal') {
+            $result = $this->updatePersonalInfo($info);
+        } elseif ($info['what'] === 'address') {
+            $result = $this->updateAddressInfo($info);
+        }
+        return $result;
+    }
+
+    public function checkForErrors()
+    {
+        return [];
     }
 }
