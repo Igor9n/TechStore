@@ -31,12 +31,12 @@
         <?php foreach ($orders as $order) : ?>
             <tr>
                 <th scope="row"><?= $order->id ?></th>
-                <?php if ($order->personalInfo['user'] === '0') : ?>
+                <?php if ($order->personalInfo['user_id'] === '0') : ?>
                     <td scope="row"><input type="text" class="form-control" name="title"
                                            value="Unregistered" disabled></td>
                 <?php else : ?>
                     <td scope="row"><input type="text" class="form-control" name="title"
-                                           value="<?= $order->personalInfo['user'] ?>" disabled></td>
+                                           value="<?= $order->personalInfo['user_id'] ?>" disabled></td>
                 <?php endif; ?>
                 <td scope="row"><input type="text" class="form-control" name="serviceTitle"
                                        value="<?= $order->mainInfo['total_price'] ?>" disabled>
@@ -47,6 +47,7 @@
                 <th scope="row">
                     <form class="d-inline" method="POST" action="/admin/update/order">
                         <input type="hidden" name="key" value="info">
+                        <input type="hidden" name="what" value="status">
                         <input type="hidden" name="id" value="<?= $order->id ?>">
                         <div class="row">
                             <div class="col">
@@ -67,6 +68,7 @@
                 <td scope="row">
                     <form class="d-inline" method="POST" action="/admin/delete/order">
                         <input type="hidden" name="key" value="info">
+                        <input type="hidden" name="what" value="order">
                         <input type="hidden" name="id" value="<?= $order->id ?>">
                         <button class="btn btn-primary" name="action" value="delete">Delete</button>
                     </form>
