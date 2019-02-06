@@ -65,9 +65,8 @@ class OrderModel extends Model
 
     public function getPersonalInfoByOrderId($id)
     {
-        $array = [];
         $info = "
-            SELECT first_name,last_name,phone_number,email,user_id 
+            SELECT users_personal.id, first_name,last_name,phone_number,email,user_id 
             FROM users_personal
             JOIN orders
             ON users_personal.id = orders.personal_id
@@ -80,7 +79,7 @@ class OrderModel extends Model
     public function getAddressInfoByOrderId($id)
     {
         $info = "
-            SELECT city,address,apartments_numbers, zip
+            SELECT users_addresses.id, city,address,apartments_numbers, zip
             FROM users_addresses
             JOIN orders
             ON users_addresses.personal_id = orders.personal_id
@@ -94,7 +93,7 @@ class OrderModel extends Model
     {
         $array = [];
         $info = "
-            SELECT type,date,time
+            SELECT orders_delivery.id, type,date,time
             FROM orders_delivery
             JOIN orders
             ON orders_delivery.order_id = orders.id

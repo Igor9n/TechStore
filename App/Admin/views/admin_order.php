@@ -16,7 +16,10 @@
     </tr>
     </thead>
     <tbody>
-    <form method="POST" action="">
+    <form method="POST" action="/admin/update/user">
+        <input type="hidden" name="key" value="info">
+        <input type="hidden" name="what" value="personal">
+        <input type="hidden" name="id" value="<?= $order->personalInfo['id'] ?>">
         <tr>
             <td scope="row">
                 <input type="text" class="form-control" name="firstName"
@@ -55,27 +58,32 @@
     </tr>
     </thead>
     <tbody>
-    <tr>
-        <td scope="row">
-            <input type="text" class="form-control" name="city"
-                   value="<?= $order->addressInfo['city'] ?>">
-        </td>
-        <td scope="row">
-            <input type="text" class="form-control" name="address"
-                   value="<?= $order->addressInfo['address'] ?>">
-        </td>
-        <td scope="row">
-            <input type="text" class="form-control" name="apartmentsNumbers"
-                   value="<?= $order->addressInfo['apartments_numbers'] ?>">
-        </td>
-        <td scope="row">
-            <input type="text" class="form-control" name="zip"
-                   value="<?= $order->addressInfo['zip'] ?>">
-        </td>
-        <td scope="row">
-            <button class="btn btn-primary">Update</button>
-        </td>
-    </tr>
+    <form method="POST" action="/admin/update/user">
+        <input type="hidden" name="key" value="info">
+        <input type="hidden" name="what" value="address">
+        <input type="hidden" name="id" value="<?= $order->addressInfo['id'] ?>">
+        <tr>
+            <td scope="row">
+                <input type="text" class="form-control" name="city"
+                       value="<?= $order->addressInfo['city'] ?>">
+            </td>
+            <td scope="row">
+                <input type="text" class="form-control" name="address"
+                       value="<?= $order->addressInfo['address'] ?>">
+            </td>
+            <td scope="row">
+                <input type="text" class="form-control" name="apartmentsNumbers"
+                       value="<?= $order->addressInfo['apartments_numbers'] ?>">
+            </td>
+            <td scope="row">
+                <input type="text" class="form-control" name="zip"
+                       value="<?= $order->addressInfo['zip'] ?>">
+            </td>
+            <td scope="row">
+                <button class="btn btn-primary" name="action" value="update">Update</button>
+            </td>
+        </tr>
+    </form>
     </tbody>
 </table>
 <div class="alert alert-info">
