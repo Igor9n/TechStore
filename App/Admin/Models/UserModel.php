@@ -79,4 +79,44 @@ class UserModel extends Model
         }
         return $result;
     }
+
+    public function deleteUser($id)
+    {
+        $query = "DELETE FROM users WHERE id = :id";
+        return $this->queryColumn($query, ['id' => $id]);
+    }
+
+    public function deletePersonal($id)
+    {
+        $query = "DELETE FROM users_personal WHERE id = :id";
+        return $this->queryColumn($query, ['id' => $id]);
+    }
+
+    public function deleteAddress($id)
+    {
+        $query = "DELETE FROM users_addresses WHERE id = :id";
+        return $this->queryColumn($query, ['id' => $id]);
+    }
+
+    public function updateUserEmail($id, $email)
+    {
+        $query = "UPDATE users 
+                          SET email = :email,  updated_at = NOW() 
+                          WHERE id = :id";
+        return $this->queryColumn($query, [
+            'id' => $id,
+            'email' => $email
+        ]);
+    }
+
+    public function updatePersonalUserID($id, $user)
+    {
+        $query = "UPDATE users_personal
+                          SET user_id = :user,  updated_at = NOW() 
+                          WHERE id = :id";
+        return $this->queryColumn($query, [
+            'id' => $id,
+            'user' => $user
+        ]);
+    }
 }

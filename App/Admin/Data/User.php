@@ -28,5 +28,4 @@ class User
     {
         return new self($id, $login, $email, $personalList);
     }
-
 }

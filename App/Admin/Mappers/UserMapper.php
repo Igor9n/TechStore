@@ -60,4 +60,19 @@ class UserMapper extends MainMapper
         }
         return $array;
     }
+
+    public function update(array $info)
+    {
+        return $this->model->updateUserEmail($info['id'], $info['email']);
+    }
+
+    public function delete(array $info)
+    {
+        return $this->model->deleteUser($info['id']);
+    }
+
+    public function checkForErrors()
+    {
+        return [];
+    }
 }
