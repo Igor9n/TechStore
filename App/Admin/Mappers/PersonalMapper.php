@@ -73,6 +73,11 @@ class PersonalMapper extends MainMapper
         );
     }
 
+    public function updateUserID(array $info)
+    {
+        return $this->model->updatePersonalUserID($info['id'], $info['user']);
+    }
+
     public function update(array $info)
     {
         $result = null;
@@ -80,8 +85,18 @@ class PersonalMapper extends MainMapper
             $result = $this->updatePersonalInfo($info);
         } elseif ($info['what'] === 'address') {
             $result = $this->updateAddressInfo($info);
+        } elseif ($info['what'] === 'user') {
+            $result = $this->updateUserID($info);
         }
         return $result;
+    }
+
+    public function delete(array $info)
+    {
+        return [
+            $this->model->deleteAddress($info['addressId']),
+            $this->model->deletePersonal($info['id'])
+        ];
     }
 
     public function validatePersonal(array $data)

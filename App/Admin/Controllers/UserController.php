@@ -22,6 +22,11 @@ class UserController extends MainController
         $this->characteristics = new PersonalMapper();
     }
 
+    public function actionDelete(Request $request)
+    {
+        $this->chooseMapper($request);
+    }
+
     public function actionUpdate(Request $request)
     {
         $this->chooseMapper($request);
