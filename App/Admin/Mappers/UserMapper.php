@@ -71,8 +71,18 @@ class UserMapper extends MainMapper
         return $this->model->deleteUser($info['id']);
     }
 
-    public function checkForErrors()
+    public function validateData(array $data)
     {
-        return [];
+        $errors[] = $this->validator->validateEmail($data['email']);
+        return $this->makeSimpleArray($errors);
+    }
+
+    public function checkForErrors(array $info)
+    {
+        $errors = [];
+        $errors['list'] = $this->validateData($info);
+        $errors['action'] = $info['action'];
+        $errors['what'] = $info['what'];
+        return $errors;
     }
 }
