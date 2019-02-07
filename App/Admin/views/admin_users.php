@@ -4,6 +4,19 @@
     <div class="alert alert-secondary">
         <h4 class="alert-heading">All <strong>users</strong> info</h4>
     </div>
+    <?php if (!empty($errors['list'])) : ?>
+        <div class="alert alert-danger">
+            <h4 class="mb-1"><?= ucfirst($errors['action']) ?> <strong>'<?= $errors['what'] ?>'</strong>
+                info failed.</strong></h4>
+            <ul>
+                <?php foreach ($errors['list'] as $error) : ?>
+                    <li class="mb-0">
+                        <?= $error ?>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    <?php endif; ?>
     <div class="row">
         <div class="col-2">
             <ul class="nav nav-pills flex-column">
@@ -45,13 +58,22 @@
                                 <td scope="row">
                                     <form method="POST" action="/admin/update/user">
                                         <input type="hidden" name="key" value="info">
+                                        <input type="hidden" name="what" value="email">
                                         <input type="hidden" name="id" value="<?= $user->id ?>">
                                         <div class="row">
-                                            <div class="col-8">
-                                                <label for="email" hidden></label>
-                                                <input class="form-control" type="text" id="email" name="email"
-                                                       value="<?= $user->email ?>">
-                                            </div>
+                                            <?php if ($user->login === 'unregistered') : ?>
+                                                <div class="col-8">
+                                                    <label for="email" hidden></label>
+                                                    <input class="form-control" type="text" id="email" name="email"
+                                                           value="<?= $user->email ?>" disabled>
+                                                </div>
+                                            <?php else : ?>
+                                                <div class="col-8">
+                                                    <label for="email" hidden></label>
+                                                    <input class="form-control" type="text" id="email" name="email"
+                                                           value="<?= $user->email ?>">
+                                                </div>
+                                            <?php endif; ?>
                                             <div class="col">
                                                 <button class="btn btn-primary" name="action" value="update">
                                                     Update user email
