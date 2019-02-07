@@ -1,4 +1,6 @@
-<?php if (empty($users)) : ?>
+<?php /**@var $user \App\Admin\Data\User */ ?>
+<?php /**@var $personal \App\Admin\Data\Personal */ ?>
+<?php if (!empty($users)) : ?>
     <div class="alert alert-secondary">
         <h4 class="alert-heading">All <strong>users</strong> info</h4>
     </div>
@@ -24,48 +26,72 @@
                             <th scope="row" style="width: 10%">User ID</th>
                             <th scope="row" style="width: 10%">User LOGIN</th>
                             <th scope="row" style="width: 40%">User EMAIL</th>
-                            <th scope="row">User PERSONALS</th>
+                            <th scope="row">User PERSONALS as ORDERS</th>
                             <th scope="row">Buttons</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <th scope="row">
-                                <label for="id" hidden></label>
-                                <input class="form-control" type="text" id="id" value="ID" disabled>
-                            </th>
-                            <td scope="row">
-                                <label for="login" hidden></label>
-                                <input class="form-control" type="text" id="login" value="LOGIN" disabled>
-                            </td>
-                            <td scope="row">
-                                <form method="POST" action="">
+                        <?php foreach ($users as $user) : ?>
+                            <tr>
+                                <th scope="row">
+                                    <label for="id" hidden></label>
+                                    <input class="form-control" type="text" id="id" value="<?= $user->id ?>" disabled>
+                                </th>
+                                <td scope="row">
+                                    <label for="login" hidden></label>
+                                    <input class="form-control" type="text" id="login" value="<?= $user->login ?>"
+                                           disabled>
+                                </td>
+                                <td scope="row">
+                                    <form method="POST" action="">
+                                        <div class="row">
+                                            <div class="col-8">
+                                                <label for="email" hidden></label>
+                                                <input class="form-control" type="text" id="email" name="email"
+                                                       value="<?= $user->email ?>">
+                                            </div>
+                                            <div class="col">
+                                                <button class="btn btn-primary">Update user email</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </td>
+                                <td scope="row">
                                     <div class="row">
-                                        <div class="col-8">
-                                            <label for="email" hidden></label>
-                                            <input class="form-control" type="text" id="email" name="email"
-                                                   value="EMAIL">
-                                        </div>
-                                        <div class="col">
-                                            <button class="btn btn-primary">Update user email</button>
-                                        </div>
+                                        <?php if (empty($user->personalList)) : ?>
+                                            <div class="col">
+                                                <label for="login" hidden></label>
+                                                <input class="form-control" type="text" id="login"
+                                                       value="You haven't orders"
+                                                       disabled>
+                                            </div>
+                                        <?php else : ?>
+                                            <div class="col-7">
+                                                <select class="custom-select" name="personal">
+                                                    <?php foreach ($user->personalList as $personal) : ?>
+                                                        <option value="<?= $personal->id ?>">
+                                                            <?= $personal->first ?> <?= $personal->last ?>
+                                                        </option>
+                                                    <?php endforeach; ?>
+                                                </select>
+                                            </div>
+                                            <div class="col">
+                                                <button class="btn btn-primary">Unset</button>
+                                            </div>
+                                        <?php endif; ?>
                                     </div>
-                                </form>
-                            </td>
-                            <td scope="row">
-                                <div class="row">
-                                    <div class="col-7">
-                                        <input class="form-control" type="text" name="email" value="PERSONALS LIST">
-                                    </div>
-                                    <div class="col">
-                                        <button class="btn btn-primary">Unset</button>
-                                    </div>
-                                </div>
-                            </td>
-                            <td scope="row">
-                                <button class="btn btn-primary">Delete user</button>
-                            </td>
-                        </tr>
+                                </td>
+                                <?php if (empty($user->personalList)) : ?>
+                                    <td scope="row">
+                                        <button class="btn btn-primary">Delete user</button>
+                                    </td>
+                                <?php else : ?>
+                                    <td scope="row">
+                                        <button class="btn btn-primary" disabled>Delete user</button>
+                                    </td>
+                                <?php endif; ?>
+                            </tr>
+                        <?php endforeach; ?>
                         </tbody>
                     </table>
                 </div>
@@ -73,40 +99,77 @@
                     <table class="table table-bordered">
                         <thead>
                         <tr>
-                            <th scope="row">Personal ID</th>
+                            <th scope="row" style="width: 10%">Personal ID</th>
+                            <th scope="row">Personal NAME</th>
                             <th scope="row">User LOGIN</th>
                             <th scope="row">Buttons</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <th scope="row">
-                                <label for="id" hidden></label>
-                                <input class="form-control" type="text" id="id" value="ID" disabled>
-                            </th>
-                            <td scope="row">
-                                <div class="row">
+                        <?php foreach ($personals as $personal) : ?>
+                            <tr>
+                                <th scope="row">
+                                    <label for="id" hidden></label>
+                                    <input class="form-control" type="text" id="id" value="<?= $personal->id ?>"
+                                           disabled>
+                                </th>
+                                <td scope="row">
                                     <div class="col">
                                         <label for="user" hidden></label>
-                                        <input class="form-control" type="text" id="user" value="User LOGIN" disabled>
+                                        <input class="form-control" type="text" id="user"
+                                               value="<?= $personal->first ?> <?= $personal->last ?>"
+                                               disabled>
                                     </div>
-                                    <div class="col">
-                                        <label for="user" hidden></label>
-                                        <input class="form-control" type="text" id="user" value="USERS LIST">
+                                </td>
+                                <td scope="row">
+                                    <div class="row">
+                                        <div class="col">
+                                            <label for="user" hidden></label>
+                                            <input class="form-control" type="text" id="user"
+                                                   value="<?= $personal->userLogin ?>"
+                                                   disabled>
+                                        </div>
+                                        <div class="col">
+                                            <label for="user" hidden></label>
+                                            <select class="custom-select" name="user" id="user">
+                                                <?php foreach ($users as $user) : ?>
+                                                    <?php if ($user->id === '0') {
+                                                        continue;
+                                                    } ?>
+                                                    <option value="<?= $user->id ?>">
+                                                        <?= $user->login ?>
+                                                    </option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+                                        <div class="col">
+                                            <button class="btn btn-primary">Set to Chosen user</button>
+                                        </div>
+                                        <?php if ($personal->userId === '0') : ?>
+                                            <div class="col">
+                                                <button class="btn btn-primary" disabled>Set to Unregistered</button>
+                                            </div>
+                                        <?php else : ?>
+                                            <div class="col">
+                                                <button class="btn btn-primary">Set to Unregistered</button>
+                                            </div>
+                                        <?php endif; ?>
                                     </div>
-                                    <div class="col">
-                                        <button class="btn btn-primary">Set to Chosen user</button>
-                                    </div>
-                                    <div class="col">
-                                        <button class="btn btn-primary">Set to Unregistered</button>
-                                    </div>
-                                </div>
-                            </td>
-                            <td scope="row">
-                                <button class="btn btn-primary">Delete</button>
-                                <button class="btn btn-primary">To order</button>
-                            </td>
-                        </tr>
+                                </td>
+                                <?php if ($personal->order) : ?>
+                                    <td scope="row">
+                                        <button class="btn btn-primary" disabled>Delete</button>
+                                        <a class="btn btn-primary" href="/admin/one/order?id=<?= $personal->order ?>">To
+                                            order</a>
+                                    </td>
+                                <?php else : ?>
+                                    <td scope="row">
+                                        <button class="btn btn-primary">Delete</button>
+                                        <button class="btn btn-primary" disabled>Not in use</button>
+                                    </td>
+                                <?php endif; ?>
+                            </tr>
+                        <?php endforeach; ?>
                         </tbody>
                     </table>
                 </div>
