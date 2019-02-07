@@ -24,6 +24,9 @@
                 <li class="nav-item">
                     <a class="btn btn-primary" href="/admin/all/orders">Orders</a>
                 </li>
+                <li class="nav-item">
+                    <a class="btn btn-primary" href="/admin/all/users">Users</a>
+                </li>
             <?php endif; ?>
         </ul>
         <div class="col-4 row justify-content-end form-around">

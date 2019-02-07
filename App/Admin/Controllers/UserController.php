@@ -24,4 +24,14 @@ class UserController extends MainController
     {
         $this->chooseMapper($request);
     }
+
+    public function actionAll()
+    {
+//        $data['items'] = $this->mapper->getAllItems();
+        $data['title'] = 'All users';
+//        $data['users'] = $this->categories->getAllCategories();
+        $data['errors'] = $this->getErrors();
+
+        $this->view->render('admin_users', $data);
+    }
 }

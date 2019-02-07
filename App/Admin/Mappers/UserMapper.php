@@ -8,6 +8,7 @@
 
 namespace App\Admin\Mappers;
 
+use App\Admin\Data\User;
 use App\Admin\Main\MainMapper;
 use App\Admin\Models\UserModel;
 use App\Admin\Validators\UserValidator;
@@ -18,6 +19,21 @@ class UserMapper extends MainMapper
     {
         $this->model = new UserModel();
         $this->validator = new UserValidator();
+    }
+
+    public function getObject($id, array $array): User
+    {
+        return User::getObject(
+            $id,
+            $array['login'],
+            $array['email'],
+            $array['personalList']
+        );
+    }
+
+    public function getUserObject($id)
+    {
+
     }
 
     public function updatePersonalInfo(array $info)
