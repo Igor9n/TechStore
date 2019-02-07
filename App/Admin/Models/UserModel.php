@@ -31,4 +31,28 @@ class UserModel extends Model
             'id' => $id, 'city' => $city, 'address' => $address, 'apartments' => $apartments, 'zip' => $zip
         ]);
     }
+
+    public function getUsersIDList()
+    {
+        $query = " SELECT id FROM users";
+        return $this->queryList($query, 'id');
+    }
+
+    public function getPersonalIdListByUser($id)
+    {
+        $query = " SELECT id FROM users_personal WHERE user_id = :id";
+        return $this->queryList($query, 'id', ['id' => $id]);
+    }
+
+    public function getFullPersonalInfo($id)
+    {
+        $query = "SELECT id, first_name, last_name, phone_number, email, user_id FROM users_personal WHERE id = :id";
+        return $this->queryRow($query, ['id' => $id]);
+    }
+
+    public function getFullAddressInfo($id)
+    {
+        $query = "SELECT id, city, address, apartments_numbers, zip, personal_id FROM users_addresses WHERE personal_id = :id";
+        return $this->queryRow($query, ['id' => $id]);
+    }
 }
