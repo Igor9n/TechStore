@@ -3,7 +3,7 @@
         <div class="col-sm-2">
             <ul class="nav nav-pills flex-column">
                 <li class="nav-item">
-                    <a class="nav-link show active alert alert-primary" data-toggle="tab"
+                    <a class="nav-link show active alert alert-secondary" data-toggle="tab"
                        href="#0">All products</a>
                 </li>
                 <?php foreach ($categories as $category) : ?>

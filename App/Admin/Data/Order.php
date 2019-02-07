@@ -18,7 +18,7 @@ class Order
     public $deliveryInfo;
     public $productsInfo;
 
-    public function __construct($id, array $main, array $personal, array $address, array $delivery, array $products)
+    protected function __construct($id, array $main, array $personal, array $address, array $delivery, array $products)
     {
         $this->id = $id;
         $this->mainInfo = $main;
