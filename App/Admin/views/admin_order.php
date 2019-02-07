@@ -30,7 +30,7 @@
     </thead>
     <tbody>
     <form method="POST" action="/admin/update/user">
-        <input type="hidden" name="key" value="info">
+        <input type="hidden" name="key" value="characteristics">
         <input type="hidden" name="what" value="personal">
         <input type="hidden" name="id" value="<?= $order->personalInfo['id'] ?>">
         <tr>
@@ -72,7 +72,7 @@
     </thead>
     <tbody>
     <form method="POST" action="/admin/update/user">
-        <input type="hidden" name="key" value="info">
+        <input type="hidden" name="key" value="characteristics">
         <input type="hidden" name="what" value="address">
         <input type="hidden" name="id" value="<?= $order->addressInfo['id'] ?>">
         <tr>

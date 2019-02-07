@@ -15,10 +15,13 @@ use App\Admin\Validators\UserValidator;
 
 class UserMapper extends MainMapper
 {
+    public $personal;
+
     public function __construct()
     {
         $this->model = new UserModel();
         $this->validator = new UserValidator();
+        $this->personal = new PersonalMapper();
     }
 
     public function getObject($id, array $array): User
@@ -31,78 +34,30 @@ class UserMapper extends MainMapper
         );
     }
 
-    public function getUserObject($id)
+    public function getUserObject($id): User
     {
+        $info = $this->model->getFullUserInfo($id);
+        $personals = $this->model->getPersonalIdListByUser($id);
 
-    }
-
-    public function updatePersonalInfo(array $info)
-    {
-        return $this->model->updatePersonalInfo(
-            $info['id'],
-            $info['firstName'],
-            $info['lastName'],
-            $info['phoneNumber'],
-            $info['email']
-        );
-    }
-
-    public function updateAddressInfo(array $info)
-    {
-        return $this->model->updateAddressInfo(
-            $info['id'],
-            $info['city'],
-            $info['address'],
-            $info['apartmentsNumbers'],
-            $info['zip']
-        );
-    }
-
-    public function update(array $info)
-    {
-        $result = null;
-        if ($info['what'] === 'personal') {
-            $result = $this->updatePersonalInfo($info);
-        } elseif ($info['what'] === 'address') {
-            $result = $this->updateAddressInfo($info);
+        $array = [];
+        foreach ($personals as $personal) {
+            $array[] = $this->personal->getPersonalObject($personal);
         }
-        return $result;
+
+        return $this->getObject($id, [
+            'login' => $info['login'],
+            'email' => $info['email'],
+            'personalList' => $array
+        ]);
     }
 
-    public function validatePersonal(array $data)
+    public function getAllUsers()
     {
-        $errors[] = $this->validator->validateFirstName($data['firstName']);
-        $errors[] = $this->validator->validateLastName($data['lastName']);
-        $errors[] = $this->validator->validatePhone($data['phoneNumber']);
-        if (!empty($data['email'])) {
-            $errors[] = $this->validator->validateEmail($data['email']);
+        $array = [];
+        $list = $this->model->getUsersIDList();
+        foreach ($list as $id) {
+            $array[] = $this->getUserObject($id);
         }
-        return $this->makeSimpleArray($errors);
-    }
-
-    public function validateAddress(array $data)
-    {
-        $errors[] = $this->validator->validateCity($data['city']);
-        $errors[] = $this->validator->validateAddress($data['address']);
-        $errors[] = $this->validator->validateApartments($data['apartmentsNumbers']);
-        if (!empty($data['zip'])) {
-            $errors[] = $this->validator->validateZip($data['zip']);
-        }
-        return $this->makeSimpleArray($errors);
-    }
-
-    public function checkForErrors(array $info)
-    {
-        $errors = [];
-
-        if ($info['what'] === 'personal') {
-            $errors['list'] = $this->validatePersonal($info);
-        } elseif ($info['what'] === 'address') {
-            $errors['list'] = $this->validateAddress($info);
-        }
-        $errors['action'] = $info['action'];
-        $errors['what'] = $info['what'];
-
-        return $errors;
+        return $array;
     }
 }

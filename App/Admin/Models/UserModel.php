@@ -38,6 +38,12 @@ class UserModel extends Model
         return $this->queryList($query, 'id');
     }
 
+    public function getPersonalIdList()
+    {
+        $query = " SELECT id FROM users_personal";
+        return $this->queryList($query, 'id');
+    }
+
     public function getPersonalIdListByUser($id)
     {
         $query = " SELECT id FROM users_personal WHERE user_id = :id";
@@ -50,9 +56,27 @@ class UserModel extends Model
         return $this->queryRow($query, ['id' => $id]);
     }
 
+    public function getFullUserInfo($id)
+    {
+        $query = "SELECT id, login, email FROM users WHERE id = :id";
+        return $this->queryRow($query, ['id' => $id]);
+    }
+
     public function getFullAddressInfo($id)
     {
         $query = "SELECT id, city, address, apartments_numbers, zip, personal_id FROM users_addresses WHERE personal_id = :id";
         return $this->queryRow($query, ['id' => $id]);
+    }
+
+    public function getPersonalOrderId($id)
+    {
+        $result = false;
+        $query = "SELECT id FROM orders WHERE personal_id = :id LIMIT 1";
+        $order = $this->queryColumn($query, ['id' => $id], 0);
+
+        if ($order) {
+            $result = $order;
+        }
+        return $result;
     }
 }
