@@ -8,12 +8,19 @@
 
 namespace Core;
 
+use Core\Mailer\Mailer;
 
 class Mapper
 {
+    protected $mailer;
     protected $model;
     protected $mapper;
     protected $validator;
+
+    public function __construct()
+    {
+        $this->mailer = new Mailer(TECH_STORE);
+    }
 
     protected function makeSimpleArray($array)
     {

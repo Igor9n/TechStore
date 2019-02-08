@@ -17,42 +17,42 @@ class MainController extends Controller
     public function actionIndex()
     {
         $data['title'] = 'Main page';
-        $this->view->render('index', $data);
+        $this->view->initView('index', $data);
     }
 
     public function actionAbout()
     {
         $data['title'] = 'Our company';
-        $this->view->render('about', $data);
+        $this->view->initView('about', $data);
     }
 
     public function actionVacancies()
     {
         $data['title'] = 'Vacancies';
-        $this->view->render('vacancies', $data);
+        $this->view->initView('vacancies', $data);
     }
 
     public function actionDelivery()
     {
         $data['title'] = 'Delivery';
-        $this->view->render('delivery', $data);
+        $this->view->initView('delivery', $data);
     }
 
     public function actionPayment()
     {
         $data['title'] = 'Payment types';
-        $this->view->render('payment', $data);
+        $this->view->initView('payment', $data);
     }
 
     public function actionGuarantee()
     {
         $data['title'] = 'Guarantee';
-        $this->view->render('guarantee', $data);
+        $this->view->initView('guarantee', $data);
     }
 
     public function actionContact()
     {
         $data['title'] = 'Our contacts';
-        $this->view->render('contact', $data);
+        $this->view->initView('contact', $data);
     }
 }

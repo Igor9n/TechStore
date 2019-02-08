@@ -8,18 +8,28 @@ class View
     protected $content;
     protected $elements;
 
-    public function render($content, $data = [], $template = 'template', $elements = USER_ELEMENTS)
+    public function __construct($template = 'template', $templatePath = USER_TEMPLATE, $elements = USER_ELEMENTS)
     {
         $this->setLayoutElements($elements);
-        $this->setContent($content, USER_VIEWS, $data);
-        $this->setTemplate($template, USER_TEMPLATE);
+        $this->setTemplate($template, $templatePath);
+    }
+
+    public function initView($content, $data = [])
+    {
+        $view = $this->render($content, $data);
+        Response::sendResponse($view);
+    }
+
+    public function render($content, $data = [], $viewPath = USER_VIEWS)
+    {
+        $this->setContent($content, $viewPath, $data);
 
         ob_start();
         extract($data);
         include $this->getTemplate();
         $view = ob_get_clean();
 
-        Response::sendResponse($view);
+        return $view;
     }
 
     public function getContent()

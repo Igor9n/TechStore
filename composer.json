@@ -9,7 +9,8 @@
     ],
     "require": {
         "monolog/monolog": "^1.24",
-        "stereolog/stereolog": "^1.0"
+        "stereolog/stereolog": "^1.0",
+        "swiftmailer/swiftmailer": "^6.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^7"

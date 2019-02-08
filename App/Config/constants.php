@@ -43,3 +43,4 @@ define("ADMIN_NAMESPACE", '\App\Admin\Controllers\\');
 define("USER_NAMESPACE", '\App\User\Controllers\\');
 
 define("PHP_EXT", '.php');
+define("TECH_STORE", ['igr2007forever@gmail.com' => 'TechStore']);

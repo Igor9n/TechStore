@@ -28,7 +28,7 @@ class ItemController extends MainController
         $data['info'] = $this->mapper->getItemObject($id);
         $data['title'] = $data['info']->title;
 
-        $this->view->render('item', $data);
+        $this->view->initView('item', $data);
     }
 
     public function actionAdd(Request $request)

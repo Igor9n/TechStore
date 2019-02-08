@@ -69,6 +69,8 @@
                     <form class="d-inline" method="POST" action="/admin/delete/order">
                         <input type="hidden" name="key" value="info">
                         <input type="hidden" name="what" value="order">
+                        <input type="hidden" name="personalId" value="<?= $order->personalInfo['id'] ?>">
+                        <input type="hidden" name="addressId" value="<?= $order->addressInfo['id'] ?>">
                         <input type="hidden" name="id" value="<?= $order->id ?>">
                         <button class="btn btn-primary" name="action" value="delete">Delete</button>
                     </form>

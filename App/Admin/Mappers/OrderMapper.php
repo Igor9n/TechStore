@@ -17,6 +17,7 @@ use App\Admin\Validators\OrderValidator;
 class OrderMapper extends MainMapper
 {
     public $user;
+    public $personal;
 
     public function __construct()
     {
@@ -24,6 +25,7 @@ class OrderMapper extends MainMapper
         $this->mapper = new ItemMapper();
         $this->user = new UserMapper();
         $this->validator = new OrderValidator();
+        $this->personal = new PersonalMapper();
     }
 
     public function getObject($id, array $array): Order
@@ -159,12 +161,16 @@ class OrderMapper extends MainMapper
         return $this->model->deleteOrderProduct($rowID);
     }
 
-    public function deleteOrder($id)
+    public function deleteOrder(array $info)
     {
         return [
-            $this->model->deleteOrderProducts($id),
-            $this->model->deleteOrderDelivery($id),
-            $this->model->deleteOrder($id)
+            $this->model->deleteOrderProducts($info['id']),
+            $this->model->deleteOrderDelivery($info['id']),
+            $this->model->deleteOrder($info['id']),
+            $this->personal->delete([
+                'id' => $info['personalId'],
+                'addressId' => $info['addressId']
+            ])
         ];
     }
 
@@ -183,7 +189,7 @@ class OrderMapper extends MainMapper
     {
         $result = null;
         if ($info['what'] === 'order') {
-            $result = $this->deleteOrder($info['id']);
+            $result = $this->deleteOrder($info);
         } elseif ($info['what'] === 'product') {
             $this->deleteOrderProduct($info['id']);
             $result = $this->updateOrderTotalPrice($info['order']);

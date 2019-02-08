@@ -69,7 +69,7 @@ class CartController extends Controller
                 Session::unset('errors');
             }
         }
-        $this->view->render('checkout', $data);
+        $this->view->initView('checkout', $data);
     }
 
     public function actionClean()
@@ -122,6 +122,6 @@ class CartController extends Controller
 
         $data['cart'] = Session::get('cart');
 
-        $this->view->render('cart', $data);
+        $this->view->initView('cart', $data);
     }
 }
