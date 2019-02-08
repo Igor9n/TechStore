@@ -18,6 +18,7 @@ class UserMapper extends Mapper
 {
     public function __construct()
     {
+        parent::__construct();
         $this->model = new UserModel();
         $this->validator = new UserValidator();
     }
@@ -92,6 +93,8 @@ class UserMapper extends Mapper
 
     public function submitUserInfo(User $object)
     {
+        $this->mailer->send(['user' => $object], REGISTRATION, [$object->email => $object->login]);
+
         return $this->model->registerUser(
             $object->login,
             $object->password,
@@ -101,17 +104,17 @@ class UserMapper extends Mapper
 
     public function loginUser(User $user)
     {
-            Session::additionalSessionStart();
-            $this->addId($user);
-            $user->clearPassword();
-            Session::set('user', $user);
+        Session::additionalSessionStart();
+        $this->addId($user);
+        $user->clearPassword();
+        Session::set('user', $user);
 
-            return [];
+        return [];
     }
 
     public function registerUser(User $user)
     {
-            Session::set('registered', $this->submitUserInfo($user));
-            return [];
+        Session::set('registered', $this->submitUserInfo($user));
+        return [];
     }
 }

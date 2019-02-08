@@ -61,7 +61,7 @@ class UserController extends Controller
 
         $data['title'] = 'Login';
 
-        $this->view->render('login', $data);
+        $this->view->initView('login', $data);
     }
 
     public function actionRegistration(Request $request)
@@ -83,7 +83,7 @@ class UserController extends Controller
             Session::unset(REGISTERED);
         }
 
-        $this->view->render('registration', $data);
+        $this->view->initView('registration', $data);
     }
 
     public function actionLogout()

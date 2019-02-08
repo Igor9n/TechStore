@@ -17,6 +17,7 @@ class CartMapper extends Mapper
 {
     public function __construct()
     {
+        parent::__construct();
         $this->model = new CartModel();
         $this->validator = new CartValidator();
     }
@@ -96,6 +97,14 @@ class CartMapper extends Mapper
         $this->model->submitAddress($personalSubmit, $object->addressArray);
         $this->model->submitOrderDelivery($orderSubmit);
         $this->model->submitOrderProducts($orderSubmit, $object->itemsArray);
+
+        if ($object->personalArray['email']) {
+            $this->mailer->send(['cart' => $object, 'order' => $orderSubmit], ORDER, [
+                $object->personalArray['email']
+                =>
+                    $object->personalArray['firstName'] . ' ' . $object->personalArray['lastName']
+            ]);
+        }
         return $orderSubmit;
     }
 
