@@ -39,7 +39,7 @@ class OrderController extends Controller
         $data['info'] = Session::get('user');
         $data['title'] = 'Orders';
 
-        $this->view->render('orders', $data);
+        $this->view->initView('orders', $data);
     }
 
     public function actionView(Request $request)
@@ -60,7 +60,7 @@ class OrderController extends Controller
             $data['info'] = $order;
         }
 
-        $this->view->render('order', $data);
+        $this->view->initView('order', $data);
     }
 
     public function actionCheck(Request $request)
@@ -70,6 +70,6 @@ class OrderController extends Controller
         $data['info'] = $this->mapper->getShortenOrder($data['orderId']);
 
         $data['title'] = 'Order status';
-        $this->view->render('check', $data);
+        $this->view->initView('check', $data);
     }
 }

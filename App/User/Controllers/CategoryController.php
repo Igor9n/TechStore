@@ -34,6 +34,6 @@ class CategoryController extends Controller
         }
 
         $data['title'] = $data[CATEGORY]->title;
-        $this->view->render('category', $data);
+        $this->view->initView('category', $data);
     }
 }
