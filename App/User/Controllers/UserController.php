@@ -8,7 +8,7 @@
 
 namespace App\User\Controllers;
 
-use App\Classes\Session;
+use Core\Session;
 use Core\Controller;
 use App\User\Mappers\UserMapper;
 use App\User\Models\OrderModel;

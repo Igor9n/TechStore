@@ -8,8 +8,7 @@
 
 namespace App\User\Controllers;
 
-use App\Classes\Session;
-use App\User\Data\Item;
+use Core\Session;
 use Core\Controller;
 use App\User\Mappers\CartMapper;
 use App\User\Models\CartModel;

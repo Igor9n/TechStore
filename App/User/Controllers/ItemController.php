@@ -2,7 +2,7 @@
 
 namespace App\User\Controllers;
 
-use App\Classes\Session;
+use Core\Session;
 use Core\CustomRedirect;
 use App\User\Mappers\ItemMapper;
 use App\User\Models\ItemModel;
@@ -39,7 +39,6 @@ class ItemController extends MainController
             CustomRedirect::redirect('404');
         }
 
-        Session::additionalSessionStart();
         Session::set('item', $this->mapper->getItemObject($id));
         CustomRedirect::redirect('cart/add');
     }

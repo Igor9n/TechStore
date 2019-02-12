@@ -18,6 +18,7 @@ class Request
     protected $postParams;
     protected $namespace;
     protected $path;
+    private $session;
 
     public function __construct($controller, $action, $key, $query)
     {
@@ -28,6 +29,12 @@ class Request
         $this->setParams($query);
         $this->setPostParams();
         $this->setPath();
+        $this->setSession();
+    }
+
+    public function setSession()
+    {
+//        $this->session = Session::getObject();
     }
 
     public static function setData($path, $query): Request

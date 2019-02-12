@@ -8,7 +8,7 @@
 
 namespace App\User\Mappers;
 
-use App\Classes\Session;
+use Core\Session;
 use App\User\Validators\UserValidator;
 use Core\Mapper;
 use App\User\Data\User;
@@ -104,7 +104,6 @@ class UserMapper extends Mapper
 
     public function loginUser(User $user)
     {
-        Session::additionalSessionStart();
         $this->addId($user);
         $user->clearPassword();
         Session::set('user', $user);

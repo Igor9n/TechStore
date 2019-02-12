@@ -43,7 +43,6 @@ class Route
         }
 
         $action = $request->getActionName();
-
         if ($var && method_exists($controller, $action)) {
             $controller->$action($request);
         } else {

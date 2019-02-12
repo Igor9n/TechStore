@@ -9,7 +9,7 @@
 namespace App\Admin\Main;
 
 
-use App\Classes\Session;
+use Core\Session;
 use Core\Controller;
 use Core\CustomRedirect;
 use Core\Request;

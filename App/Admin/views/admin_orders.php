@@ -83,7 +83,7 @@
 <?php else : ?>
     <div class="alert alert-warning">
         <h4 class="alert-heading">Orders list is <strong>empty.</strong></h4>
-        <p class="mb-0">Try to buy <a class="btn btn-secondary" href="category/view?id=all">something</a></p>
+        <p class="mb-0">Try to buy <a class="btn btn-secondary" href="/category/view?id=all">something</a></p>
     </div>
 <?php endif; ?>
 

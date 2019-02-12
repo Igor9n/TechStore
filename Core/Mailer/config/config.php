@@ -10,6 +10,6 @@ return [
     'server' => 'smtp.gmail.com',
     'port' => 587,
     'user' => 'igr2007forever@gmail.com',
-    'password' => 'bioshock1994',
+    'password' => '',
     'encryption' => 'tls'
 ];

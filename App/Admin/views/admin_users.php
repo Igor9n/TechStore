@@ -67,18 +67,24 @@
                                                     <input class="form-control" type="text" id="email" name="email"
                                                            value="<?= $user->email ?>" disabled>
                                                 </div>
+                                                <div class="col">
+                                                    <button class="btn btn-primary" name="action" value="update"
+                                                            disabled>
+                                                        Update user email
+                                                    </button>
+                                                </div>
                                             <?php else : ?>
                                                 <div class="col-8">
                                                     <label for="email" hidden></label>
                                                     <input class="form-control" type="text" id="email" name="email"
                                                            value="<?= $user->email ?>">
                                                 </div>
+                                                <div class="col">
+                                                    <button class="btn btn-primary" name="action" value="update">
+                                                        Update user email
+                                                    </button>
+                                                </div>
                                             <?php endif; ?>
-                                            <div class="col">
-                                                <button class="btn btn-primary" name="action" value="update">
-                                                    Update user email
-                                                </button>
-                                            </div>
                                         </div>
                                     </form>
                                 </td>
@@ -121,7 +127,7 @@
                                         </div>
                                     </form>
                                 </td>
-                                <?php if (empty($user->personalList)) : ?>
+                                <?php if (empty($user->personalList) && $user->login !== 'unregistered') : ?>
                                     <form method="POST" action="/admin/delete/user">
                                         <input type="hidden" name="key" value="info">
                                         <input type="hidden" name="id" value="<?= $user->id ?>">
