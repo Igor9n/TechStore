@@ -26,7 +26,7 @@ class Mapper
      * @param $array
      * @return array
      */
-    protected function makeSimpleArray(array $array): array
+    public function makeSimpleArray(array $array): array
     {
         $result = [];
         foreach ($array as $value) {

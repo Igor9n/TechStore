@@ -100,11 +100,17 @@ class CartController extends Controller
     {
         $id = $request->getPostParam('id');
         $key = $request->getActionKey();
-
-        $this->mapper->changeItemCount($key, Session::get('cart'), Session::get('cart')->itemsArray[$id]['info']);
+        /**
+         * @var $cart Cart
+         */
+        $cart = Session::get('cart');
+        $this->mapper->changeItemCount($key, $cart, $cart->itemsArray[$id]['info']);
         CustomRedirect::back();
     }
 
+    /**
+     * @param Request $request
+     */
     public function actionOrder(Request $request)
     {
         if (!$request->getPostParam('order')) {

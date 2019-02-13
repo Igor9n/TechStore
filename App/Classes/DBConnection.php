@@ -10,7 +10,6 @@ namespace App\Classes;
 
 use PDO;
 
-
 class DBConnection
 {
     private static $instance;
@@ -18,7 +17,7 @@ class DBConnection
     public static function getInstance(): PDO
     {
         if (null === static::$instance) {
-            $config = require APP_CONFIG . 'db.php';
+            $config = require '../App/Config/db.php';
             $dsn = sprintf('mysql:host=%s;dbname=%s;charset=%s', $config['host'], $config['db'], $config['charset']);
             static::$instance = new PDO(
                 $dsn,
@@ -34,10 +33,6 @@ class DBConnection
     }
 
     private function __clone()
-    {
-    }
-
-    private function __wakeup()
     {
     }
 }
