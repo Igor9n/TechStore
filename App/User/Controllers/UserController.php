@@ -30,14 +30,15 @@ class UserController extends Controller
      * Trying to login/register
      *
      * @param string $action
+     * @param $request Request
      * @return string
      */
-    public function try(string $action)
+    public function try(string $action, Request $request)
     {
         $method = $action . 'User';
         $errors = $action . 'Errors';
 
-        $user = $this->mapper->getObject($action);
+        $user = $this->mapper->getObject($action, $request);
         $errors = $this->mapper->$errors($user, $action);
 
         if (empty($errors)) {
@@ -52,7 +53,7 @@ class UserController extends Controller
         $action = $request->getPostParam('try');
 
         if ($action) {
-            $data['errors'] = $this->try($action);
+            $data['errors'] = $this->try($action, $request);
         }
 
         if (Session::check('user')) {
@@ -69,7 +70,7 @@ class UserController extends Controller
         $action = $request->getPostParam('try');
 
         if ($action) {
-            $data['errors'] = $this->try($action);
+            $data['errors'] = $this->try($action, $request);
         }
 
         if (Session::check('user')) {

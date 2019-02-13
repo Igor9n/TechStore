@@ -12,6 +12,8 @@ use App\User\Validators\CartValidator;
 use Core\Mapper;
 use App\User\Data\Cart;
 use App\User\Models\CartModel;
+use Core\Request;
+use Core\Session;
 
 class CartMapper extends Mapper
 {
@@ -108,25 +110,25 @@ class CartMapper extends Mapper
         return $orderSubmit;
     }
 
-    public function addInfoForOrder($cart)
+    public function addInfoForOrder($cart, Request $request)
     {
         $this->addAddressInfo($cart, [
-            'city' => $_POST['city'],
-            'address' => $_POST['address'],
-            'house' => $_POST['house'],
-            'apartment' => $_POST['apartment'],
-            'zip' => $_POST['zip']
+            'city' => $request->getPostParam('city'),
+            'address' => $request->getPostParam('address'),
+            'house' => $request->getPostParam('house'),
+            'apartment' => $request->getPostParam('apartment'),
+            'zip' => $request->getPostParam('zip')
         ]);
-        if (isset($_SESSION['user'])) {
-            $id = (int)$_SESSION['user']->id;
+        if (Session::check('user')) {
+            $id = (int)Session::get('user')->id;
         } else {
             $id = 0; // It means 'unregistered' user
         }
         $this->addPersonalInfo($cart, [
-            'firstName' => $_POST['firstName'],
-            'lastName' => $_POST['lastName'],
-            'phone' => $_POST['phone'],
-            'email' => $_POST['email'],
+            'firstName' => $request->getPostParam('firstName'),
+            'lastName' => $request->getPostParam('lastName'),
+            'phone' => $request->getPostParam('phone'),
+            'email' => $request->getPostParam('email'),
             'userId' => $id
         ]);
     }

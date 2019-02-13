@@ -21,7 +21,12 @@ class Model
         $this->pdo = DBConnection::getInstance();
     }
 
-
+    /**
+     * @param $query
+     * @param array $value
+     * @param null $column
+     * @return bool
+     */
     protected function queryColumn($query, array $value = [], $column = null)
     {
         $query = $this->pdo->prepare($query);
@@ -33,6 +38,11 @@ class Model
         }
     }
 
+    /**
+     * @param $query
+     * @param array $values
+     * @return mixed
+     */
     protected function queryRow($query, array $values = [])
     {
         $query = $this->pdo->prepare($query);
@@ -50,6 +60,13 @@ class Model
         return sprintf($query, $condition);
     }
 
+    /**
+     * @param $query
+     * @param $value
+     * @param $flag
+     * @param int $column
+     * @return bool|mixed
+     */
     protected function selectTypeAndQuery($query, $value, $flag, $column = 0)
     {
         $query = $this->selectCondition($query, $value);
@@ -62,7 +79,13 @@ class Model
         }
     }
 
-    protected function queryList($query, $column, array $variables = [])
+    /**
+     * @param $query
+     * @param $column
+     * @param array $variables
+     * @return array
+     */
+    protected function queryList($query, $column, array $variables = []): array
     {
         $array = [];
         $query = $this->pdo->prepare($query);
@@ -74,7 +97,12 @@ class Model
         return $array;
     }
 
-    protected function queryArray($query, $variables = [])
+    /**
+     * @param $query
+     * @param array $variables
+     * @return array
+     */
+    protected function queryArray($query, $variables = []): array
     {
         $query = $this->pdo->prepare($query);
         $query->execute($variables);
@@ -82,7 +110,12 @@ class Model
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    protected function matchData($arrayOne, $arrayTwo)
+    /**
+     * @param $arrayOne
+     * @param $arrayTwo
+     * @return array
+     */
+    protected function matchData($arrayOne, $arrayTwo): array
     {
         $result = [];
         for ($i = 0; $i < count($arrayOne); $i++) {
