@@ -19,7 +19,7 @@ class Mapper
 
     public function __construct()
     {
-        $this->mailer = new Mailer(TECH_STORE);
+//        $this->mailer = new Mailer(TECH_STORE);
     }
 
     /**
@@ -30,6 +30,9 @@ class Mapper
     {
         $result = [];
         foreach ($array as $value) {
+            if (!is_array($value)) {
+                throw  new \InvalidArgumentException('Value must be an array');
+            }
             if (isset($value)) {
                 foreach ($value as $var) {
                     $result[] = $var;

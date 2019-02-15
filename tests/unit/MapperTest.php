@@ -29,10 +29,32 @@ class MapperTest extends Unit
         $this->assertEquals($expected, $result);
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     * @dataProvider  exceptionProvider
+     * @param $value
+     */
+    public function testSimpleArrayException($value)
+    {
+        $this->mapper->makeSimpleArray($value);
+    }
+
     public function arrayProvider()
     {
         return [
-            [[], ['It must fails']]
+            [[], []],
+            [
+                ['first' => ['one', 'two', 'three'], 'second' => ['four', 'five', 'six']],
+                ['one', 'two', 'three', 'four', 'fails here', 'six']
+            ]
+        ];
+    }
+
+    public function exceptionProvider()
+    {
+        return [
+            [['string' => ['first'], 'one']],
+            [[213]]
         ];
     }
 }
