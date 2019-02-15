@@ -8,13 +8,10 @@
 
 namespace App\User\Controllers;
 
-use App\Classes\Session;
-use App\User\Data\Item;
-use Core\Controller;
+use App\User\Data\{Item, Cart};
+use Core\{Session, Controller, CustomRedirect, Request};
 use App\User\Mappers\CartMapper;
 use App\User\Models\CartModel;
-use Core\CustomRedirect;
-use Core\Request;
 
 class CartController extends Controller
 {
@@ -32,21 +29,27 @@ class CartController extends Controller
         }
 
         $newAdded = 0;
+        /**
+         * @var $item Item
+         */
         $item = Session::get('item');
         if (!Session::check('cart')) {
             Session::set('cart', $this->mapper->getObject($item));
             $newAdded = 1;
         }
-
-        if (isset(Session::get('cart')->itemsArray[$item->id]) && $newAdded === 0) {
-            $this->mapper->changeItemCount('plus', Session::get('cart'), $item);
+        /**
+         * @var $cart Cart
+         */
+        $cart = Session::get('cart');
+        if (isset($cart->itemsArray[$item->id]) && $newAdded === 0) {
+            $this->mapper->changeItemCount('plus', $cart, $item);
         } else {
-            $this->mapper->addItemToCart(Session::get('cart'), $item);
+            $this->mapper->addItemToCart($cart, $item);
         }
 
         Session::unset('item');
 
-        CustomRedirect::redirect('item/view?id=' . $item->serviceTitle);
+        CustomRedirect::back();
     }
 
 
@@ -60,9 +63,7 @@ class CartController extends Controller
             $data['ordered'] = true;
             $data['orderNumber'] = Session::get('orderNumber');
 
-            Session::unset('ordered');
-            Session::unset('orderNumber');
-            Session::unset('cart');
+            Session::unset(['ordered', 'orderNumber', 'cart']);
         } else {
             if (Session::check('errors')) {
                 $data['errors'] = Session::get('errors');
@@ -78,12 +79,19 @@ class CartController extends Controller
         CustomRedirect::back();
     }
 
+    /**
+     * @param Request $request
+     */
     public function actionDelete(Request $request)
     {
         $id = $request->getPostParam('id');
 
-        unset($_SESSION['cart']->itemsArray[$id]);
-        Session::get('cart')->totalPrice = Session::get('cart')->getTotalPrice(Session::get('cart')->itemsArray);
+        Session::unset("cart.itemsArray.$id");
+        /**
+         * @var $cart Cart
+         */
+        $cart = Session::get('cart');
+        $cart->totalPrice = $cart->getTotalPrice($cart->itemsArray);
 
         CustomRedirect::back();
     }
@@ -92,26 +100,34 @@ class CartController extends Controller
     {
         $id = $request->getPostParam('id');
         $key = $request->getActionKey();
-
-        $this->mapper->changeItemCount($key, Session::get('cart'), Session::get('cart')->itemsArray[$id]['info']);
+        /**
+         * @var $cart Cart
+         */
+        $cart = Session::get('cart');
+        $this->mapper->changeItemCount($key, $cart, $cart->itemsArray[$id]['info']);
         CustomRedirect::back();
     }
 
+    /**
+     * @param Request $request
+     */
     public function actionOrder(Request $request)
     {
         if (!$request->getPostParam('order')) {
             CustomRedirect::redirect('cart/view');
         }
 
-        $this->mapper->addInfoForOrder(Session::get('cart'));
-        $info = Session::get('cart');
-        $errors = $this->mapper->checkForErrors($info);
+        $cart = Session::get('cart');
+        $this->mapper->addInfoForOrder($cart, $request);
+        $errors = $this->mapper->checkForErrors($cart);
 
         if (!empty($errors)) {
             Session::set('errors', $errors);
         } else {
-            Session::set('ordered', true);
-            Session::set('orderNumber', $this->mapper->submitOrder($info));
+            Session::set([
+                'ordered' => true,
+                'orderNumber' => $this->mapper->submitOrder($cart)
+            ]);
         }
         CustomRedirect::back();
     }

@@ -12,7 +12,7 @@ use App\Admin\Data\Admin;
 use App\Admin\Main\MainMapper;
 use App\Admin\Models\AdminModel;
 use App\Admin\Validators\AdminValidator;
-use App\Classes\Session;
+use Core\Session;
 use Core\Request;
 
 class AdminMapper extends MainMapper
@@ -58,7 +58,6 @@ class AdminMapper extends MainMapper
 
     public function loginAdmin(Admin $admin)
     {
-        Session::additionalSessionStart();
         $this->addRole($admin);
         $admin->clearPassword();
         Session::set('admin', $admin);

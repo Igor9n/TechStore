@@ -4,13 +4,21 @@ namespace Core;
 
 class Route
 {
+    /**
+     * Just renders page with error
+     */
     public static function errorPage404()
     {
         $view = new View();
-        $view->render('404', ['title' => 'Not found']);
+        $view->initView('404', ['title' => 'Not found']);
     }
 
-    public static function checkExist($name, $array)
+    /**
+     * @param $name
+     * @param $array
+     * @return bool
+     */
+    public static function checkExist($name, $array): bool
     {
         $result = false;
         if (in_array($name, $array)) {
@@ -19,6 +27,9 @@ class Route
         return $result;
     }
 
+    /**
+     * @return Request object
+     */
     public static function parseUri(): Request
     {
         $query = [];
@@ -30,6 +41,9 @@ class Route
         return Request::setData($uri['path'], $query);
     }
 
+    /**
+     * Start routing
+     */
     public static function start()
     {
         $var = false;
@@ -43,7 +57,6 @@ class Route
         }
 
         $action = $request->getActionName();
-
         if ($var && method_exists($controller, $action)) {
             $controller->$action($request);
         } else {

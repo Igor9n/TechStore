@@ -8,7 +8,8 @@
 
 namespace App\User\Mappers;
 
-use App\Classes\Session;
+use Core\Request;
+use Core\Session;
 use App\User\Validators\UserValidator;
 use Core\Mapper;
 use App\User\Data\User;
@@ -23,19 +24,19 @@ class UserMapper extends Mapper
         $this->validator = new UserValidator();
     }
 
-    public function getObject($flag): User
+    public function getObject($flag, Request $request): User
     {
         if ($flag === 'login') {
             return User::createObject(
-                $_POST['login'],
-                $_POST['password']
+                $request->getPostParam('login'),
+                $request->getPostParam('password')
             );
         } else {
             return User::createObject(
-                $_POST['login'],
-                $_POST['password'],
-                $_POST['confirm'],
-                $_POST['email']
+                $request->getPostParam('login'),
+                $request->getPostParam('password'),
+                $request->getPostParam('confirm'),
+                $request->getPostParam('email')
             );
         }
     }
@@ -104,7 +105,6 @@ class UserMapper extends Mapper
 
     public function loginUser(User $user)
     {
-        Session::additionalSessionStart();
         $this->addId($user);
         $user->clearPassword();
         Session::set('user', $user);

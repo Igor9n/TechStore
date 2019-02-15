@@ -4,9 +4,8 @@ require __DIR__ . '/../vendor/autoload.php';
 require __DIR__ . '/../App/Config/constants.php';
 require __DIR__ . '/../Core/Mailer/config/constants.php';
 
-use Core\Route;
-use App\Classes\Session;
+use Core\{Route, Session};
 
-Session::sessionStart();
+Session::start();
 
 Route::start();

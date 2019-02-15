@@ -9,12 +9,11 @@
 namespace App\Admin\Controllers;
 
 use App\Admin\Mappers\AdminMapper;
-use App\Classes\Session;
+use Core\Session;
 use Core\Controller;
 use App\Admin\Main\MainView;
 use Core\CustomRedirect;
 use Core\Request;
-use Core\Response;
 
 class AdminController extends Controller
 {

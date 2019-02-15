@@ -10,7 +10,6 @@ namespace App\Classes;
 
 use PDO;
 
-
 class DBConnection
 {
     private static $instance;
@@ -34,10 +33,6 @@ class DBConnection
     }
 
     private function __clone()
-    {
-    }
-
-    private function __wakeup()
     {
     }
 }

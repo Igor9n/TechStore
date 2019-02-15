@@ -8,8 +8,8 @@
 
 namespace App\User\Controllers;
 
-
-use App\Classes\Session;
+use App\User\Data\User;
+use Core\Session;
 use Core\Controller;
 use App\User\Mappers\OrderMapper;
 use App\User\Mappers\UserMapper;
@@ -32,11 +32,14 @@ class OrderController extends Controller
         if (!Session::check('user')) {
             CustomRedirect::redirect('user/login');
         }
+        /**
+         * @var $user User
+         */
+        $user = Session::get('user');
+        $id = $user->id;
+        $this->userMapper->addOrdersInfo($user, $this->mapper->getOrdersListForUser($id));
 
-        $id = Session::get('user')->id;
-        $this->userMapper->addOrdersInfo(Session::get('user'), $this->mapper->getOrdersListForUser($id));
-
-        $data['info'] = Session::get('user');
+        $data['info'] = $user;
         $data['title'] = 'Orders';
 
         $this->view->initView('orders', $data);

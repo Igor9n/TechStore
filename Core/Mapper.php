@@ -22,7 +22,11 @@ class Mapper
         $this->mailer = new Mailer(TECH_STORE);
     }
 
-    protected function makeSimpleArray($array)
+    /**
+     * @param $array
+     * @return array
+     */
+    public function makeSimpleArray(array $array): array
     {
         $result = [];
         foreach ($array as $value) {

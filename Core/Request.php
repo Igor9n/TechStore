@@ -8,7 +8,6 @@
 
 namespace Core;
 
-
 class Request
 {
     protected $controllerName;
@@ -18,7 +17,15 @@ class Request
     protected $postParams;
     protected $namespace;
     protected $path;
+//    protected $session;
 
+    /**
+     * Request constructor.
+     * @param $controller
+     * @param $action
+     * @param $key
+     * @param $query
+     */
     public function __construct($controller, $action, $key, $query)
     {
         $this->setNamespace($controller);
@@ -28,8 +35,19 @@ class Request
         $this->setParams($query);
         $this->setPostParams();
         $this->setPath();
+//        $this->setSession();
     }
 
+//    public function setSession()
+//    {
+//        $this->session = Session::getObject();
+//    }
+
+    /**
+     * @param $path
+     * @param $query
+     * @return Request object
+     */
     public static function setData($path, $query): Request
     {
         $routes = explode('/', $path);
@@ -51,6 +69,9 @@ class Request
         return new self($controller, $action, $key, $query);
     }
 
+    /**
+     * @param $value
+     */
     public function setNamespace($value)
     {
         if (preg_match('/^admin$/', $value)) {
@@ -60,17 +81,25 @@ class Request
         }
     }
 
-    public function getNamespace()
+    /**
+     * @return string
+     */
+    public function getNamespace(): string
     {
         return $this->namespace;
     }
 
-
-    public function getControllerName()
+    /**
+     * @return string
+     */
+    public function getControllerName(): string
     {
         return $this->controllerName;
     }
 
+    /**
+     * @param $value
+     */
     public function setControllerName($value)
     {
         if (empty($value)) {
@@ -79,11 +108,17 @@ class Request
         $this->controllerName = ucfirst($value) . CONTROLLER;
     }
 
-    public function getActionName()
+    /**
+     * @return string
+     */
+    public function getActionName(): string
     {
         return $this->actionName;
     }
 
+    /**
+     * @param $value
+     */
     public function setActionName($value)
     {
         if (empty($value)) {
@@ -92,11 +127,17 @@ class Request
         $this->actionName = ACTION . ucfirst($value);
     }
 
-    public function getActionKey()
+    /**
+     * @return string
+     */
+    public function getActionKey(): string
     {
         return $this->actionKey;
     }
 
+    /**
+     * @param $value
+     */
     public function setActionKey($value)
     {
         if (!empty($value)) {
@@ -104,11 +145,32 @@ class Request
         }
     }
 
-    public function getParams()
+    /**
+     *Return all GET params
+     *
+     * @return array
+     */
+    public function getParams(): array
     {
         return $this->getParams;
     }
 
+    /**
+     * Put one GET param into object
+     *
+     * @param $title
+     * @param $value
+     */
+    public function setParam($title, $value)
+    {
+        $this->getParams[$title] = $value;
+    }
+
+    /**
+     * Put GET params into object
+     *
+     * @param $value
+     */
     public function setParams($value)
     {
         if (!empty($value)) {
@@ -121,11 +183,12 @@ class Request
         }
     }
 
-    public function setParam($title, $value)
-    {
-        $this->getParams[$title] = $value;
-    }
-
+    /**
+     * Returns needed GET param
+     *
+     * @param $title
+     * @return bool
+     */
     public function getParam($title)
     {
         $result = false;
@@ -135,21 +198,39 @@ class Request
         return $result;
     }
 
+    /**
+     * Path to for controller
+     */
     public function setPath()
     {
         $this->path = $this->getNamespace() . $this->getControllerName();
     }
 
+    /**
+     * @return mixed
+     */
     public function getPath()
     {
         return $this->path;
     }
 
+    /**
+     * Put one POST param into object
+     *
+     * @param $title
+     * @param $value
+     */
     public function setPostParam($title, $value)
     {
         $this->postParams[$title] = $value;
     }
 
+    /**
+     * Returns needed POST param
+     *
+     * @param $title
+     * @return bool
+     */
     public function getPostParam($title)
     {
         $result = false;
@@ -159,11 +240,19 @@ class Request
         return $result;
     }
 
-    public function getPostParams()
+    /**
+     * Returns all POST params
+     *
+     * @return array
+     */
+    public function getPostParams(): array
     {
         return $this->postParams;
     }
 
+    /**
+     * Put POST params into object
+     */
     public function setPostParams()
     {
         if (!empty($_POST)) {

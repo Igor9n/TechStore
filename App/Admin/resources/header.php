@@ -1,4 +1,4 @@
-<?php use App\Classes\Session; ?>
+<?php use Core\Session; ?>
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <img src="/media/tech.png" width="30" height="30" alt="">
     <a class="navbar-brand" href="/">TechStore</a>
