@@ -1,5 +1,5 @@
 .git
-/PHP_CodeSniffer/
-/storage/sessions/*
-/vendor/
-/Core/Mailer/config/config.php
+PHP_CodeSniffer/
+storage/sessions/*
+vendor/
+Core/Mailer/config/config.php
