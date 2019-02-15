@@ -132,7 +132,7 @@
                 </div>
             </td>
             <td scope="row">
-                <input type="text" class="form-control" name="date"
+                <input type="date" class="form-control" name="date"
                        value="<?= $order->deliveryInfo['date'] ?>">
             </td>
             <td scope="row">

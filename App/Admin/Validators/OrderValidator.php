@@ -14,7 +14,7 @@ class OrderValidator
     public function validateDeliveryDate($title)
     {
         $errors = [];
-        if (!preg_match('/^[0-9]{2}[.]{1}[0-9]{2}[.]{1}[0-9]{4}$/', $title)) {
+        if (!preg_match('/^[0-9]{4}[-]{1}[0-9]{2}[-]{1}[0-9]{2}$/', $title)) {
             $errors['dateFormat'] = 'Valid <strong>delivery date</strong> format is <strong>dd.mm.yyyy</strong>';
         }
         return $errors;
